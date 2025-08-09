@@ -1,0 +1,13 @@
+{% block title %}Detalhes do Veterinário{% endblock %}
+
+{% block content %}
+<h2>Detalhes do Veterinário</h2>
+
+<ul>
+    <li><strong>Email:</strong> {{ veterinario.email }}</li>
+    
+</ul>
+
+<a href="{% url 'listar_veterinarios' %}">← Voltar à lista</a>
+{% endblock %}
+{% block content %}

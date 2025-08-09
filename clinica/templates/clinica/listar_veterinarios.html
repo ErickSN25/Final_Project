@@ -1,0 +1,36 @@
+{% extends 'clinica/base.html' %}
+
+{% block title %}Veterinários{% endblock %}
+
+{% block content %}
+<h2>Lista de Veterinários</h2>
+<p>Aqui vai a lista dos veterinários cadastrados.</p>
+<table class="table">
+    <thead>
+      <tr>
+        <th>Nome</th>
+        <th>Sobrenome</th>
+        <th>CRMV</th>
+        <th>Ações</th>
+      </tr>
+    </thead>
+    <tbody>
+    {% for veterinario in veterinarios %}
+      <tr>
+        <td>{{ veterinario.nome }}</td>
+        <td>{{ veterinario.sobrenome }}</td>
+        <td>{{ veterinario.crmv }}</td>
+        <td>
+          <a href="{% url 'veterinario_editar' veterinario.id %}" class="btn btn-warning">Editar</a>
+          <a href="{% url 'veterinario_deletar' veterinario.id %}" class="btn btn-danger">Deletar</a>
+          <a href="{% url 'veterinario_detalhes' veterinario.id %}" class="btn btn-info">Detalhes</a>
+        </td>
+      </tr>
+    {% empty %}
+      <tr>
+        <td colspan="4">Nenhum veterinário cadastrado.</td>
+      </tr>
+    {% endfor %}
+    </tbody>
+</table>
+{% endblock %}

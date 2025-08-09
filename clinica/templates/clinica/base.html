@@ -1,0 +1,38 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>SerraVet - {% block title %}{% endblock %}</title>
+    <link rel="stylesheet" href="{% static 'css/style.css' %}">
+    <link rel="stylesheet" href="{% static 'css/sidebar.css' %}">
+</head>
+<body>
+
+    <div class="container">
+        <!-- Menu lateral -->
+        <nav class="sidebar">
+            <h2>Menu</h2>
+            <a href="/">Início</a>
+            <a href="/admin/">Administração</a>
+            <a href="{% url 'listar_veterinarios' %}">Veterinários</a>
+        </nav>
+
+        <!-- Conteúdo principal -->
+        <main class="content">
+            <header>
+                <h1>SerraVet</h1>
+            </header>
+
+            {% block content %}
+            {% endblock %}
+        </main>
+    </div>
+
+    <footer>
+        <p>&copy; 2025 SerraVet. Todos os direitos reservados.</p>
+    </footer>
+
+</body>
+</html>
