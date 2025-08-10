@@ -1,0 +1,30 @@
+{% extends 'clinica/base.html' %}
+
+{% block content %}
+<h2>Editar Veterinário</h2>
+
+<form method="POST">
+    {% csrf_token %}
+
+    <label for="nome">Nome:</label>
+    <input type="text" name="nome" id="nome" value="{{ veterinario.nome }}" required><br>
+
+    <label for="sobrenome">Sobrenome:</label>
+    <input type="text" name="sobrenome" id="sobrenome" value="{{ veterinario.sobrenome }}" required><br>
+
+    <label for="cpf">CPF:</label>
+    <input type="text" name="cpf" id="cpf" value="{{ veterinario.cpf }}" required><br>
+
+    <label for="crmv">CRMV:</label>
+    <input type="text" name="crmv" id="crmv" value="{{ veterinario.crmv }}" required><br>
+
+    <label for="gmail">Gmail:</label>
+    <input type="email" name="gmail" id="gmail" value="{{ veterinario.gmail }}" required><br>
+
+    <button type="submit">Salvar Alterações</button>
+</form>
+
+<a href="{% url 'listar_veterinarios' %}">Voltar para a lista</a>
+{% endblock %}
+
+

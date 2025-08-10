@@ -1,13 +1,17 @@
-{% block title %}Detalhes do Veterinário{% endblock %}
+{% extends 'clinica/base.html' %}
 
 {% block content %}
-<h2>Detalhes do Veterinário</h2>
 
-<ul>
-    <li><strong>Email:</strong> {{ veterinario.email }}</li>
-    
-</ul>
+<h1>{{ veterinario.nome }}</h1>
+<p><strong>Nomes:</strong> {{ veterinario.nome }}</p>
+<p><strong>Sobrenome:</strong> {{ veterinario.sobrenome }}</p>
+<p><strong>Cpf:</strong> {{ veterinario.cpf }}</p>
+<p><strong>CRMV:</strong> {{ veterinario.crmv }}</p>
+<p><strong>Gmail:</strong> {{ veterinario.gmail }}</p>
 
-<a href="{% url 'listar_veterinarios' %}">← Voltar à lista</a>
+
+<a href="{% url 'listar_veterinarios' %}" class="btn btn-secondary">Voltar</a>
+<form method="post" action="{% url 'veterinario_editar' veterinario.id %}">
+    {% csrf_token %}
+    <button type="submit" class="btn btn-warning">Editar</button>
 {% endblock %}
-{% block content %}

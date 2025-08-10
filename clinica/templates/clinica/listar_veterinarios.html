@@ -12,12 +12,15 @@
         <th>Sobrenome</th>
         <th>CRMV</th>
         <th>Ações</th>
+        <a href="{% url 'cadastrar_veterinario' %}" >
+          <button>Cadastrar Veterinário</button>
+        </a>
       </tr>
     </thead>
     <tbody>
     {% for veterinario in veterinarios %}
       <tr>
-        <td>{{ veterinario.nome }}</td>
+       <td>{{ veterinario.nome }}</td>
         <td>{{ veterinario.sobrenome }}</td>
         <td>{{ veterinario.crmv }}</td>
         <td>
