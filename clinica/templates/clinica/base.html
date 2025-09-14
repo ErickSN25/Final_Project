@@ -1,38 +1,26 @@
 {% load static %}
 <!DOCTYPE html>
-<html lang="pt-br">
+<html lang="pt-BR">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>SerraVet - {% block title %}{% endblock %}</title>
+    <title>{% block title %}SerraVet{% endblock %}</title>
+    <link href="https://fonts.googleapis.com/css2?family=Questrial&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="{% static 'css/style.css' %}">
-    <link rel="stylesheet" href="{% static 'css/sidebar.css' %}">
+    <link rel="icon" type="image/x-icon" href="{% static 'favicon.ico' %}">
 </head>
 <body>
 
-    <div class="container">
-        <!-- Menu lateral -->
-        <nav class="sidebar">
-            <h2>Menu</h2>
-            <a href="/">Início</a>
-            <a href="/admin/">Administração</a>
-            <a href="{% url 'listar_veterinarios' %}">Veterinários</a>
-        </nav>
-
-        <!-- Conteúdo principal -->
-        <main class="content">
-            <header>
-                <h1>SerraVet</h1>
-            </header>
-
-            {% block content %}
-            {% endblock %}
-        </main>
+<header>
+    <div class="logo">
+        <span>SerraVet</span>
     </div>
+    <nav>
+        <a href="#" class="active">Sobre nós</a>
+    </nav>
+</header>
 
-    <footer>
-        <p>&copy; 2025 SerraVet. Todos os direitos reservados.</p>
-    </footer>
+{% block content %}{% endblock %}
 
 </body>
 </html>

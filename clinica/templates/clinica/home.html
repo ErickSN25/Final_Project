@@ -1,8 +1,39 @@
-{% extends 'clinica/base.html' %}
+{% extends "clinica/base.html" %}
+{% load static %}
 
-{% block title %}Início{% endblock %}
+{% block title %}Login - SerraVetClinic{% endblock %}
 
 {% block content %}
-<h2>Bem-vindo(a) ao Clinica SerraVet </h2>
-<p>AAAAAAAAAAAAAAAA.</p>
+<div class="hero">
+    <div class="login-container">
+        <div class="login-icon">
+            <i class="fas fa-sign-in-alt"></i>
+        </div>
+        <h2>SerraVetClinic</h2>
+        <p class="subtitle">Blabblala</p>
+
+        <form method="POST">
+            {% csrf_token %}
+            <label for="email">Email</label>
+            <input type="email" id="email" name="username" placeholder="seu@email.com" required>
+
+            <label for="senha">Senha</label>
+            <input type="password" id="senha" name="password" placeholder="********" required>
+
+            <div class="esqueci-senha">
+                <a href="/esqueci-senha/">Esqueceu a senha?</a>
+            </div>
+
+            <button type="submit" class="btn-entrar">Entrar</button>
+        </form>
+
+        <p class="novo-cliente">
+            Novo cliente? <a href="{% url 'cadastro' %}">Criar conta</a>
+        </p>
+    </div>
+</div>
+
+<div class="wave">
+    <img src="{% static 'images/home3.jpg' %}" alt="" class="wave-image" aria-hidden="true">
+</div>
 {% endblock %}

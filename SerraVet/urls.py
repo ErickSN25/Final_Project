@@ -16,15 +16,10 @@ Including another URLconf
 """
 from django.contrib import admin
 from django.urls import path
-from clinica import views
-from clinica.views import home, listar_veterinarios, veterinario_detalhes, cadastrar_veterinario
+from clinica import views 
 
 urlpatterns = [
     path('admin/', admin.site.urls),
     path('', views.home, name='home'),
-    path('veterinarios/', views.listar_veterinarios, name='listar_veterinarios'),
-    path('veterinarios/<int:id>/', views.veterinario_detalhes, name='veterinario_detalhes'),
-    path('veterinarios/cadastrar/', views.cadastrar_veterinario, name='cadastrar_veterinario'),
-    path('veterinarios/editar/<int:id>/', views.editar_veterinario, name='veterinario_editar'),
-    path('veterinarios/deletar/<int:id>/', views.deletar_veterinario, name='veterinario_deletar'),
+    path('cadastro/', views.cadastro, name='cadastro'),
 ]

@@ -1,1 +1,44 @@
+# Banco de dados SQLite
+db.sqlite3
+*.sqlite3
+
+# Arquivos de migração compilados
+*.pyc
+__pycache__/
+*.pyo
+*.pyd
+*.pkl
+
+# Pastas de cache do Django
+*.log
+local_settings.py
+db.sqlite3-journal
+
+# Arquivos de configuração/dados sensíveis
+.env
+*.env
+
+# Virtualenvs
 venv/
+.venv/
+ENV/
+env/
+env.bak/
+
+# Diretórios de build/IDE
+*.egg
+*.egg-info/
+dist/
+build/
+.eggs/
+.idea/
+.vscode/
+*.swp
+
+# Arquivos estáticos coletados
+/staticfiles/
+/media/
+
+# Arquivos do sistema
+.DS_Store
+Thumbs.db
