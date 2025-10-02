@@ -5,10 +5,8 @@ from django.core.exceptions import ValidationError
 
 class UsuarioManager(BaseUserManager):
     def create_user(self, email, password=None, **extra_fields):
-        """Cria e retorna um usuário comum (cliente, atendente ou veterinário)."""
         if not email:
             raise ValueError("O usuário precisa ter um e-mail válido")
-        
         email = self.normalize_email(email)
         usuario = self.model(email=email, **extra_fields)
         usuario.set_password(password)
@@ -16,7 +14,6 @@ class UsuarioManager(BaseUserManager):
         return usuario
 
     def create_superuser(self, email, password=None, **extra_fields):
-        """Cria e retorna um superusuário com acesso ao admin."""
         extra_fields.setdefault("is_staff", True)
         extra_fields.setdefault("is_superuser", True)
 
@@ -61,9 +58,9 @@ class CustomUser(AbstractBaseUser, PermissionsMixin):
         verbose_name_plural = "Usuários"
 
 class VeterinarioInfo(models.Model):
-    """Modelo para informações específicas de veterinários."""
     user = models.OneToOneField(CustomUser, on_delete=models.CASCADE, limit_choices_to={'user_type': 'veterinario'})
     crmv = models.CharField(max_length=10, unique=True, verbose_name="CRMV")
+    foto_veterinario = models.ImageField(upload_to='fotos_perfil/', blank=True, null=True)
 
     def __str__(self):
         return f"CRMV: {self.crmv} - {self.user.get_full_name()}"
@@ -73,9 +70,6 @@ class VeterinarioInfo(models.Model):
         verbose_name_plural = "Informações dos Veterinários"
 
 class ClientePerfil(models.Model):
-    """
-    Modelo para informações adicionais e opcionais do cliente.
-    """
     UF_CHOICES = [
         ('AC', 'Acre'),
         ('AL', 'Alagoas'),
@@ -106,11 +100,8 @@ class ClientePerfil(models.Model):
         ('TO', 'Tocantins'),
     ]
 
-    user = models.OneToOneField(
-        'CustomUser', 
-        on_delete=models.CASCADE, 
-        limit_choices_to={'user_type': 'cliente'}
-    )
+    user = models.OneToOneField('CustomUser', on_delete=models.CASCADE, limit_choices_to={'user_type': 'cliente'})
+    foto_user = models.ImageField(upload_to='fotos_perfil/', blank=True, null=True)
     telefone = models.CharField(max_length=15, blank=True, null=True)
     endereco = models.CharField(max_length=255, blank=True, null=True)
     cidade = models.CharField(max_length=100, blank=True, null=True)
@@ -125,7 +116,7 @@ class ClientePerfil(models.Model):
         verbose_name = "Perfil do Cliente"
         verbose_name_plural = "Perfis dos Clientes"
 
-# --- Modelos relacionados a pets e consultas ---
+
 
 class Pet(models.Model):
     especieChoices = [
@@ -142,6 +133,7 @@ class Pet(models.Model):
     ]
     
     tutor = models.ForeignKey(CustomUser, on_delete=models.CASCADE, limit_choices_to={'user_type': 'cliente'})
+    foto_pet = models.ImageField(upload_to='fotos_pet/', blank=True, null=True)
     nome = models.CharField(max_length=100)
     especie = models.CharField(max_length=50, choices=especieChoices)
     raca = models.CharField(max_length=50, blank=True, null=True)
