@@ -1,5 +1,5 @@
 from django import forms
-from django.core.validators import RegexValidator
+from django.core.validators import RegexValidator, FileExtensionValidator
 from django.core.exceptions import ValidationError
 from django.db import transaction
 from .models import (
@@ -12,11 +12,13 @@ from .models import (
     HorarioDisponivel
 )
 
+# -------------------------
 # Formulários para Ações do Atendente
+# -------------------------
 
 class HorarioDisponivelForm(forms.ModelForm):
     veterinario = forms.ModelChoiceField(
-        queryset=CustomUser.objects.filter(user_type='veterinario'),
+        queryset=CustomUser.objects.none(),
         label="Veterinário"
     )
     
@@ -27,13 +29,21 @@ class HorarioDisponivelForm(forms.ModelForm):
             'data': forms.DateTimeInput(attrs={'type': 'datetime-local'}),
         }
 
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+        self.fields['veterinario'].queryset = CustomUser.objects.filter(user_type='veterinario')
+
+
+# -------------------------
 # Formulário para Ação do Veterinário
+# -------------------------
 
 class ProntuarioForm(forms.ModelForm):
     receita_prescrita = forms.FileField(
         required=False,
         label="Receita Prescrita (PDF/Imagem)",
-        help_text="Faça upload da receita prescrita para o pet (opcional)."
+        help_text="Faça upload da receita prescrita para o pet (opcional).",
+        validators=[FileExtensionValidator(allowed_extensions=['pdf', 'jpg', 'jpeg', 'png'])]
     )
     
     class Meta:
@@ -62,6 +72,7 @@ class ProntuarioForm(forms.ModelForm):
             'observacoes': 'Observações Adicionais',
         }
         
+
 class AusenciaForm(forms.ModelForm):
     class Meta:
         model = Ausencia
@@ -77,7 +88,9 @@ class AusenciaForm(forms.ModelForm):
         }
 
 
+# -------------------------
 # Formulários para Ações do Cliente
+# -------------------------
 
 class CadastroClienteForm(forms.Form):
     nome = forms.CharField(max_length=30, label="Nome")
@@ -96,8 +109,8 @@ class CadastroClienteForm(forms.Form):
         label="Telefone",
         required=False,
         validators=[RegexValidator(
-            regex=r'^\(\d{2}\) \d{4}-\d{4}$',
-            message="Digite o telefone no formato (00) 0000-0000."
+            regex=r'^\(\d{2}\) \d{4,5}-\d{4}$',
+            message="Digite o telefone no formato (00) 00000-0000 ou (00) 0000-0000."
         )],
         widget=forms.TextInput(attrs={'class': 'form-control'})
     )
@@ -115,7 +128,6 @@ class CadastroClienteForm(forms.Form):
         return email
 
     def save(self):
-        # Esta lógica de save será usada na view para criar os dois objetos
         with transaction.atomic():
             user = CustomUser.objects.create_user(
                 email=self.cleaned_data['email'],
@@ -133,9 +145,7 @@ class CadastroClienteForm(forms.Form):
 
 
 class CadastroPetForm(forms.ModelForm):
-    """
-    Formulário para o cliente cadastrar um novo pet.
-    """
+    """ Formulário para o cliente cadastrar um novo pet. """
     class Meta:
         model = Pet
         fields = ['nome', 'especie', 'raca', 'peso', 'vacinas_em_dia', 'alergias', 'doencas']
@@ -148,7 +158,7 @@ class AgendamentoClienteForm(forms.Form):
     )
 
     veterinario = forms.ModelChoiceField(
-        queryset=CustomUser.objects.filter(user_type='veterinario'),
+        queryset=CustomUser.objects.none(),
         label="Selecione o Veterinário"
     )
 
@@ -161,8 +171,27 @@ class AgendamentoClienteForm(forms.Form):
     def __init__(self, *args, **kwargs):
         user = kwargs.pop('user', None)
         super().__init__(*args, **kwargs)
+
+        # Pets do cliente logado
         if user and user.is_authenticated:
             self.fields['pet'].queryset = Pet.objects.filter(tutor=user)
-            
-    
-            
+
+        # Veterinários disponíveis
+        self.fields['veterinario'].queryset = CustomUser.objects.filter(user_type='veterinario')
+
+        # Horários disponíveis
+        self.fields['horario'].queryset = HorarioDisponivel.objects.filter(disponivel=True)
+
+
+class ConsultaForm(forms.ModelForm):
+    class Meta:
+        model = Consulta
+        fields = ['data_hora', 'motivo']
+        widgets = {
+            'data_hora': forms.DateTimeInput(attrs={'type': 'datetime-local'}),
+            'motivo': forms.Textarea(attrs={'rows': 4}),
+        }
+        labels = {
+            'data_hora': 'Data e Hora da Consulta',
+            'motivo': 'Motivo da Consulta',
+        }

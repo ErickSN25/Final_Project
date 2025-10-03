@@ -175,6 +175,8 @@ class Consulta(models.Model):
         ],
         default='MARCADA'
     )
+    data_hora = models.DateTimeField()
+    motivo = models.TextField()
 
     def __str__(self):
         return f"Consulta {self.pet.nome} - {self.veterinario.get_full_name()} ({self.data})"
@@ -239,3 +241,26 @@ class Notificacao(models.Model):
         verbose_name = "Notificação"
         verbose_name_plural = "Notificações"
         ordering = ['-criada_em']
+
+class Agendamento(models.Model):
+    pet = models.ForeignKey(Pet, on_delete=models.CASCADE)
+    veterinario = models.ForeignKey(CustomUser, on_delete=models.CASCADE, limit_choices_to={'user_type': 'veterinario'})
+    data_hora = models.DateTimeField()
+    status = models.CharField(
+        max_length=20,
+        choices=[
+            ('PENDENTE', 'Pendente'),
+            ('CONFIRMADO', 'Confirmado'),
+            ('CANCELADO', 'Cancelado'),
+            ('REALIZADO', 'Realizado'),
+        ],
+        default='PENDENTE'
+    )
+
+    def __str__(self):
+        return f"Agendamento {self.pet.nome} - {self.veterinario.get_full_name()} ({self.data_hora})"
+
+    class Meta:
+        verbose_name = "Agendamento"
+        verbose_name_plural = "Agendamentos"
+        ordering = ['data_hora']
