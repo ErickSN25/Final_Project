@@ -27,7 +27,6 @@ def cadastro(request):
         if form.is_valid():
             try:
                 usuario = form.save(commit=False)
-                # 🔒 Criptografa a senha antes de salvar
                 usuario.set_password(form.cleaned_data["password"])
                 usuario.save()
                 
@@ -78,7 +77,7 @@ def redirect_home(request):
     elif user.user_type == "veterinario":
         return redirect("clinica/vet/home_vet", veterinario_id=user.id)
     elif user.user_type == "atendente":
-        return redirect("clinica/atendente/home_atendente")
+        return redirect("clinica/atd/home_atendente")
     elif user.user_type == "administrador":
         return redirect("/admin/") 
     return redirect("home") 
@@ -89,8 +88,7 @@ def redirect_home(request):
 @login_required
 def home_user(request):
     pets = Pet.objects.filter(tutor=request.user)
-    consultas = Consulta.objects.filter(pet__tutor=request.user).order_by('-data_hora')[:5]
-    # Adiciona as informações do usuário ao contexto
+    consultas = Consulta.objects.filter(pet__tutor=request.user).order_by('-horario_agendado')[:5]
     context = {
         'user': request.user,
         'pets': pets,
@@ -114,34 +112,24 @@ def cadastro_pet(request):
 
 
 # --- VIEWS DE VETERINÁRIO ---
+from datetime import date, timedelta
+from django.utils import timezone
+from django.contrib.auth.decorators import login_required
+from django.shortcuts import render
 
 @login_required
 def home_vet(request):
-    veterinario = request.user 
+    hoje = timezone.now() 
     daqui_7_dias = hoje + timedelta(days=7)
+    veterinario = request.user
 
-    # Quantidade de consultas futuras do veterinário
-    consultas_qtd = Consulta.objects.filter(
-        veterinario=veterinario,
-        data_hora__gte=hoje
-    ).count()
+    consultas_qtd = Consulta.objects.filter(veterinario=veterinario, horario_agendado__data__gte=hoje).count()
 
-    # Quantidade de prontuários do veterinário (já feitos)
-    prontuarios_qtd = Prontuario.objects.filter(
-        consulta__veterinario=veterinario
-    ).count()
+    prontuarios_qtd = Prontuario.objects.filter(consulta__veterinario=veterinario).count()
 
-    # Próximas consultas em até 7 dias
-    proximas_consultas = Consulta.objects.filter(
-        veterinario=veterinario,
-        data_hora__gte=hoje,
-        data_hora__lte=daqui_7_dias
-    ).order_by("data_hora")
+    proximas_consultas = Consulta.objects.filter(veterinario=veterinario, horario_agendado__data__gte=hoje, horario_agendado__data__lte=daqui_7_dias).order_by("horario_agendado__data")
 
-    # Histórico completo de consultas
-    historico_consultas = Consulta.objects.filter(
-        veterinario=veterinario
-    ).order_by("-data_hora")
+    historico_consultas = Consulta.objects.filter(veterinario=veterinario).order_by("-horario_agendado__data")[:5]
 
     return render(request, "clinica/vet/home_vet.html", {
         "consultas_qtd": consultas_qtd,
@@ -175,20 +163,16 @@ def prontuario_veterinario(request, consulta_id):
 def home_atendente(request):
     hoje = date.today()
     consultas_do_dia_count = Consulta.objects.filter(
-        data_hora__date=hoje,
+        horario_agendado__data=hoje,
         status__in=['PENDENTE', 'CONFIRMADO'] 
     ).count()
     consultas_pendentes_count = Consulta.objects.filter(
         status__in=['PENDENTE', 'CONFIRMADO'],
-        data_hora__date__gte=hoje 
+        horario_agendado__data__gte=hoje 
     ).count()
-    
-    consultas_cadastradas = Consulta.objects.select_related(
-        'pet',        
-        'veterinario' 
-    ).order_by(
-        '-data_hora' 
-    )[:10]
+
+    consultas_cadastradas = Consulta.objects.filter(horario_agendado__data__gte=timezone.now())
+
 
     contexto = {
         'consultas_do_dia_count': consultas_do_dia_count,
@@ -196,7 +180,7 @@ def home_atendente(request):
         'consultas_cadastradas': consultas_cadastradas,
     }
 
-    return render(request, 'clinica/atendente/home_atendente.html', contexto)
+    return render(request, 'clinica/atd/home_atendente.html', contexto)
 
 def gerenciar_horarios(request):
     if request.method == 'POST':

@@ -155,6 +155,7 @@ class Pet(models.Model):
         verbose_name_plural = "Pets"
 
 class Consulta(models.Model):
+    
     pet = models.ForeignKey(Pet, on_delete=models.CASCADE)
     veterinario = models.ForeignKey(
         CustomUser,

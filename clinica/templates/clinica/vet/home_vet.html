@@ -45,7 +45,7 @@
             {% for consulta in historico_consultas %}
                 <li data-pet="{{ consulta.pet.nome|lower }}" data-tutor="{{ consulta.pet.tutor.get_full_name|lower }}">
                     <strong>{{ consulta.pet.nome }}</strong> - {{ consulta.pet.tutor.get_full_name }} <br>
-                    Data: {{ consulta.data_hora|date:"d/m/Y H:i" }}
+                    Data: {{ consulta.horario_agendado|date:"d/m/Y H:i" }}
                 </li>
             {% endfor %}
         </ul>
