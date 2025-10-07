@@ -16,10 +16,18 @@ Including another URLconf
 """
 from django.contrib import admin
 from django.urls import path
-from clinica import views 
+from django.contrib.auth.views import LogoutView
+from clinica.views import CustomLoginView, redirect_home, home_user, home_vet, cadastro, home, home_atendente
 
 urlpatterns = [
     path('admin/', admin.site.urls),
-    path('', views.home, name='home'),
-    path('cadastro/', views.cadastro, name='cadastro'),
+    path("", home, name="home"),
+    path("cadastro/", cadastro, name="cadastro"),
+    path("login/", CustomLoginView.as_view(), name="login"), 
+    path("logout/", LogoutView.as_view(), name="logout"),
+    path("home_user/", home_user, name="home_user"),
+    path("redirect_home/", redirect_home, name="redirect_home"),
+    path("home_vet/", home_vet, name="home_vet"),
+    path("home_atendente/", home_atendente, name="home_atendente"),
+    
 ]

@@ -1,0 +1,40 @@
+{% extends "clinica/user/base_user.html" %}
+{% load static %}
+
+{% block title %}Tela Cliente - Home{% endblock %}
+
+
+{% block content %}
+<div class="main-content">
+
+    <!-- Banner de boas-vindas -->
+    <section class="welcome-section">
+        <div class="welcome-text">
+            <h2>Seja Bem Vindo, {{ request.user.get_full_name }}</h2>
+            <p>Cuidar do seu pet com carinho e profissionalismo é a nossa prioridade</p>
+        </div>
+        <div class="welcome-img">
+            <img src="{% static 'images/dog.png' %}" alt="Dog Illustration">
+        </div>
+    </section>
+
+    <!-- Aviso Importante -->
+    <section class="notice-section">
+        <h3>AVISO IMPORTANTE</h3>
+        <p>A clínica abre às 08:00 e fecha às 18:00</p>
+        <p>A clínica entra de recesso todo ano no mês de julho e dezembro</p>
+    </section>
+
+    <!-- Curiosidades -->
+    <section class="curiosities-section">
+        <h3>Curiosidades sobre pets de pequeno porte</h3>
+        <ul>
+            <li>O focinho de cada cachorro é único, como a impressão digital das pessoas.</li>
+            <li>Os gatos ronronam não só quando estão felizes, mas também para se acalmarem.</li>
+            <li>Os coelhos podem girar as orelhas em quase 180 graus para ouvir melhor.</li>
+            <li>Os hamsters, apesar de pequenos, conseguem memorizar rotas de labirintos com facilidade.</li>
+        </ul>
+    </section>
+
+</div>
+{% endblock %}

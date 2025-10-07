@@ -1,0 +1,73 @@
+{% extends "clinica/vet/base_vet.html" %}
+{% load static %}
+
+{% block title %}Portal do Veterinário{% endblock %}
+
+{% block content %}
+<div class="container">
+
+    <!-- Cards de Resumo -->
+    <div class="cards">
+        <div class="card">
+            <h3>Consultas</h3>
+            <p>{{ consultas_qtd }} <small>consultas agendadas</small></p>
+        </div>
+        <div class="card">
+            <h3>Prontuários</h3>
+            <p>{{ prontuarios_pendentes_qtd }} <small>a finalizar</small></p>
+        </div>
+    </div>
+
+    <!-- Próximas Consultas -->
+    <section class="card full-width">
+        <h2>Próximas Consultas</h2>
+        {% if proximas_consultas %}
+            <ul class="lista-consultas">
+                {% for consulta in proximas_consultas %}
+                    <li>
+                        <strong>{{ consulta.pet.nome }}</strong> - {{ consulta.pet.tutor.get_full_name }} <br>
+                        Data: {{ consulta.data_hora|date:"d/m/Y H:i" }}
+                    </li>
+                {% endfor %}
+            </ul>
+        {% else %}
+            <p>Nenhuma consulta nos próximos 7 dias.</p>
+        {% endif %}
+    </section>
+
+    <!-- Histórico de Consultas Agendadas -->
+    <section class="card full-width">
+        <h2>Histórico de Consultas Agendadas</h2>
+
+        <input type="text" id="filtroConsulta" placeholder="Pesquisar por pet ou tutor...">
+
+        <ul id="historicoConsultas" class="lista-consultas">
+            {% for consulta in historico_consultas %}
+                <li data-pet="{{ consulta.pet.nome|lower }}" data-tutor="{{ consulta.pet.tutor.get_full_name|lower }}">
+                    <strong>{{ consulta.pet.nome }}</strong> - {{ consulta.pet.tutor.get_full_name }} <br>
+                    Data: {{ consulta.data_hora|date:"d/m/Y H:i" }}
+                </li>
+            {% endfor %}
+        </ul>
+    </section>
+</div>
+
+<!-- Script de filtragem -->
+<script>
+    const filtro = document.getElementById("filtroConsulta");
+    const lista = document.getElementById("historicoConsultas").getElementsByTagName("li");
+
+    filtro.addEventListener("keyup", function() {
+        let texto = filtro.value.toLowerCase();
+
+        for (let i = 0; i < lista.length; i++) {
+            let li = lista[i];
+            let pet = li.getAttribute("data-pet");
+            let tutor = li.getAttribute("data-tutor");
+
+            li.style.display = (pet.includes(texto) || tutor.includes(texto)) ? "" : "none";
+        }
+    });
+</script>
+
+{% endblock %}
