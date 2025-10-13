@@ -112,11 +112,6 @@ def cadastro_pet(request):
 
 
 # --- VIEWS DE VETERINÁRIO ---
-from datetime import date, timedelta
-from django.utils import timezone
-from django.contrib.auth.decorators import login_required
-from django.shortcuts import render
-
 @login_required
 def home_vet(request):
     hoje = timezone.now() 

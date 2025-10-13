@@ -4,17 +4,7 @@ from django.core.exceptions import ValidationError
 from django.db import transaction
 from django.contrib.auth.forms import AuthenticationForm
 from django.contrib.auth.forms import UserCreationForm, UserChangeForm
-
-
-from .models import (
-    CustomUser,
-    ClientePerfil,
-    Pet,
-    Consulta,
-    Prontuario,
-    Ausencia,
-    HorarioDisponivel
-)
+from .models import (CustomUser, ClientePerfil, Pet, Consulta, Prontuario, Ausencia, HorarioDisponivel)
 
 class CustomAuthenticationForm(AuthenticationForm):
     username = forms.EmailField(
@@ -139,7 +129,6 @@ class CadastroClienteForm(forms.Form):
         widget=forms.TextInput(attrs={'class': 'form-control'})
     )
     
-    # === CORREÇÃO: CAMPOS DE SENHA ADICIONADOS ===
     password = forms.CharField(
         label="Senha",
         strip=False,
@@ -154,8 +143,7 @@ class CadastroClienteForm(forms.Form):
     aceito = forms.BooleanField(
     label="Concordo com as diretrizes do site",
     required=True
-)
-    # ============================================
+    )
 
     def clean_cpf(self):
         cpf = self.cleaned_data.get('cpf')
@@ -168,15 +156,13 @@ class CadastroClienteForm(forms.Form):
         if CustomUser.objects.filter(email=email).exists():
             raise forms.ValidationError("Este e-mail já está em uso.")
         return email
-        
-    # === CORREÇÃO: VALIDAÇÃO DE SENHA ===
+    
     def clean(self):
         cleaned_data = super().clean()
         password = cleaned_data.get("password")
         password_confirm = cleaned_data.get("password_confirm")
 
         if password and password_confirm and password != password_confirm:
-            # Adiciona o erro ao campo de confirmação
             self.add_error('password_confirm', "As senhas não coincidem.")
             
         return cleaned_data
