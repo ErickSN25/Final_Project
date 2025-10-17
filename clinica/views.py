@@ -3,7 +3,7 @@ from django.http import HttpResponseRedirect
 from django.urls import reverse, reverse_lazy # Adicionei reverse_lazy
 from django.db import transaction
 from .models import CustomUser, ClientePerfil, Pet, Consulta, Prontuario, HorarioDisponivel, Notificacao
-from .forms import CadastroPetForm, ProntuarioForm, HorarioDisponivelForm, ConsultaForm
+from .forms import CadastroPetForm, ProntuarioForm, HorarioDisponivelForm, ConsultaForm, HorarioFiltroForm
 from django.contrib.auth.decorators import login_required
 from django.contrib.auth.views import LoginView
 from .forms import CustomAuthenticationForm
@@ -12,6 +12,7 @@ from django.utils import timezone
 from datetime import timedelta
 from django.db.models import Q
 from datetime import date
+from django.core.paginator import Paginator
 
 
 # --- VIEWS PÚBLICAS / BÁSICAS ---
@@ -178,16 +179,118 @@ def home_atendente(request):
     return render(request, 'clinica/atd/home_atendente.html', contexto)
 
 def gerenciar_horarios(request):
+    # 1. Buscar todos os horários
+    horarios = HorarioDisponivel.objects.all().order_by('data')
+
+    # 2. Adiciona a consulta relacionada a cada horário (ou None)
+    for horario in horarios:
+        horario.consulta = Consulta.objects.filter(horario_agendado=horario).first()
+
+    # 3. Formulário de filtros
+    filtro_form = HorarioFiltroForm(request.GET or None)
+
+    if filtro_form.is_valid():
+        veterinario = filtro_form.cleaned_data.get('veterinario')
+        if veterinario:
+            horarios = horarios.filter(veterinario=veterinario)
+
+        data = filtro_form.cleaned_data.get('data')
+        if data:
+            horarios = horarios.filter(data__date=data)
+
+        apenas_disponiveis = filtro_form.cleaned_data.get('apenas_disponiveis')
+        if apenas_disponiveis:
+            horarios = horarios.filter(disponivel=True)
+
+    # ----------------------
+    # Paginação (3 horários por página)
+    paginator = Paginator(horarios, 3)
+    page_number = request.GET.get('page')
+    page_obj = paginator.get_page(page_number)
+    # ----------------------
+
+    contexto = {
+        'horarios': page_obj,       # queryset paginado
+        'page_obj': page_obj,       # para controles de paginação
+        'filtro_form': filtro_form,
+    }
+
+    return render(request, 'clinica/atd/gerenciar_horarios.html', contexto)
+
+def criar_horario(request):
     if request.method == 'POST':
         form = HorarioDisponivelForm(request.POST)
         if form.is_valid():
             form.save()
-            return HttpResponseRedirect(reverse('gerenciar_horarios'))
+            messages.success(request, "Horário criado com sucesso!")
+            return redirect('gerenciar_horarios')
     else:
         form = HorarioDisponivelForm()
-    horarios = HorarioDisponivel.objects.all().order_by('data') 
-    return render(request, 'clinica/gerenciar_horarios.html', {'form': form, 'horarios': horarios})
 
+    return render(request, 'clinica/atd/criar_horario.html', {'form': form})
+
+def reservar_horario(request, horario_id):
+    """
+    View para reservar um horário já existente, vinculando cliente e pet.
+    """
+    horario = get_object_or_404(HorarioDisponivel, id=horario_id)
+
+    # Buscar todos os clientes e pets existentes
+    clientes = ClientePerfil.objects.all()
+    pets = Pet.objects.all()
+
+    if request.method == 'POST':
+        cliente_id = request.POST.get('cliente_id')
+        pet_id = request.POST.get('pet_id')
+        observacoes = request.POST.get('observacoes', '')
+
+        cliente = get_object_or_404(ClientePerfil, id=cliente_id)
+        pet = get_object_or_404(Pet, id=pet_id)
+
+        # Criar a consulta
+        Consulta.objects.create(
+            pet=pet,
+            veterinario=horario.veterinario,
+            horario_agendado=horario,
+            motivo=observacoes,
+            status='Agendada'
+        )
+
+        # Atualizar status do horário
+        horario.disponivel = False
+        horario.save()
+
+        messages.success(request, f"Horário reservado para {cliente.user.get_full_name()} e o pet {pet.nome}!")
+        return redirect('gerenciar_horarios')
+
+    contexto = {
+        'horario': horario,
+        'clientes': clientes,
+        'pets': pets,
+    }
+    return render(request, 'clinica/atd/reservar_horario.html', contexto)
+
+def editar_horario(request, horario_id):
+    """Edita um horário existente."""
+    horario = get_object_or_404(HorarioDisponivel, id=horario_id)
+    if request.method == 'POST':
+        form = HorarioDisponivelForm(request.POST, instance=horario)
+        if form.is_valid():
+            form.save()
+            return redirect('gerenciar_horarios')
+    else:
+        form = HorarioDisponivelForm(instance=horario)
+
+    return render(request, 'clinica/atd/editar_horario.html', {'form': form, 'horario': horario})
+
+
+def excluir_horario(request, horario_id):
+    """Confirma e exclui um horário."""
+    horario = get_object_or_404(HorarioDisponivel, id=horario_id)
+    if request.method == 'POST':
+        horario.delete()
+        return redirect('gerenciar_horarios')
+    return render(request, 'clinica/atd/excluir_horario.html', {'horario': horario})
 # --- VIEWS DE NOTIFICAÇÃO ---
 
 @login_required

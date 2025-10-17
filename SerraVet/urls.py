@@ -18,6 +18,7 @@ from django.contrib import admin
 from django.urls import path
 from django.contrib.auth.views import LogoutView
 from clinica.views import CustomLoginView, redirect_home, home_user, home_vet, cadastro, home, home_atendente
+from clinica import views
 
 urlpatterns = [
     path('admin/', admin.site.urls),
@@ -29,5 +30,9 @@ urlpatterns = [
     path("redirect_home/", redirect_home, name="redirect_home"),
     path("home_vet/", home_vet, name="home_vet"),
     path("home_atendente/", home_atendente, name="home_atendente"),
-    
+    path('home_atendente/atd/gerenciar_horarios/', views.gerenciar_horarios, name='gerenciar_horarios'),
+    path('home_atendente/atd/editar_horario/<int:horario_id>/', views.editar_horario, name='editar_horario'),
+    path('home_atendente/atd/excluir_horario/<int:horario_id>/', views.excluir_horario, name='excluir_horario'),
+    path('home_atendente/atd/gerenciar_horarios/<int:horario_id>/reservar/', views.reservar_horario, name='reservar_horario'),
+    path('home_atendente/atd/gerenciar_horarios/criar/', views.criar_horario, name='criar_horario'),
 ]

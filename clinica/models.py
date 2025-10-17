@@ -244,9 +244,12 @@ class HorarioDisponivel(models.Model):
     veterinario = models.ForeignKey(CustomUser, on_delete=models.CASCADE, limit_choices_to={'user_type': 'veterinario'})
     data = models.DateTimeField()
     disponivel = models.BooleanField(default=True)
+    disponivel = models.BooleanField(default=True)  # 👈 Novo campo!
 
     def __str__(self):
-        return f"{self.veterinario.get_full_name()} - {self.data}"
+        status = "Disponível" if self.disponivel else "Indisponível"
+        return f"{self.veterinario} - {self.data.strftime('%d/%m/%Y %H:%M')} ({status})"
+
 
     class Meta:
         verbose_name = "Horário Disponível"

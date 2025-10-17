@@ -6,6 +6,7 @@
     <title>{% block title %}Portal do Atendente {% endblock %}</title>
     <link rel="stylesheet" href="{% static 'css/style_ate.css' %}">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    {% block extra_head %}{% endblock %}
 </head>
 <body> 
     <!-- Navbar Superior -->
@@ -21,8 +22,8 @@
         <aside class="sidebar">
             <h2>Menu</h2>
             <ul>
-                <li><a href="#">Início</a></li>
-                <li><a href="#">Gerenciamento de Horarios</a></li>
+                <li><a href={%url 'home_atendente'%}>Início</a></li>
+                <li><a href={%url 'gerenciar_horarios'%}>Gerenciamento de Horarios</a></li>
                 <li><a href="#">Gerenciamento de pagamentos</a></li>
             </ul>
         </aside>

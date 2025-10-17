@@ -39,7 +39,7 @@ class HorarioDisponivelForm(forms.ModelForm):
     
     class Meta:
         model = HorarioDisponivel
-        fields = ['veterinario', 'data']
+        fields = ['veterinario', 'data', 'disponivel']
         widgets = {
             'data': forms.DateTimeInput(attrs={'type': 'datetime-local'}),
         }
@@ -47,6 +47,8 @@ class HorarioDisponivelForm(forms.ModelForm):
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
         self.fields['veterinario'].queryset = CustomUser.objects.filter(user_type='veterinario')
+
+    
 
 
 # -------------------------
@@ -261,3 +263,24 @@ class ConsultaForm(forms.ModelForm):
             )
         
         return cleaned_data
+
+
+#=====================
+#FILTROS
+#=====================
+
+class HorarioFiltroForm(forms.Form):
+    veterinario = forms.ModelChoiceField(
+        queryset=CustomUser.objects.filter(user_type='veterinario'),
+        required=False,
+        label="Veterinário"
+    )
+    data = forms.DateField(
+        required=False,
+        widget=forms.DateInput(attrs={'type': 'date'}),
+        label="Data"
+    )
+    apenas_disponiveis = forms.BooleanField(
+        required=False,
+        label="Apenas Disponíveis"
+    )
