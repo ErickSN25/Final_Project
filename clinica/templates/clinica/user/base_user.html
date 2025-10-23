@@ -21,8 +21,8 @@
         <aside class="sidebar">
             <h2>Menu</h2>
             <ul>
-                <li><a href="{% url 'home_user' %}">Início</a></li>
-                <li><a href="#">Meus Pets</a></li>
+                <li><a href="{% url 'home_user' %}" {% if request.resolver_match.url_name == 'home_user' %}class="active"{% endif %}>Início</a></li>
+                <li><a href="{% url 'meus_pets' %}" {% if request.resolver_match.url_name == 'meus_pets' %}class="active"{% endif %}>Meus Pets</a></li>
                 <li><a href="#">Consultas</a></li>
                 <li><a href="#">Pagamento</a></li>
                 <li><a href="#">Notificações</a></li>

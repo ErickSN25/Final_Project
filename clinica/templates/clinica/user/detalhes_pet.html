@@ -1,0 +1,39 @@
+{% extends "clinica/user/base_user.html" %}
+{% load static %}
+
+{% block title %}{{ titulo_pagina }}{% endblock %}
+
+{% block content %}
+<div class="details-container">
+    <div class="details-header">
+        <div class="header-left">
+            <span class="dot">●</span> 
+            <h1>{{ titulo_pagina }}</h1>
+        </div>
+        <div>
+            <a href="{% url 'meus_pets' %}" class="btn-voltar-details">voltar</a>
+            <a href="{% url 'editar_pet' pet.id %}" class="btn-edit-details">Editar</a>
+        </div>
+    </div>
+
+    <div class="pet-details-card">
+        <div class="pet-photo-display">
+            {% if pet.foto_pet %}
+                <img src="{{ pet.foto_pet.url }}" alt="Foto de {{ pet.nome }}">
+            {% else %}
+                <img src="{% static 'img/default_pet.png' %}" alt="Foto Padrão">
+            {% endif %}
+        </div>
+        
+        <div class="pet-info-grid">
+            <p class="detail-row"><strong>Nome:</strong> <span>{{ pet.nome }}</span></p>
+            <p class="detail-row"><strong>Espécie:</strong> <span>{{ pet.get_especie_display }}</span></p>
+            <p class="detail-row"><strong>Raça:</strong> <span>{% if pet.raca %}{{ pet.raca }}{% else %}Não informada{% endif %}</span></p>
+            <p class="detail-row"><strong>Peso:</strong> <span>{{ pet.peso }} Kg</span></p>
+            <p class="detail-row"><strong>Vacinas em dia?</strong> <span>{% if pet.vacinas_em_dia %}Sim{% else %}Não{% endif %}</span></p>
+            <p class="detail-row full-width"><strong>Alergias:</strong> <span>{% if pet.alergias %}{{ pet.alergias }}{% else %}Nenhuma{% endif %}</span></p>
+            <p class="detail-row full-width"><strong>Doenças Preexistentes:</strong> <span>{% if pet.doencas %}{{ pet.doencas }}{% else %}Nenhuma{% endif %}</span></p>
+        </div>
+    </div>
+</div>
+{% endblock content %}

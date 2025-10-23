@@ -97,19 +97,81 @@ def home_user(request):
     }
     return render(request, 'clinica/user/home_user.html', context)
 
+
 @login_required
-def cadastro_pet(request):
+def meus_pets_view(request):
+    pets = Pet.objects.filter(tutor=request.user).order_by('nome')
+    context = {
+        'pets': pets,
+        'titulo_pagina': 'Meus Pets',
+    }
+    return render(request, 'clinica/user/meus_pets.html', context)
+
+@login_required
+def cadastrar_pet_view(request):
     if request.method == 'POST':
-        form = CadastroPetForm(request.POST)
+        form = CadastroPetForm(request.POST, request.FILES)
         if form.is_valid():
-            pet = form.save(commit=False)
-            pet.tutor = request.user
-            pet.save()
-            return redirect('perfil_cliente', cliente_id=request.user.clienteperfil.id)
+            novo_pet = form.save(commit=False)
+            novo_pet.tutor = request.user
+            novo_pet.save()
+            messages.success(request, f'O pet "{novo_pet.nome}" foi cadastrado com sucesso!')
+            return redirect('meus_pets')
+    
     else:
         form = CadastroPetForm()
-    return render(request, 'clinica/cadastro_pet.html', {'form': form})
+        
+    context = {
+        'form': form,
+        'titulo_pagina': 'Cadastrar Novo Pet',
+    }
 
+    return render(request, 'clinica/user/cadastrar_pet.html', context)
+
+@login_required
+def excluir_pet_view(request, pet_id):
+    pet = get_object_or_404(Pet, id=pet_id, tutor=request.user)
+    
+    if request.method == 'POST':
+        nome_pet = pet.nome
+        pet.delete()
+        messages.warning(request, f'O pet "{nome_pet}" foi removido com sucesso.')
+    return redirect('meus_pets')
+
+@login_required
+def detalhes_pet_view(request, pet_id):
+    pet = get_object_or_404(Pet, id=pet_id, tutor=request.user)
+    hoje = date.today()
+    # Assumindo que você tem um campo 'data_nascimento' no seu modelo Pet
+    # Se não tiver, você pode adicionar ou estimar de outra forma
+    # idade = hoje.year - pet.data_nascimento.year - ((hoje.month, hoje.day) < (pet.data_nascimento.month, pet.data_nascimento.day))
+    # Por enquanto, vou deixar como um placeholder, pois não está no seu model atual.
+    # Você pode adicionar um campo 'idade' como CharField ou calcular se tiver 'data_nascimento'
+    context = {
+        'pet': pet,
+        'titulo_pagina': f'Detalhamento dos dados de {pet.nome}',
+    }
+    return render(request, 'clinica/user/detalhes_pet.html', context)
+
+@login_required
+def editar_pet_form_view(request, pet_id): 
+    pet = get_object_or_404(Pet, id=pet_id, tutor=request.user)
+    
+    if request.method == 'POST':
+        form = CadastroPetForm(request.POST, request.FILES, instance=pet)
+        if form.is_valid():
+            form.save()
+            messages.success(request, f'Os dados de "{pet.nome}" foram atualizados com sucesso.')
+            return redirect('detalhes_pet', pet_id=pet.id) 
+    else:
+        form = CadastroPetForm(instance=pet)
+        
+    context = {
+        'form': form,
+        'pet': pet,
+        'titulo_pagina': f'Editar Dados: {pet.nome}',
+    }
+    return render(request, 'clinica/user/editar_pet.html', context) 
 
 
 # --- VIEWS DE VETERINÁRIO ---

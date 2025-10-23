@@ -176,3 +176,567 @@ body {
     margin-bottom: 8px;
 }
 
+
+/* MY PETS */
+
+/* Estilos Específicos para a página Meus Pets */
+.pets-container {
+    padding: 20px;
+}
+
+/* Cabeçalho da Seção */
+.pets-header {
+    display: flex;
+    flex-direction: column;
+    margin-bottom: 25px;
+    position: relative; /* Para posicionar o botão de cadastro */
+}
+
+.pets-header h1 {
+    font-size: 1.8em;
+    color: #333;
+    margin: 0 0 5px 0;
+}
+
+.pets-header p {
+    font-size: 1em;
+    color: #666;
+    margin: 0;
+}
+
+/* Botão Cadastrar Pet */
+.btn-cadastrar-pet {
+    background-color: #a4c9b3; /* Um verde suave, similar ao da imagem */
+    color: white;
+    padding: 8px 15px;
+    border: none;
+    border-radius: 5px;
+    text-decoration: none;
+    font-weight: bold;
+    transition: background-color 0.3s;
+    position: absolute;
+    top: 0;
+    right: 0;
+    align-self: flex-start; /* Garante que fique no canto superior direito */
+    box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+}
+
+.btn-cadastrar-pet:hover {
+    background-color: #8db89a;
+}
+
+/* Lista de Pets (Layout com Grid) */
+.pets-list {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); /* Responsivo para 1 ou 2 colunas */
+    gap: 20px;
+}
+
+/* Card Individual do Pet */
+.pet-card {
+    background-color: #fff;
+    border-radius: 10px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    padding: 20px;
+    display: flex;
+    flex-direction: column;
+}
+
+.pet-info-header {
+    display: flex;
+    align-items: center;
+    border-bottom: 1px solid #eee;
+    padding-bottom: 15px;
+    margin-bottom: 15px;
+}
+
+.pet-photo {
+    width: 60px;
+    height: 60px;
+    border-radius: 50%;
+    object-fit: cover;
+    margin-right: 15px;
+    border: 2px solid #ddd;
+}
+
+.pet-name-and-breed h2 {
+    font-size: 1.4em;
+    color: #333;
+    margin: 0;
+}
+
+.pet-name-and-breed span {
+    font-size: 1em;
+    color: #777;
+    font-weight: normal;
+}
+
+/* Detalhes do Pet */
+.pet-details p {
+    margin: 8px 0;
+    font-size: 0.95em;
+    color: #555;
+    display: flex;
+    justify-content: space-between;
+}
+
+.pet-details strong {
+    font-weight: 600;
+    color: #333;
+    min-width: 100px; /* Alinha os valores */
+    margin-right: 10px;
+}
+
+/* Ações (Botões) */
+.pet-actions {
+    display: flex;
+    gap: 10px;
+    margin-top: auto; /* Empurra os botões para o final do card */
+    padding-top: 15px;
+    border-top: 1px solid #eee;
+}
+
+.pet-actions button {
+    padding: 10px 20px;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    font-weight: 600;
+    transition: background-color 0.3s, opacity 0.3s;
+    flex-grow: 1; /* Faz os botões dividirem o espaço */
+}
+
+.btn-detalhes {
+    background-color: #b2b2c2; /* Cor azul/cinza suave */
+    color: white;
+}
+
+.btn-detalhes:hover {
+    background-color: #9a9aab;
+}
+
+.btn-excluir {
+    background-color: #c9a4a4; /* Cor rosa/marrom suave */
+    color: white;
+}
+
+.btn-excluir:hover {
+    background-color: #b88f8f;
+}
+
+
+/* Detalhes do Pet - Página */
+.sidebar ul li a.active {
+    background: #e9ecef; /* cor de fundo ao passar */
+    font-weight: bold;
+    color: #000000; /* cor do texto ao passar */
+    border-left: 5px solid #a4c9b3; /* Linha verde/azul do destaque */
+}
+
+/* Estilos para a página de Detalhes do Pet (NOVO) */
+.details-container {
+    padding: 20px;
+}
+
+.details-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 25px;
+    border-bottom: 1px solid #eee; /* Linha de separação */
+    padding-bottom: 15px;
+}
+
+.details-header .header-left {
+    display: flex;
+    align-items: center;
+}
+
+.details-header a {
+    margin-left: 10px;
+    text-decoration: none;
+    font-size: 1em;
+    padding: 8px 15px;
+    border-radius: 5px;
+    font-weight: 600;
+    text-align: center;
+    transition: background-color 0.2s;
+}
+
+.details-header .header-left .dot {
+    font-size: 1.5em; /* Tamanho da bolinha */
+    color: #a4c9b3; /* Cor da bolinha */
+    margin-right: 10px;
+    line-height: 0; /* Alinha verticalmente com o texto */
+}
+
+.details-header h1 {
+    font-size: 1.8em;
+    color: #333;
+    margin: 0;
+}
+
+.btn-edit-details {
+    background-color: #a4c9b3; /* Verde do Cadastrar Pet */
+    color: white;
+    padding: 8px 15px;
+    border: none;
+    border-radius: 5px;
+    text-decoration: none;
+    font-weight: bold;
+    transition: background-color 0.3s;
+    box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+}
+
+.btn-edit-details:hover {
+    background-color: #8db89a;
+}
+
+.btn-voltar-details {
+    background-color: #c9a4a4; /* Marrom suave */
+    color: white;
+    padding: 8px 15px;
+    border: none;
+    border-radius: 5px;
+    text-decoration: none;
+    font-weight: bold;
+    transition: background-color 0.3s;
+    box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+}
+
+.btn-voltar-details:hover {
+    background-color: #b88f8f;
+}
+
+
+
+.pet-details-card {
+    background-color: #fff;
+    border-radius: 10px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    padding: 30px;
+    display: flex;
+    flex-direction: column; /* Para a foto ficar em cima dos dados */
+    align-items: center; /* Centraliza a foto */
+}
+
+.pet-photo-display img {
+    width: 120px;
+    height: 120px;
+    border-radius: 50%;
+    object-fit: cover;
+    border: 3px solid #ddd;
+    margin-bottom: 25px;
+}
+
+.pet-info-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr; /* Duas colunas para os detalhes */
+    gap: 15px 30px; /* Espaço entre as linhas e colunas */
+    width: 100%; /* Ocupa a largura total do card */
+    max-width: 600px; /* Limita a largura para melhor leitura */
+}
+
+.detail-row {
+    display: flex;
+    justify-content: space-between;
+    align-items: baseline; /* Alinha os textos pela base */
+    padding: 5px 0;
+    border-bottom: 1px solid #eee; /* Linha inferior de cada detalhe */
+    margin: 0; /* Remove margem padrão do p */
+}
+
+.detail-row:last-of-type {
+    border-bottom: none; /* Remove a linha do último item */
+}
+
+.detail-row strong {
+    color: #555;
+    font-weight: 600;
+    margin-right: 10px; /* Espaço entre o label e o valor */
+    flex-shrink: 0; /* Impede que o label encolha */
+}
+
+.detail-row span {
+    color: #333;
+    text-align: right;
+    flex-grow: 1; /* Permite que o valor ocupe o espaço restante */
+    font-weight: 500;
+}
+
+.detail-row.full-width {
+    grid-column: 1 / -1; /* Ocupa a largura total */
+    flex-direction: column; /* Label em cima, valor embaixo */
+    align-items: flex-start;
+    padding-top: 15px;
+    border-top: 1px dashed #eee; /* Uma linha diferente para observações */
+}
+
+.detail-row.full-width strong {
+    margin-bottom: 5px;
+    font-size: 1.1em;
+}
+
+.detail-row.full-width span {
+    text-align: left;
+    background-color: #f9f9f9;
+    border: 1px solid #e0e0e0;
+    border-radius: 5px;
+    padding: 10px;
+    width: 100%;
+    box-sizing: border-box;
+    min-height: 80px; /* Altura mínima para observações */
+}
+
+
+/* ============================================== */
+/* ESTILOS ESPECÍFICOS PARA O FORMULÁRIO DE CADASTRO/EDIÇÃO (image_099b99.png) */
+/* ============================================== */
+
+/* Container geral do formulário */
+.form-container {
+    background: #fff;
+    padding: 30px;
+    border-radius: 10px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.05);
+    max-width: 900px; /* Aumentado ligeiramente para melhor visualização */
+    margin: 20px auto;
+}
+
+/* --- Novo Header do Formulário --- */
+.form-header-title {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 25px;
+    padding-bottom: 15px;
+    border-bottom: 1px solid #eee;
+}
+
+.form-header-title .header-left {
+    display: flex;
+    align-items: center;
+}
+
+.form-header-title .header-left .dot {
+    font-size: 1.5em; 
+    color: #a4c9b3; /* Cor da bolinha */
+    margin-right: 10px;
+    line-height: 0; 
+}
+
+.form-header-title h1 {
+    font-size: 1.8em;
+    color: #333;
+    margin: 0;
+    border-bottom: none; /* Remove a linha de baixo do H1 padrão */
+    padding-bottom: 0;
+}
+
+.form-header-title .header-actions {
+    display: flex;
+    gap: 10px;
+}
+
+
+/* Botão Adicionar/Salvar no header */
+.btn-submit-header {
+    background-color: #a4c9b3; 
+    color: white;
+    padding: 8px 15px;
+    border: none;
+    border-radius: 5px;
+    font-weight: bold;
+    cursor: pointer;
+    transition: background-color 0.3s;
+    box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+}
+
+.btn-submit-header:hover {
+    background-color: #8db89a;
+}
+
+/* Botão Cancelar no header */
+.btn-cancel-header {
+    background-color: #c9a4a4; /* Marrom suave */
+    color: white;
+    padding: 8px 15px;
+    border: none;
+    border-radius: 5px;
+    text-decoration: none;
+    font-weight: bold;
+    transition: background-color 0.3s;
+    display: inline-block;
+    box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+}
+
+.btn-cancel-header:hover {
+    background-color: #b88f8f;
+}
+
+/* Contêiner da foto e nome no card */
+.pet-card .pet-info-header {
+    display: flex;
+    align-items: center;
+    margin-bottom: 20px;
+    padding-bottom: 15px;
+    border-bottom: 1px solid #f0f0f0;
+}
+
+/* --- Layout dos Campos do Formulário --- */
+.form-fields-grid {
+    display: flex;
+    flex-wrap: wrap; /* Permite que os itens quebrem para a próxima linha */
+    gap: 20px;
+}
+
+.form-row {
+    display: flex;
+    flex-direction: column;
+}
+
+/* Campos de largura total (100%): Nome, Espécie, Raça */
+.form-row.full-width {
+    width: 100%;
+}
+
+/* Campos de um terço (1/3): Idade, Peso, Vacinas */
+.form-row.third-width {
+    width: calc(33.333% - 14px); /* 1/3 do container menos o gap (20px) */
+    box-sizing: border-box;
+}
+
+/* Campos de meia coluna (1/2): Alergias, Doenças */
+.form-row.half-column {
+    width: calc(50% - 10px); /* 1/2 do container menos o gap (20px) */
+    box-sizing: border-box;
+}
+
+/* --- Estilo Base dos Campos --- */
+.form-row label {
+    font-weight: 500;
+    color: #333;
+    margin-bottom: 5px;
+    font-size: 1.1em;
+}
+
+.form-row input[type="text"],
+.form-row input[type="number"],
+.form-row textarea,
+.form-row select {
+    width: 100%;
+    padding: 10px;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+    box-sizing: border-box;
+    margin-top: 3px;
+    font-size: 1em;
+}
+
+/* Estilo específico para Textareas em 1/2 coluna (Alergias/Doenças) */
+.form-row.half-column textarea {
+    min-height: 120px;
+    resize: vertical;
+    width: 100%; 
+}
+
+
+/* --- Layout Customizado do Campo de Foto --- */
+
+/* Esconde o input file padrão (manipulado via JS no template) */
+.form-row input[type="file"] {
+    display: none; 
+}
+
+.form-row .file-info {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    margin-top: 5px;
+    background: #f9f9f9;
+    border: 1px solid #eee;
+    border-radius: 5px;
+    padding: 5px;
+}
+
+.form-row .btn-anexar {
+    background-color: #e0e0e0;
+    color: #555;
+    padding: 8px 15px;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+    cursor: pointer;
+    font-weight: normal;
+    transition: background-color 0.3s;
+}
+
+.form-row .btn-anexar:hover {
+    background-color: #ccc;
+}
+
+.form-row .file-info span {
+    color: #777;
+    font-style: italic;
+    white-space: nowrap; /* Evita quebra de linha do texto do arquivo */
+    overflow: hidden;
+    text-overflow: ellipsis;
+    max-width: 100%;
+}
+
+/* --- Layout Customizado para Checkbox (Vacinas em dia) --- */
+.form-row .checkbox-options {
+    display: flex;
+    align-items: center;
+    justify-content: center; 
+    height: 100%; 
+    background: #f0f0f0;
+    border: 1px solid #ddd;
+    border-radius: 5px;
+    padding: 0 10px;
+    box-sizing: border-box;
+    /* Faz o bloco ficar visualmente alinhado com a altura dos inputs text */
+    min-height: 48px; 
+}
+
+.form-row .checkbox-options input[type="checkbox"] {
+    width: auto;
+    margin-right: 8px;
+}
+
+/* Estilo para erros de formulário (opcional, mas bom ter) */
+.form-row ul.errorlist {
+    list-style: none;
+    padding: 5px 0 0 0;
+    margin: 0;
+    color: #cc0000;
+    font-size: 0.85em;
+}
+
+/* Remove margem inferior para a última linha de campos */
+.form-fields-grid:last-child {
+    margin-bottom: 0;
+}
+
+/* --- Estilo da Pré-Visualização na Edição (current-photo-edit) --- */
+
+.current-photo-edit {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start; /* Alinhado à esquerda do campo */
+    margin-bottom: 15px;
+}
+
+.current-photo-edit img {
+    width: 80px; /* Tamanho da pré-visualização */
+    height: 80px;
+    border-radius: 10px; /* Borda quadrada/arredondada para pré-visualização */
+    object-fit: cover;
+    border: 1px solid #ccc;
+    margin-bottom: 5px;
+}
+
+.current-photo-edit p {
+    font-size: 0.9em;
+    color: #666;
+    margin: 0;
+}

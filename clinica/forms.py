@@ -149,9 +149,17 @@ class CadastroClienteForm(forms.Form):
 
     def clean_cpf(self):
         cpf = self.cleaned_data.get('cpf')
-        if CustomUser.objects.filter(cpf=cpf).exists():
-            raise forms.ValidationError("Este CPF já está cadastrado.")
-        return cpf
+        cpf_limpo = ''.join(filter(str.isdigit, cpf)) 
+        if len(cpf_limpo) != 11:
+            raise forms.ValidationError("O CPF deve conter exatamente 11 dígitos.")
+        return cpf 
+    
+    def clean_telefone(self):
+        telefone = self.cleaned_data.get('telefone')
+        telefone_limpo = ''.join(filter(str.isdigit, telefone))
+        if not (10 <= len(telefone_limpo) <= 11):
+            raise forms.ValidationError("O telefone deve ter 10 ou 11 dígitos.")
+        return telefone_limpo
 
     def clean_email(self):
         email = self.cleaned_data.get('email')
@@ -168,7 +176,7 @@ class CadastroClienteForm(forms.Form):
             self.add_error('password_confirm', "As senhas não coincidem.")
             
         return cleaned_data
-    # ====================================
+    
 
     def save(self, commit=True):
         with transaction.atomic():
@@ -192,7 +200,7 @@ class CadastroPetForm(forms.ModelForm):
     """ Formulário para o cliente cadastrar um novo pet. """
     class Meta:
         model = Pet
-        fields = ['nome', 'especie', 'raca', 'peso', 'vacinas_em_dia', 'alergias', 'doencas']
+        fields = ['foto_pet', 'nome', 'especie', 'raca', 'peso', 'vacinas_em_dia', 'alergias', 'doencas']
 
 
 class AgendamentoClienteForm(forms.Form):
