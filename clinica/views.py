@@ -142,11 +142,6 @@ def excluir_pet_view(request, pet_id):
 def detalhes_pet_view(request, pet_id):
     pet = get_object_or_404(Pet, id=pet_id, tutor=request.user)
     hoje = date.today()
-    # Assumindo que você tem um campo 'data_nascimento' no seu modelo Pet
-    # Se não tiver, você pode adicionar ou estimar de outra forma
-    # idade = hoje.year - pet.data_nascimento.year - ((hoje.month, hoje.day) < (pet.data_nascimento.month, pet.data_nascimento.day))
-    # Por enquanto, vou deixar como um placeholder, pois não está no seu model atual.
-    # Você pode adicionar um campo 'idade' como CharField ou calcular se tiver 'data_nascimento'
     context = {
         'pet': pet,
         'titulo_pagina': f'Detalhamento dos dados de {pet.nome}',
