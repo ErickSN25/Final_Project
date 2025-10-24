@@ -1,3 +1,4 @@
+import os
 """
 Django settings for SerraVet project.
 
@@ -74,8 +75,12 @@ WSGI_APPLICATION = 'SerraVet.wsgi.application'
 
 DATABASES = {
     'default': {
-        'ENGINE': 'django.db.backends.sqlite3',
-        'NAME': BASE_DIR / 'db.sqlite3',
+        'ENGINE': 'django.db.backends.postgresql',
+        'NAME': os.getenv('DJANGO_DB_NAME', 'django_db'),
+        'USER': os.getenv('DJANGO_DB_USER', 'django_user'),
+        'PASSWORD': os.getenv('DJANGO_DB_PASSWORD', 'django_pass'),
+        'HOST': os.getenv('DJANGO_DB_HOST', 'db'),
+        'PORT': '5432',
     }
 }
 
