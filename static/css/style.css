@@ -197,7 +197,7 @@ body {
 
 /* FORMULÁRIO - Lado Esquerdo */
 .cadastro-form-area {
-    width: 50%; /* 50% da tela */
+    width: 45%; /* 45% da tela */
     background-color: #fff;
     display: flex;
     justify-content: center;
@@ -207,7 +207,7 @@ body {
 }
 .cadastro-container {
     width: 80%;
-    max-width: 400px;
+    max-width: 350px;
     background-color: #fff;
     padding: 30px 40px;
     border-radius: 12px;

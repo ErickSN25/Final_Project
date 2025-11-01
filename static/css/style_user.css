@@ -740,3 +740,339 @@ body {
     color: #666;
     margin: 0;
 }
+
+
+/* ============================================== */
+
+/* ==================================== */
+/*     TELA MINHAS CONSULTAS (9912a6)    */
+/* ==================================== */
+
+.consultas-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 25px;
+}
+
+.consultas-header h1 {
+    font-size: 1.8rem;
+    color: #333;
+}
+
+.consultas-header .subtitle {
+    font-size: 0.95rem;
+    color: #777;
+}
+
+/* Botão Agendar Consulta */
+.btn-agendar {
+    background-color: #6c757d; /* Cinza suave como no mockup */
+    color: white;
+    padding: 10px 18px;
+    border-radius: 8px;
+    font-size: 0.95rem;
+    text-decoration: none;
+    display: flex;
+    align-items: center;
+    gap: 5px;
+    transition: background-color 0.2s;
+}
+
+.btn-agendar:hover {
+    background-color: #5a6268;
+}
+
+.consultas-list {
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+}
+
+/* Cartão Individual da Consulta */
+.consulta-card {
+    background-color: white;
+    padding: 20px;
+    border-radius: 12px;
+    border: 1px solid #eee;
+    /* card-shadow deve ser uma classe genérica para sombra suave */
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05); 
+}
+
+.consulta-card .card-top {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-start;
+    padding-bottom: 15px;
+    margin-bottom: 15px;
+    border-bottom: 1px solid #f0f0f0;
+}
+
+.consulta-card .pet-info {
+    display: flex;
+    align-items: center;
+    gap: 15px;
+}
+
+.consulta-card .pet-foto {
+    width: 60px;
+    height: 60px;
+    border-radius: 50%;
+    object-fit: cover;
+    border: 2px solid #ddd;
+}
+
+.consulta-card h3 {
+    font-size: 1.25rem;
+    font-weight: 600;
+    margin-bottom: 2px;
+}
+
+.consulta-card .veterinario-nome {
+    font-size: 0.9rem;
+    color: #555;
+}
+
+.consulta-card .horario-agendado {
+    font-size: 0.95rem;
+    color: #222;
+    font-weight: 600;
+    margin-bottom: 15px;
+}
+
+/* Tags de Status */
+.status-tag {
+    padding: 4px 10px;
+    border-radius: 15px;
+    font-size: 0.75rem;
+    font-weight: bold;
+    text-transform: uppercase;
+    align-self: flex-start; /* Alinha a tag ao topo */
+}
+
+/* Cores das Tags (Mapeamento do seu Models.py) */
+.status-marcada {
+    background-color: #e0f2f1; /* Ciano claro */
+    color: #00897b;
+}
+.status-cancelada {
+    background-color: #fce4ec; /* Vermelho claro */
+    color: #d81b60;
+}
+.status-em_andamento {
+    background-color: #fffde7; /* Amarelo muito claro */
+    color: #fdd835;
+}
+.status-realizada {
+    background-color: #e8f5e9; /* Verde claro (como 'Concluída' no mockup) */
+    color: #43a047;
+}
+
+/* ==================================== */
+/*     BLOCOS DE INFORMAÇÃO/ALERTA      */
+/* ==================================== */
+
+.info-box {
+    padding: 12px;
+    border-radius: 8px;
+    margin-bottom: 15px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    font-size: 0.9rem;
+}
+
+/* Bloco Aguardando (Amarelo/Laranja) */
+.info-aguardando {
+    background-color: #fef5e7; /* Laranja claro */
+    color: #cb7516;
+    border: 1px solid #f9e3c9;
+}
+
+/* Bloco Prontuário Disponível (Verde) */
+.info-prontuario {
+    background-color: #e6f6e6; /* Verde claro */
+    color: #388e3c;
+    border: 1px solid #c8e6c9;
+}
+
+.info-prontuario span {
+    font-weight: bold;
+}
+
+.info-em-andamento {
+    background-color: #fff8e1;
+    color: #fbc02d;
+    border: 1px solid #ffecb3;
+}
+
+.info-cancelada {
+    background-color: #ffebee;
+    color: #e53935;
+    border: 1px solid #ffcdd2;
+}
+
+
+/* Botão "Ver" (Prontuário) */
+.btn-ver-prontuario {
+    background-color: #6e8e6e; /* Cor do botão 'Ver' no mockup */
+    color: white;
+    padding: 6px 15px;
+    border-radius: 6px;
+    text-decoration: none;
+    font-weight: bold;
+    transition: background-color 0.2s;
+}
+
+.btn-ver-prontuario:hover {
+    background-color: #5b795b;
+}
+
+/* Botão Detalhes (Pode ser um botão simples ou um link que se parece com texto) */
+.btn-detalhes {
+    /* Estilo de link que você preferir, ou adicione uma classe de botão. */
+    color: #4b6175;
+    text-decoration: underline;
+    font-size: 0.95rem;
+    display: block;
+    text-align: right;
+}
+
+/* ==================================== */
+/*     FILTRO E PAGINAÇÃO              */
+/* ==================================== */
+
+.filter-bar {
+    background-color: #f8f9fa; /* Fundo mais claro para a barra */
+    padding: 15px 20px;
+    border-radius: 8px;
+    margin-bottom: 25px;
+    box-shadow: none; /* Remove a sombra do card se usar 'card-shadow' */
+    border: 1px solid #e9ecef;
+}
+
+.form-filtro {
+    display: flex;
+    gap: 15px;
+    align-items: flex-end; /* Alinha os botões e campos */
+}
+
+.form-group-inline {
+    display: flex;
+    flex-direction: column;
+    flex: 1; /* Distribui o espaço entre os campos */
+    min-width: 150px;
+}
+
+.form-group-inline label {
+    font-size: 0.9rem;
+    color: #555;
+    margin-bottom: 5px;
+}
+
+.form-select, .form-control {
+    padding: 8px 12px;
+    border: 1px solid #ced4da;
+    border-radius: 4px;
+    font-size: 1rem;
+    width: 100%;
+}
+
+/* Estilo do Botão Filtrar */
+.btn-filtro {
+    background-color: #4b6175;
+    color: white;
+    padding: 10px 15px;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+    font-size: 0.9rem;
+    transition: background-color 0.2s;
+}
+
+.btn-filtro:hover {
+    background-color: #38495a;
+}
+
+.btn-limpar-filtro {
+    /* Estilo de link para limpar filtro */
+    color: #dc3545;
+    text-decoration: none;
+    padding: 10px 0;
+    font-size: 0.9rem;
+    transition: color 0.2s;
+    white-space: nowrap; /* Impede que quebre a linha */
+}
+
+.btn-limpar-filtro:hover {
+    color: #b02a37;
+}
+
+/* ==================================== */
+/*     ESTILO DA PAGINAÇÃO              */
+/* ==================================== */
+
+.pagination-container {
+    display: flex;
+    justify-content: center;
+    margin-top: 30px;
+}
+
+.pagination {
+    display: flex;
+    list-style: none;
+    padding: 0;
+    margin: 0;
+    border-radius: 4px;
+    overflow: hidden;
+}
+
+.page-item {
+    border: 1px solid #dee2e6;
+    margin-left: -1px; /* Remove a borda dupla */
+}
+
+.page-item:first-child {
+    margin-left: 0;
+    border-top-left-radius: 4px;
+    border-bottom-left-radius: 4px;
+}
+
+.page-item:last-child {
+    border-top-right-radius: 4px;
+    border-bottom-right-radius: 4px;
+}
+
+.page-link {
+    display: block;
+    padding: 8px 12px;
+    color: #4b6175;
+    text-decoration: none;
+    background-color: white;
+    transition: background-color 0.2s;
+}
+
+.page-link:hover {
+    background-color: #e9ecef;
+}
+
+.page-item.active .page-link {
+    color: white;
+    background-color: #4b6175;
+    border-color: #4b6175;
+    cursor: default;
+}
+
+.page-item.disabled .page-link {
+    color: #6c757d;
+    pointer-events: none;
+    background-color: #f8f9fa;
+}
+
+/* Mensagem de lista vazia */
+.mensagem-vazia {
+    text-align: center;
+    color: #777;
+    margin: 40px 0;
+    font-size: 1.1rem;
+}

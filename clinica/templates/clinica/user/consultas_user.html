@@ -1,0 +1,132 @@
+{% extends "clinica/user/base_user.html" %}
+{% load static %}
+
+{% block title %}Minhas Consultas{% endblock %}
+
+{% block content %}
+<div class="main-content-wrapper">
+
+    <div class="content-header consultas-header">
+        <div>
+            <h1>Minhas Consultas</h1>
+            <p class="subtitle">Histórico e agendamentos das consultas dos seus pets</p>
+        </div>
+        <a href="{% url 'cadastrar_consulta' %}" class="btn-agendar">
+            + Agendar Consulta
+        </a>
+    </div>
+
+    <div class="filter-bar card-shadow">
+        <form method="get" class="form-filtro">
+            {% csrf_token %}
+
+            <div class="form-group-inline">
+                <label for="{{ form_filtro.status.id_for_label }}">Status:</label>
+                {{ form_filtro.status }}
+            </div>
+
+            <div class="form-group-inline">
+                <label for="{{ form_filtro.data_inicio.id_for_label }}">De:</label>
+                {{ form_filtro.data_inicio }}
+            </div>
+
+            <div class="form-group-inline">
+                <label for="{{ form_filtro.data_fim.id_for_label }}">Até:</label>
+                {{ form_filtro.data_fim }}
+            </div>
+
+            <button type="submit" class="btn-filtro">
+                <i class="fas fa-filter"></i> Filtrar
+            </button>
+            
+            {% if request.GET|length > 0 %}
+            <a href="{% url 'consultas_user' %}" class="btn-limpar-filtro">
+                Limpar Filtro
+            </a>
+            {% endif %}
+        </form>
+    </div>
+
+    <div class="consultas-list">
+        {% if consultas %}
+            {% for consulta in consultas %}
+            <div class="consulta-card card-shadow">
+                
+                <div class="card-top">
+                    <div class="pet-info">
+                        
+                        {% with foto_url=consulta.pet.foto.url|default:'' %}
+                        <img src="{% if foto_url %}{{ foto_url }}{% else %}{% static 'images/foto_padrao_pet.png' %}{% endif %}" 
+                             alt="{{ consulta.pet.nome }}" 
+                             class="pet-foto">
+                        {% endwith %}
+                        
+                        <div>
+                            <h3>{{ consulta.pet.nome }}</h3>
+                            <p class="veterinario-nome">Veterinário: {{ consulta.veterinario.get_full_name }}</p>
+                        </div>
+                    </div>
+
+                    {% with status_display=consulta.get_status_display %}
+                    <span class="status-tag status-{{ consulta.status|lower }}">
+                        {{ status_display }}
+                    </span>
+                    {% endwith %}
+                </div>
+
+                <div class="card-bottom">
+                    <p class="horario-agendado">
+                        <i class="fas fa-calendar-alt"></i> {{ consulta.horario_agendado.data|date:"d/m/Y" }} às {{ consulta.horario_agendado.data|date:"H:i" }}
+                    </p>
+
+                    <div class="card-actions">
+                        {% with pagamento_display=consulta.get_status_pagamento_display %}
+                        <span class="pagamento-status-tag pagamento-{{ consulta.status_pagamento|lower }}">
+                            Pagamento: {{ pagamento_display }}
+                        </span>
+                        {% endwith %}
+
+                        <a href="{% url 'detalhes_consulta' consulta.pk %}" class="btn-detalhes">Ver Detalhes <i class="fas fa-chevron-right"></i></a>
+                    </div>
+                </div>
+            </div>
+            {% endfor %}
+
+        {% else %}
+            <p class="mensagem-vazia">
+                {% if form_filtro.is_bound and form_filtro.is_valid and request.GET|length > 0 %}
+                    Nenhuma consulta encontrada com os filtros aplicados.
+                {% else %}
+                    Você não tem consultas agendadas.
+                {% endif %}
+            </p>
+        {% endif %}
+    </div>
+    
+    {% if consultas.has_other_pages %}
+    <div class="pagination-container">
+        <ul class="pagination">
+            {% if consultas.has_previous %}
+                <li class="page-item"><a class="page-link" href="?page={{ consultas.previous_page_number }}{% for key, value in request.GET.items %}{% if key != 'page' %}&{{ key }}={{ value }}{% endif %}{% endfor %}">Anterior</a></li>
+            {% else %}
+                <li class="page-item disabled"><span class="page-link">Anterior</span></li>
+            {% endif %}
+            
+            {% for i in consultas.paginator.page_range %}
+                {% if consultas.number == i %}
+                    <li class="page-item active"><span class="page-link">{{ i }}</span></li>
+                {% else %}
+                    <li class="page-item"><a class="page-link" href="?page={{ i }}{% for key, value in request.GET.items %}{% if key != 'page' %}&{{ key }}={{ value }}{% endif %}{% endfor %}">{{ i }}</a></li>
+                {% endif %}
+            {% endfor %}
+            
+            {% if consultas.has_next %}
+                <li class="page-item"><a class="page-link" href="?page={{ consultas.next_page_number }}{% for key, value in request.GET.items %}{% if key != 'page' %}&{{ key }}={{ value }}{% endif %}{% endfor %}">Próxima</a></li>
+            {% else %}
+                <li class="page-item disabled"><span class="page-link">Próxima</span></li>
+            {% endif %}
+        </ul>
+    </div>
+    {% endif %}
+</div>
+{% endblock %}

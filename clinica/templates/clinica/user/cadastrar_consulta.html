@@ -1,0 +1,120 @@
+
+{% extends "clinica/user/base_user.html" %}
+{% load static %}
+
+{% block title %}{{ titulo }}{% endblock %}
+
+{% block content %}
+<div class="main-content-wrapper">
+    <div class="content-header">
+        <h1>{{ titulo }}</h1>
+        <p class="subtitle">Selecione seu pet, um veterinário e um horário disponível para agendar.</p>
+    </div>
+
+    <div class="card-shadow form-container form-agendamento">
+        <form method="post" id="form-agendamento">
+            {% csrf_token %}
+
+            {% if form.non_field_errors %}
+                <div class="alert alert-danger">
+                    {% for error in form.non_field_errors %}
+                        <p>{{ error }}</p>
+                    {% endfor %}
+                </div>
+            {% endif %}
+
+            <div class="form-row">
+                <div class="form-group">
+                    <label for="{{ form.pet.id_for_label }}">{{ form.pet.label }}</label>
+                    {{ form.pet }}
+                    {% for error in form.pet.errors %}<span class="error-message">{{ error }}</span>{% endfor %}
+                </div>
+
+                <div class="form-group">
+                    <label for="{{ form.veterinario.id_for_label }}">{{ form.veterinario.label }}</label>
+                    {{ form.veterinario }}
+                    {% for error in form.veterinario.errors %}<span class="error-message">{{ error }}</span>{% endfor %}
+                </div>
+            </div>
+            
+            <div class="form-row">
+                <div class="form-group full-width">
+                    <label for="{{ form.horario_agendado.id_for_label }}">{{ form.horario_agendado.label }}</label>
+                    {{ form.horario_agendado }}
+                    {% for error in form.horario_agendado.errors %}<span class="error-message">{{ error }}</span>{% endfor %}
+                </div>
+            </div>
+
+            <div class="form-group full-width">
+                <label for="{{ form.motivo.id_for_label }}">{{ form.motivo.label }}</label>
+                {{ form.motivo }}
+                {% for error in form.motivo.errors %}<span class="error-message">{{ error }}</span>{% endfor %}
+            </div>
+
+            <div class="form-actions">
+                <button type="submit" class="btn-agendar-submit"><i class="fas fa-check"></i> Confirmar Agendamento</button>
+                <a href="{% url 'consultas_user' %}" class="btn-cancelar">Cancelar</a>
+            </div>
+        </form>
+    </div>
+</div>
+{% endblock %}
+{% block extra_js %}
+<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+    console.log("✅ Script de agendamento carregado.");
+
+    const veterinarioSelect = document.getElementById('id_veterinario');
+    const horarioSelect = document.getElementById('id_horario_agendado_ajax');
+
+    if (!veterinarioSelect || !horarioSelect) {
+        console.error("❌ IDs incorretos nos selects!");
+        return;
+    }
+
+    veterinarioSelect.addEventListener('change', async function() {
+        const veterinarioId = this.value;
+        console.log("👨‍⚕️ Veterinário selecionado:", veterinarioId);
+
+        horarioSelect.innerHTML = '<option>Carregando...</option>';
+
+        if (!veterinarioId) {
+            horarioSelect.innerHTML = '<option>Selecione um veterinário primeiro</option>';
+            return;
+        }
+
+        try {
+            const response = await fetch(`/ajax/obter_horarios/?veterinario_id=${veterinarioId}`);
+            const data = await response.json();
+
+            console.log("📅 Horários recebidos:", data);
+            horarioSelect.innerHTML = '';
+
+            if (!data || data.length === 0) {
+                horarioSelect.innerHTML = '<option>Nenhum horário disponível</option>';
+                return;
+            }
+
+            const defaultOption = document.createElement('option');
+            defaultOption.textContent = '--- Selecione um horário ---';
+            defaultOption.value = '';
+            horarioSelect.appendChild(defaultOption);
+
+            data.forEach(horario => {
+                const opt = document.createElement('option');
+                opt.value = horario.id;
+                opt.textContent = horario.display;
+                horarioSelect.appendChild(opt);
+            });
+
+        } catch (err) {
+            console.error("❌ Erro na requisição AJAX:", err);
+            horarioSelect.innerHTML = '<option>Erro ao carregar horários</option>';
+        }
+    });
+});
+</script>
+
+{% endblock %}

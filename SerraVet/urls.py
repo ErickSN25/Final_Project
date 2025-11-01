@@ -43,6 +43,10 @@ urlpatterns = [
     path('meus-pets/excluir/<int:pet_id>/', views.excluir_pet_view, name='excluir_pet'),
     path('meus-pets/detalhes/<int:pet_id>/', views.detalhes_pet_view, name='detalhes_pet'),
     path('meus-pets/editar/<int:pet_id>/', views.editar_pet_form_view, name='editar_pet'),
+    path('consultas/', views.minhas_consultas_view, name='consultas_user'), 
+    path('agendar-consulta/', views.agendar_consulta_view, name='cadastrar_consulta'),
+    path('ajax/obter_horarios/', views.obter_horarios_disponiveis_ajax, name='obter_horarios_ajax'),
+    path('consultas/<int:pk>/', views.detalhe_consulta_view, name='detalhes_consulta'),
 ]
 
 if settings.DEBUG:

@@ -3,7 +3,7 @@ from django.http import HttpResponseRedirect
 from django.urls import reverse, reverse_lazy # Adicionei reverse_lazy
 from django.db import transaction
 from .models import CustomUser, ClientePerfil, Pet, Consulta, Prontuario, HorarioDisponivel, Notificacao
-from .forms import CadastroPetForm, ProntuarioForm, HorarioDisponivelForm, ConsultaForm, HorarioFiltroForm
+from .forms import CadastroPetForm, ProntuarioForm, HorarioDisponivelForm, ConsultaForm, HorarioFiltroForm, AgendamentoClienteForm, ConsultaFiltroForm
 from django.contrib.auth.decorators import login_required
 from django.contrib.auth.views import LoginView
 from .forms import CustomAuthenticationForm
@@ -13,6 +13,11 @@ from datetime import timedelta
 from django.db.models import Q
 from datetime import date
 from django.core.paginator import Paginator
+from django.http import JsonResponse
+from django.views.decorators.http import require_GET
+from django.utils.timezone import localtime
+
+
 
 
 # --- VIEWS PÚBLICAS / BÁSICAS ---
@@ -167,6 +172,149 @@ def editar_pet_form_view(request, pet_id):
         'titulo_pagina': f'Editar Dados: {pet.nome}',
     }
     return render(request, 'clinica/user/editar_pet.html', context) 
+
+
+@login_required
+def minhas_consultas_view(request):
+    """
+    Lista as consultas do cliente logado com opções de filtro por status e data.
+    """
+    # Verifica se o usuário é um cliente/tutor
+    if request.user.user_type != 'cliente':
+        # Redireciona para onde for apropriado para outros tipos de usuário
+        return redirect('home_user') 
+
+    # Inicializa o formulário de filtro com os dados do GET (filtros)
+    form_filtro = ConsultaFiltroForm(request.GET)
+    
+    # 1. Queryset Base: Filtra Consultas onde o TUTOR (do Pet) é o usuário logado
+    # IMPORTANTE: Ajuste 'pet__tutor' para 'pet__dono' se for o nome do campo no seu modelo Pet
+    consultas_queryset = Consulta.objects.filter(
+        pet__tutor=request.user 
+    ).select_related('pet', 'veterinario', 'horario_agendado').order_by('-horario_agendado__data')
+
+    # 2. Lógica de Filtragem (Usando o Form Limpo)
+    if form_filtro.is_valid():
+        status_filter = form_filtro.cleaned_data.get('status')
+        data_inicio = form_filtro.cleaned_data.get('data_inicio')
+        data_fim = form_filtro.cleaned_data.get('data_fim')
+        
+        # Filtro por Status
+        if status_filter and status_filter != 'TODOS':
+            consultas_queryset = consultas_queryset.filter(status=status_filter)
+        
+        # Filtro por Data de Início (>= data_inicio)
+        if data_inicio:
+            consultas_queryset = consultas_queryset.filter(
+                horario_agendado__data__date__gte=data_inicio
+            )
+
+        # Filtro por Data Final (< data_fim + 1 dia)
+        if data_fim:
+            data_fim_exclusiva = data_fim + timezone.timedelta(days=1)
+            consultas_queryset = consultas_queryset.filter(
+                horario_agendado__data__date__lt=data_fim_exclusiva
+            )
+
+    # 3. Paginação
+    PAGINATION_SIZE = 5 
+    paginator = Paginator(consultas_queryset, PAGINATION_SIZE)
+    page_number = request.GET.get('page')
+    consultas = paginator.get_page(page_number)
+    
+    
+    # 4. Contexto
+    context = {
+        'consultas': consultas,
+        'form_filtro': form_filtro,
+        # Verifica se o queryset inicial está vazio E se não há filtros aplicados
+        'consultas_list_vazia': not consultas_queryset.exists() and not request.GET, 
+    }
+    
+    return render(request, 'clinica/user/consultas_user.html', context)
+
+@login_required
+def agendar_consulta_view(request):
+    """
+    Permite ao cliente agendar uma nova consulta.
+    """
+    if request.user.user_type != 'cliente':
+        messages.error(request, "Apenas clientes podem agendar consultas.")
+        return redirect('consultas_user') # Ou para a página inicial
+    
+    if request.method == 'POST':
+        # Passa request.POST e o user para o form
+        form = AgendamentoClienteForm(request.POST, user=request.user)
+        if form.is_valid():
+            try:
+                # O método save() do form lida com a criação da Consulta e atualização do HorarioDisponivel
+                form.save(user=request.user)
+                messages.success(request, "Consulta agendada com sucesso!")
+                return redirect('consultas_user')
+            except Exception as e:
+                # Caso ocorra um erro na transação ou salvamento (ex: horário indisponível)
+                messages.error(request, f"Ocorreu um erro ao agendar: {e}")
+                
+    else:
+        # GET: Inicializa o formulário, filtrando os pets do cliente
+        form = AgendamentoClienteForm(user=request.user)
+    
+    context = {
+        'form': form,
+        'titulo': 'Agendar Nova Consulta'
+    }
+    return render(request, 'clinica/user/cadastrar_consulta.html', context)
+
+
+
+from django.http import JsonResponse
+from django.views.decorators.http import require_GET
+from django.utils.timezone import localtime
+
+@require_GET
+def obter_horarios_disponiveis_ajax(request):
+    veterinario_id = request.GET.get('veterinario_id')
+
+    if not veterinario_id:
+        return JsonResponse([], safe=False)
+
+    try:
+        # Filtra SOMENTE horários disponíveis para esse veterinário
+        horarios = HorarioDisponivel.objects.filter(
+            veterinario_id=veterinario_id,
+            disponivel=True
+        ).order_by('data')
+
+        horarios_data = [
+            {
+                'id': h.id,
+                'display': localtime(h.data).strftime('%d/%m/%Y às %H:%M')
+            }
+            for h in horarios
+        ]
+        return JsonResponse(horarios_data, safe=False)
+    except Exception as e:
+        print("❌ ERRO AO OBTER HORÁRIOS:", e)
+        return JsonResponse([], safe=False)
+
+
+@login_required
+def detalhe_consulta_view(request, pk):
+    try:
+        consulta = Consulta.objects.filter(
+            pk=pk, 
+            pet__tutor=request.user
+        ).select_related('pet', 'veterinario', 'horario_agendado').get()
+
+    except Consulta.DoesNotExist:
+        # Se a consulta não existir ou não pertencer ao usuário
+        return render(request, 'clinica/erro_acesso.html', {'mensagem': 'Consulta não encontrada ou acesso negado.'}, status=404)
+    
+    context = {
+        'consulta': consulta,
+    }
+    # O template 'detalhe_consulta.html' já foi fornecido no passo anterior.
+    return render(request, 'clinica/detalhes_consulta.html', context)
 
 
 # --- VIEWS DE VETERINÁRIO ---

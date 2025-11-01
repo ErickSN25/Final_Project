@@ -148,7 +148,7 @@ class Pet(models.Model):
     doencas = models.TextField(blank=True, null=True)
 
     def __str__(self):
-        return f"{self.nome} ({self.especie}) - Tutor: {self.tutor.get_full_name()}"
+        return f"{self.nome} ({self.especie})"
 
     class Meta:
         verbose_name = "Pet"

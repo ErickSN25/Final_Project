@@ -204,24 +204,29 @@ class CadastroPetForm(forms.ModelForm):
 
 
 class AgendamentoClienteForm(forms.Form):
+    # Campo 1: PET (O cliente só vê os seus)
     pet = forms.ModelChoiceField(
         queryset=Pet.objects.none(),
         label="Selecione o seu Pet"
     )
 
+    # Campo 2: VETERINÁRIO (Filtra todos os veterinários)
     veterinario = forms.ModelChoiceField(
         queryset=CustomUser.objects.none(),
         label="Selecione o Veterinário"
     )
 
-    # NOVO NOME E QUERYSET INICIAL
+    # Campo 3: HORÁRIO DISPONÍVEL (Será preenchido via AJAX/JS após selecionar o veterinário)
     horario_agendado = forms.ModelChoiceField(
         queryset=HorarioDisponivel.objects.none(), # Inicialmente vazio
-        label="Horário Disponível"
+        label="Horário Disponível",
+        # Adicione o atributo 'id' para facilitar a manipulação com JS/AJAX
+        widget=forms.Select(attrs={'id': 'id_horario_agendado_ajax'}) 
     )
     
+    # Campo 4: MOTIVO
     motivo = forms.CharField(
-        widget=forms.Textarea(attrs={'rows': 4}),
+        widget=forms.Textarea(attrs={'rows': 4, 'placeholder': 'Descreva o motivo da consulta...'}),
         label="Motivo da Consulta"
     )
 
@@ -230,19 +235,55 @@ class AgendamentoClienteForm(forms.Form):
         super().__init__(*args, **kwargs)
 
         if user and user.is_authenticated:
-            self.fields['pet'].queryset = Pet.objects.filter(tutor=user)
+            # Filtra os pets apenas para os que pertencem ao cliente logado
+            # (Assumo que o campo no Pet se chama 'tutor')
+            self.fields['pet'].queryset = Pet.objects.filter(tutor=user).order_by('nome')
 
-            self.fields['veterinario'].queryset = CustomUser.objects.filter(user_type='veterinario')
-    
+            # Filtra todos os usuários que são veterinários
+            self.fields['veterinario'].queryset = CustomUser.objects.filter(
+                user_type='veterinario'
+            ).order_by('nome')
+            
+    # O método clean garante que os dados sejam válidos, incluindo o horário
+    def clean(self):
+        cleaned_data = super().clean()
+        horario = cleaned_data.get('horario_agendado')
+        veterinario = cleaned_data.get('veterinario')
+        
+        # 1. Validação: Checa se o horário pertence ao veterinário selecionado
+        if horario and veterinario and horario.veterinario != veterinario:
+             self.add_error('horario_agendado', "O horário selecionado não pertence ao veterinário escolhido.")
+             
+        # 2. Validação: Checa se o horário ainda está disponível (Dupla checagem)
+        if horario and not horario.disponivel:
+             self.add_error('horario_agendado', "Este horário não está mais disponível.")
+             
+        return cleaned_data
 
-    def save(self, pet_instance, veterinario_instance, horario_instance):
-        Consulta.objects.create(
-            pet=pet_instance,
-            veterinario=veterinario_instance,
-            horario_agendado=horario_instance,
-            motivo=self.cleaned_data['motivo'],
-            status='MARCADA' 
-        )
+
+    def save(self, user):
+        """Salva a consulta e marca o HorarioDisponivel como indisponível."""
+        # Se você usar .get() diretamente em clean_data, você terá os objetos do model
+        pet_instance = self.cleaned_data.get('pet')
+        veterinario_instance = self.cleaned_data.get('veterinario')
+        horario_instance = self.cleaned_data.get('horario_agendado')
+        motivo = self.cleaned_data.get('motivo')
+        
+        with transaction.atomic():
+            # Cria a instância da consulta
+            consulta = Consulta.objects.create(
+                pet=pet_instance,
+                veterinario=veterinario_instance,
+                horario_agendado=horario_instance,
+                motivo=motivo,
+                status='MARCADA' 
+            )
+            
+            # Marca o horário como indisponível
+            horario_instance.disponivel = False
+            horario_instance.save()
+            
+            return consulta
 
 class ConsultaForm(forms.ModelForm):
     class Meta:
@@ -291,4 +332,28 @@ class HorarioFiltroForm(forms.Form):
     apenas_disponiveis = forms.BooleanField(
         required=False,
         label="Apenas Disponíveis"
+    )
+
+class ConsultaFiltroForm(forms.Form):
+    
+    # Adiciona 'TODOS' como primeira opção de status
+    STATUS_CHOICES_FILTRO = [('TODOS', 'Todos os Status')] + list(Consulta.STATUS_CHOICES)
+    
+    status = forms.ChoiceField(
+        choices=STATUS_CHOICES_FILTRO,
+        required=False,
+        label="Status",
+        widget=forms.Select(attrs={'class': 'form-select'}) # Adicione classes CSS
+    )
+
+    data_inicio = forms.DateField(
+        required=False,
+        label="Data de Início",
+        widget=forms.DateInput(attrs={'type': 'date', 'class': 'form-control'}) # Type 'date' para calendário HTML5
+    )
+    
+    data_fim = forms.DateField(
+        required=False,
+        label="Data Final",
+        widget=forms.DateInput(attrs={'type': 'date', 'class': 'form-control'}) # Type 'date' para calendário HTML5
     )
