@@ -1,0 +1,310 @@
+/* Reset básico */
+body {
+    margin: 0;
+    font-family: Arial, sans-serif;
+    background: #f5f5f5;
+}
+
+/* Navbar superior */
+.navbar {
+    background: #F3F7F8;
+    height: 60px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 0 20px;
+    border-bottom: 2px solid #ddd;
+}
+
+.navbar-logo {
+    font-family: 'Questrial', sans-serif;
+    font-size: 24px;  /* pode aumentar o tamanho */
+    font-weight: normal; /* Questrial é leve, mas você pode trocar */
+    color: #000000; /* mantém a cor azul que você já usa */
+}
+
+
+.navbar-user {
+    display: flex;
+    align-items: center;
+    gap: 15px;
+}
+
+.navbar-user span {
+    font-weight: bold;
+    color: #555;
+}
+
+.logout {
+    text-decoration: none;
+    color: #c0392b;
+    font-weight: bold;
+}
+
+/* Layout com sidebar */
+.layout {
+    display: flex;
+    min-height: calc(100vh - 60px); /* altura total menos a navbar */
+}
+
+/* Sidebar lateral */
+.sidebar {
+    width: 250px;
+    background: #ffffff;
+    border-right: 2px solid #ddd;
+    padding: 20px;
+    box-sizing: border-box;
+    height: calc(100vh - 60px); /* altura total menos a navbar */
+    overflow-y: auto; /* permite rolagem se o conteúdo for maior que a altura */
+    position: sticky;
+    top: 60px; /* fixa a sidebar abaixo da navbar */
+}
+
+.sidebar h2 {
+    text-align: center;
+    font-size: 25px;
+    margin-bottom: 20px;
+    font-weight: bold;
+}
+
+.sidebar ul {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+}
+
+.sidebar ul li {
+    margin: 15px 0;
+}
+
+.sidebar ul li a {
+    text-align: center;
+    text-decoration: none;
+    color: #000000;
+    display: block;
+    padding: 8px 50px;
+    border-radius: 0 10px 10px 0;
+    transition: all 0.3s ease;
+}
+
+.sidebar ul li a:hover,
+.sidebar ul li a.active {
+    background: #e9ecef;  /* cor de fundo ao passar */
+    font-weight: bold;
+    color: #000000;  /* cor do texto ao passar */
+}
+/* Conteúdo principal: Home */
+.content {
+    flex-grow: 1;
+    padding: 30px; /* Padding interno do conteúdo */
+    background: #f5f5f5; /* Fundo mais claro */
+}
+
+/* --- Layout dos Cards de Estatística (Topo) --- */
+
+.stats-row {
+    display: flex;
+    gap: 20px; /* Espaço entre os cartões */
+    margin-bottom: 30px;
+}
+
+.stats-card {
+    flex: 1;
+    min-width: 280px; /* Largura mínima para evitar quebra em telas maiores */
+    background-color: #ffffff;
+    padding: 20px;
+    border-radius: 8px;
+    /* Sombra suave como na imagem */
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
+    border: 1px solid #f0f0f0; /* Borda sutil */
+}
+
+.card-title-main {
+    font-size: 1rem;
+    font-weight: 500;
+    color: #343a40;
+    margin-bottom: 5px;
+}
+
+.card-subtitle-small {
+    font-size: 0.85rem;
+    color: #6c757d;
+    display: block;
+    margin-bottom: 15px;
+}
+
+.card-number {
+    font-size: 3.5rem;
+    font-weight: bold;
+    text-align: center;
+    line-height: 1;
+    color: #343a40; /* Cor padrão para números (Hoje, Sem Cadastro) */
+    margin-bottom: 5px;
+}
+
+.card-number.warning {
+    color: #ffc107; /* Amarelo/Laranja para 'Agendadas' */
+}
+
+.card-text-small {
+    font-size: 0.9rem;
+    text-align: center;
+    color: #6c757d;
+}
+
+/* --- Seção Consultas Cadastradas --- */
+
+.consultas-section {
+    background-color: #ffffff;
+    padding: 25px;
+    border-radius: 8px;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
+    border: 1px solid #f0f0f0;
+}
+
+.consultas-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 20px;
+}
+
+.consultas-header h4 {
+    margin: 0;
+    font-weight: 600;
+    font-size: 1.25rem;
+}
+
+/* Campo de Pesquisa */
+.search-container {
+    position: relative;
+    width: 300px;
+}
+
+.search-container input {
+    width: 100%;
+    padding: 10px 40px 10px 15px; /* Espaço para o ícone */
+    border: 1px solid #ddd;
+    border-radius: 6px;
+    background-color: #f8f8f8;
+    box-sizing: border-box;
+    font-size: 1rem;
+    outline: none;
+    transition: border-color 0.3s;
+}
+
+.search-container input:focus {
+    border-color: #aaa;
+    background-color: #fff;
+}
+
+.search-icon {
+    position: absolute;
+    right: 15px;
+    top: 50%;
+    transform: translateY(-50%);
+    color: #888;
+}
+
+/* Lista de Consultas */
+.consulta-list {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+}
+
+.consulta-item {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 15px 0;
+    border-bottom: 1px solid #eee;
+}
+
+.consulta-item:last-child {
+    border-bottom: none; /* Remove a borda do último item */
+}
+
+.consulta-details {
+    display: flex;
+    align-items: center;
+}
+
+.dot {
+    height: 8px;
+    width: 8px;
+    background-color: #343a40;
+    border-radius: 50%;
+    margin-right: 15px;
+    flex-shrink: 0; /* Impede que o ponto diminua */
+}
+
+.consulta-details span {
+    font-weight: bold;
+    color: #333;
+    display: block;
+}
+
+.consulta-details small {
+    color: #999;
+    font-size: 0.85rem;
+}
+
+/* Badges de Status */
+.status-badge {
+    padding: 6px 15px;
+    border-radius: 4px;
+    font-weight: 600;
+    font-size: 0.8rem;
+    cursor: default;
+    text-transform: capitalize; /* Deixa a primeira letra maiúscula */
+}
+
+/* Status 'REALIZADO' (Cor de Concluída/Sucesso) */
+.status-concluida {
+    background-color: #d4edda; /* Verde claro */
+    color: #155724; /* Verde escuro */
+}
+
+/* Status 'PENDENTE' (Cor de Agendada/Informação) */
+.status-agendada {
+    background-color: #cce5ff; /* Azul claro */
+    color: #004085; /* Azul escuro */
+}
+
+/* Status 'CONFIRMADO' (Amarelo/Alerta - Supondo que precisa de atenção antes de REALIZADO) */
+.status-confirmada {
+    background-color: #fff3cd; /* Amarelo muito claro */
+    color: #856404; /* Amarelo escuro */
+}
+
+/* Status 'CANCELADO' (Vermelho/Perigo) */
+.status-cancelada {
+    background-color: #f8d7da; /* Vermelho claro */
+    color: #721c24; /* Vermelho escuro */
+}
+
+
+/* Responsividade (Para telas menores) */
+@media (max-width: 992px) {
+    .stats-row {
+        flex-wrap: wrap;
+    }
+    .stats-card {
+        flex: 1 1 45%; /* Permite 2 cards por linha */
+    }
+    .search-container {
+        width: 100%;
+        margin-top: 15px;
+    }
+    .consultas-header {
+        flex-direction: column;
+        align-items: flex-start;
+    }
+}
+
+@media (max-width: 576px) {
+    .stats-card {
+        flex: 1 1 100%; /* 1 card por linha */
+    }
+}

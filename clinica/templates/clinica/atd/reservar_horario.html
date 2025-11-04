@@ -1,0 +1,55 @@
+{% extends "clinica/atd/base_atendente.html" %}
+{% block title %}Reservar Horário{% endblock %}
+
+{% block extra_head %}
+<style>
+body { font-family: Arial, sans-serif; background-color: #f5f5f5; }
+.container { width: 80%; margin: 30px auto; }
+h2 { margin-bottom: 20px; color: #333; }
+form { background-color: #fff; padding: 20px; border-radius: 6px; box-shadow: 0 2px 5px rgba(0,0,0,0.1); }
+label { display: block; margin-top: 10px; font-weight: bold; }
+input, select, textarea { width: 100%; padding: 8px; margin-top: 5px; border-radius: 4px; border: 1px solid #ccc; }
+.btn { display: inline-block; padding: 6px 12px; font-size: 14px; text-decoration: none; border-radius: 4px; color: #fff; cursor: pointer; margin-top: 15px; }
+.btn-success { background-color: #28a745; }
+.btn-primary { background-color: #007bff; }
+.btn-secondary { background-color: #6c757d; }
+.btn:hover { opacity: 0.9; }
+</style>
+{% endblock %}
+
+{% block content %}
+<h2>Reservar Horário</h2>
+
+<p><strong>Data / Hora:</strong> {{ horario.data|date:"d/m/Y H:i" }}</p>
+<p><strong>Veterinário:</strong> {{ horario.veterinario.get_full_name }}</p>
+
+<form method="POST">
+    {% csrf_token %}
+
+    <div class="mb-3">
+        <label for="cliente_id" class="form-label">Cliente:</label>
+        <select name="cliente_id" id="cliente_id" required>
+            {% for cliente in clientes %}
+                <option value="{{ cliente.id }}">{{ cliente.user.get_full_name }}</option>
+            {% endfor %}
+        </select>
+    </div>
+
+    <div class="mb-3">
+        <label for="pet_id" class="form-label">Pet:</label>
+        <select name="pet_id" id="pet_id" required>
+            {% for pet in pets %}
+                <option value="{{ pet.id }}">{{ pet.nome }} ({{ pet.especie }})</option>
+            {% endfor %}
+        </select>
+    </div>
+
+    <div class="mb-3">
+        <label for="observacoes" class="form-label">Observações:</label>
+        <textarea name="observacoes" id="observacoes" rows="3"></textarea>
+    </div>
+
+    <button type="submit" class="btn btn-primary">Reservar</button>
+    <a href="{% url 'gerenciar_horarios' %}" class="btn btn-secondary">Cancelar</a>
+</form>
+{% endblock %}

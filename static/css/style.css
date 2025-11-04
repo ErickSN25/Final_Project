@@ -1,205 +1,281 @@
 /* Reset básico */
 * {
-  box-sizing: border-box;
-  margin: 0;
-  padding: 0;
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    /* Use 'Questrial' se for a fonte principal do projeto */
+    font-family: 'Questrial', sans-serif; 
 }
 
 body {
-  font-family: Arial, sans-serif;
-  background: #fff;
-  color: #000;
-  min-height: 100vh;
-  display: flex;
-  flex-direction: column;
+    background-color: #fff;
 }
 
-/* Container ocupa toda a altura até o rodapé */
-.container {
-  display: flex;
-  flex: 1;
-  min-height: 100vh;
-}
-
-/* Menu lateral fixo */
-.sidebar {
-  background: #6e8d70;
-  color: #000;
-  width: 220px;
-  padding: 20px;
-  display: flex;
-  flex-direction: column;
-  border-right: 4px solid #000000;
-  box-shadow: 2px 0 8px rgba(0, 0, 0, 0.15);
-  position: fixed;
-  top: 0;
-  left: 0;
-  bottom: 0px; 
-  overflow-y: auto;
-  transition: transform 0.3s ease;
-  z-index: 1000;
-}
-
-.sidebar h2 {
-  margin-bottom: 30px;
-  text-align: center;
-  color: #000;
-}
-
-.sidebar a {
-  color: #000;
-  padding: 12px 15px;
-  text-decoration: none;
-  margin-bottom: 10px;
-  border-radius: 6px;
-  background-color: #536853;
-  transition: background-color 0.3s ease, color 0.3s ease;
-  font-weight: bold;
-  box-shadow: inset 0 0 0 0 #807b7f;
-}
-
-.sidebar a:hover,
-.sidebar a:focus {
-  background-color: #2c3e50;
-  color: #000000;
-  box-shadow: inset 250px 0 0 0 #c4d3c0;
-}
-
-/* Conteúdo principal */
-.content {
-  margin-left: 220px;
-  padding: 50px;
-  flex: 1;
-  background: #fff;
-  min-height: calc(100vh - 50px);
-  overflow-y: auto;
-  transition: margin-left 0.3s ease;
-}
-
-/* Rodapé fixo sem sobrepor o menu */
-footer {
-  background: #6e8d70;
-  color: #000;
-  height: 50px;
-  line-height: 50px;
-  text-align: center;
-  position: fixed;
-  bottom: 0;
-  left: 220px; /* começa depois da sidebar */
-  right: 0;
-  box-shadow: 0 -3px 5px rgba(0,0,0,0.1);
-  z-index: 1100;
-  font-weight: bold;
-}
-
-/* Títulos */
-h2 {
-  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-  color: #2c3e50;
-  margin-bottom: 20px;
-}
-
-/* Estilo da tabela */
-.table {
-  width: 100%;
-  border-collapse: collapse;
-  font-family: Arial, sans-serif;
-  background-color: #fff;
-  box-shadow: 0 2px 5px rgba(0,0,0,0.1);
-  border-radius: 6px;
-  overflow: hidden;
-  margin-top: 15px;
-}
-
-.table thead {
-  background-color: #6e8d70;
-  color: #000;
-  text-align: left;
-}
-
-.table th, .table td {
-  padding: 12px 15px;
-  border-bottom: 1px solid #ddd;
-}
-
-.table tbody tr:hover {
-  background-color: #f2f2f2;
-}
-
-/* Botões */
-.btn {
-  padding: 6px 12px;
-  border-radius: 4px;
-  color: white;
-  text-decoration: none;
-  font-size: 14px;
-  margin-right: 5px;
-  transition: background-color 0.3s ease;
-  display: inline-block;
-}
-
-.btn-warning { background-color: #f39c12; }
-.btn-warning:hover { background-color: #d48806; }
-.btn-danger { background-color: #e74c3c; }
-.btn-danger:hover { background-color: #c0392b; }
-.btn-info { background-color: #3498db; }
-.btn-info:hover { background-color: #2980b9; }
-
-/* Mensagem de tabela vazia */
-.table tbody tr td[colspan="4"] {
-  text-align: center;
-  font-style: italic;
-  color: #888;
-}
-
-/* Responsividade */
-@media (max-width: 768px) {
-  .sidebar {
-    position: fixed;
+/* ---------------------- */
+/*   CABEÇALHO (FLUTUANTE PARA TELA DE LOGIN) */
+/* ---------------------- */
+.topo-flutuante {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    width: 100%;
+    padding: 25px 40px; 
+    position: absolute; /* Corrigido: Remover a barra invertida */
     top: 0;
     left: 0;
-    right: 0;
-    height: 60px;
-    width: 100%;
-    border-right: none;
-    border-bottom: 4px solid #6e8d70;
-    flex-direction: row;
-    align-items: center;
-    padding: 0 15px;
-    box-shadow: 0 2px 5px rgba(0,0,0,0.1);
-  }
-
-  .sidebar h2 {
-    flex: 1;
-    margin-bottom: 0;
-    text-align: left;
-    color: #000;
-  }
-
-  .sidebar a {
-    margin: 0 8px;
-    padding: 8px 12px;
-    background-color: transparent;
-    color: #000;
-    font-weight: normal;
-    box-shadow: none;
-  }
-
-  .sidebar a:hover,
-  .sidebar a:focus {
-    background-color: #6e8d70;
-    color: #fff;
-    box-shadow: none;
-  }
-
-  .content {
-    margin: 60px 15px 70px 15px;
-    padding: 15px;
-  }
-
-  footer {
-    left: 0; /* ocupa toda a largura no mobile */
-    height: 70px;
-    line-height: 70px;
-  }
+    z-index: 100; 
+    font-family: 'Questrial', sans-serif;
 }
+
+.topo-flutuante .logo {
+    font-size: 1.5rem;
+    font-weight: bold;
+    color: #222;
+}
+
+/* Estilo do botão "Sobre nós" */
+.botao-sobre {
+    background-color: #5a654d;
+    color: white;
+    padding: 6px 16px;
+    border-radius: 20px;
+    font-size: 14px;
+    text-decoration: none;
+    transition: background-color 0.3s ease;
+}
+
+.botao-sobre:hover {
+    background-color: #6e775f;
+}
+
+/* ---------------------- */
+/*   LAYOUT DE LOGIN  */
+/* ---------------------- */
+
+/* Container principal - Ocupa a tela inteira por baixo do header */
+.login-page-wrapper {
+    display: flex;
+    width: 100%;
+    height: 100vh; 
+    overflow: hidden;
+    background-color: #ffffff;
+    font-family: 'Questrial', sans-serif;
+}
+
+/* FORMULÁRIO - Lado Esquerdo */
+.login-form-area {
+    width: 45%; /* 45% da tela */
+    background-color: #fff;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    position: relative;
+    z-index: 2;
+}
+
+.login-container {
+    width: 80%;
+    max-width: 350px;
+    background-color: #fff;
+    padding: 30px 40px;
+    border-radius: 12px;
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
+    text-align: center;
+}
+
+.login-avatar {
+    width: 55px;
+    height: 55px;
+    background-color: #2d3b2b; 
+    border-radius: 50%;
+    margin: 0 auto 10px;
+}
+
+.login-container h2 {
+    font-size: 1.35rem;
+    font-weight: bold;
+    margin-bottom: 4px;
+    color: #1e1e1e;
+}
+
+.subtitle {
+    color: #8a8a8a;
+    font-size: 0.85rem;
+    margin-bottom: 20px;
+}
+
+/* CAMPOS */
+.login-container label {
+    display: block;
+    text-align: left;
+    margin-top: 10px;
+    font-size: 0.9rem;
+    color: #3c3c3c;
+}
+
+.login-container input {
+    width: 100%;
+    padding: 8px;
+    border: 1px solid #ccc;
+    border-radius: 6px;
+    font-size: 0.9rem;
+}
+
+.esqueci-senha {
+    text-align: right;
+    margin-top: 6px;
+}
+
+.esqueci-senha a {
+    font-size: 0.85rem;
+    color: #7a8a9a;
+    text-decoration: none;
+}
+
+/* BOTÃO ENTRAR */
+.btn-entrar {
+    width: 100%;
+    margin-top: 15px;
+    background-color: #4b6175; 
+    color: white;
+    border: none;
+    padding: 10px;
+    border-radius: 6px;
+    font-size: 1rem;
+    cursor: pointer;
+    transition: background 0.2s;
+}
+
+.btn-entrar:hover {
+    background-color: #3b556e;
+}
+
+/* CRIAR CONTA */
+.novo-cliente {
+    margin-top: 15px;
+    font-size: 0.85rem;
+    color: #555;
+}
+
+.novo-cliente a {
+    color: #3b556e;
+    text-decoration: none;
+    font-weight: 600;
+}
+
+
+/* ---------------------- */
+/*   IMAGEM DIAGONAL    */
+/* ---------------------- */
+.login-image-area {
+    width: 55%; /* 55% da tela */
+    height: 100%;
+    position: relative;
+    overflow: hidden;
+    clip-path: polygon(10% 0, 100% 0, 100% 100%, 0 100%); 
+    background-color: #f0f0f0;
+    
+
+}
+
+.login-image-area img {
+    width: 110%;
+    height: 100%;
+    object-fit: cover;
+    object-position: center;
+    position: absolute;
+    top: 0;
+    left: 0;
+    transform: translateX(-5%); 
+    margin-left: 20px; 
+}
+
+
+/* ---------------------- */
+/*   LAYOUT DE CADASTRO  */
+/* ---------------------- */
+
+/* FORMULÁRIO - Lado Esquerdo */
+.cadastro-form-area {
+    width: 45%; /* 45% da tela */
+    background-color: #fff;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    position: relative;
+    z-index: 2;
+}
+.cadastro-container {
+    width: 80%;
+    max-width: 350px;
+    background-color: #fff;
+    padding: 30px 40px;
+    border-radius: 12px;
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
+    text-align: center;
+}
+.cadastro-container h2 {
+    font-size: 1.35rem;
+    font-weight: bold;
+    margin-bottom: 4px;
+    color: #1e1e1e;
+}
+.subtitle-cadastro {
+    color: #8a8a8a;
+    font-size: 0.85rem;
+    margin-bottom: 20px;
+}
+.cadastro-container label {
+    display: block;
+    text-align: left;
+    margin-top: 10px;
+    font-size: 0.9rem;
+    color: #3c3c3c;
+}
+.cadastro-container input {
+    width: 100%;
+    padding: 8px;
+    border: 1px solid #ccc;
+    border-radius: 6px;
+    font-size: 0.9rem;
+}     
+
+
+/* ---------------------- */
+/*   RESPONSIVIDADE (Manter para telas menores) */
+/* ---------------------- */
+@media (max-width: 900px) {
+    .topo-flutuante {
+        position: relative;
+        padding: 15px 20px;
+    }
+    
+    .login-page-wrapper {
+        flex-direction: column;
+        height: auto;
+    }
+
+    .login-form-area {
+        width: 100%;
+        box-shadow: none;
+        padding: 40px 20px;
+    }
+
+    .login-image-area {
+        width: 100%;
+        height: 250px;
+        clip-path: none; /* Remove o corte no mobile */
+        transform: none;
+        margin-left: 0;
+    }
+    
+    .login-image-area img {
+        transform: none;
+        margin-left: 0;
+    }
+    
+    .login-container {
+        width: 100%;
+        box-shadow: none;
+    }
+  }

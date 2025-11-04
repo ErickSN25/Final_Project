@@ -42,3 +42,9 @@ build/
 # Arquivos do sistema
 .DS_Store
 Thumbs.db
+
+# Diretórios de uploads de mídia
+media/
+fotos_perfil/
+fotos_pet/
+

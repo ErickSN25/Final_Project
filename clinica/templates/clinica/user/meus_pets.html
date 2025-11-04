@@ -1,0 +1,55 @@
+{% extends "clinica/user/base_user.html" %}
+{% load static %}
+
+{% block title %}{{ titulo_pagina }}{% endblock %}
+
+{% block content %}
+<div class="pets-container">
+    <div class="pets-header">
+        <h1>{{ titulo_pagina }}</h1>
+        <p>Gerencie as informações dos seus pets</p>
+        
+        <a href="{% url 'cadastrar_pet' %}" class="btn-cadastrar-pet">
+            + Cadastrar Pet
+        </a>
+    </div>
+
+    <div class="pets-list">
+        {% if pets %}
+            {% for pet in pets %}
+            <div class="pet-card">
+                <div class="pet-info-header">
+                    {% if pet.foto_pet %}
+                        <img src="{{ pet.foto_pet.url }}" alt="Foto de {{ pet.nome }}" class="pet-photo">
+                    {% else %}
+                        <img src="{% static 'img/default_pet.png' %}" alt="Foto Padrão" class="pet-photo">
+                    {% endif %}
+                    
+                    <div class="pet-name-and-breed">
+                        <h2>{{ pet.nome }}</h2>
+                        <span>{% if pet.raca %}{{ pet.raca }}{% else %}{{ pet.especie }}{% endif %}</span>
+                    </div>
+                </div>
+                <div class="pet-details">
+                    <p><strong>Espécie:</strong> <span>{{ pet.get_especie_display }}</span></p> 
+                    <p><strong>Peso:</strong> <span>{{ pet.peso }} kg</span></p>
+                    <p><strong>Vacinas em dia:</strong> <span>{% if pet.vacinas_em_dia %}Sim{% else %}Não{% endif %}</span></p>
+                </div>
+                <div class="pet-actions">
+                    <a href="{% url 'detalhes_pet' pet.id %}">
+                        <button class="btn-detalhes">Detalhes</button>
+                    </a>
+                    
+                    <form action="{% url 'excluir_pet' pet.id %}" method="post" style="display:inline;">
+                        {% csrf_token %}
+                        <button type="submit" class="btn-excluir" onclick="return confirm('Tem certeza que deseja excluir o pet {{ pet.nome }}? Esta ação é irreversível.');">Excluir</button>
+                    </form>
+                </div>
+            </div>
+            {% endfor %}
+        {% else %}
+            <p>Você não tem nenhum pet cadastrado. <a href="{% url 'cadastrar_pet' %}">Clique aqui para cadastrar seu primeiro pet!</a></p>
+        {% endif %}
+    </div>
+</div>
+{% endblock content %}

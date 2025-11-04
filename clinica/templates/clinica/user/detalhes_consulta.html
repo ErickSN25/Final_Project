@@ -1,0 +1,88 @@
+{% extends "clinica/user/base_user.html" %}
+{% load static %}
+
+{% block title %}Detalhes da Consulta{% endblock %}
+
+{% block content %}
+<div class="main-content-wrapper">
+    <div class="content-header">
+        <h1>Detalhes da Consulta</h1>
+        <p class="subtitle">Informações completas sobre o agendamento</p>
+    </div>
+
+    <div class="detalhe-card card-shadow">
+        
+        <div class="detalhe-secao">
+            <h2><i class="fas fa-calendar-check"></i> Agendamento</h2>
+            <div class="detalhe-info-grid">
+                <div>
+                    <strong>Data e Hora:</strong>
+                    <span>{{ consulta.horario_agendado.data|date:"d/m/Y" }} às {{ consulta.horario_agendado.data|date:"H:i" }}</span>
+                </div>
+                <div>
+                    <strong>Status:</strong>
+                    <span class="status-tag status-{{ consulta.status|lower }}">{{ consulta.get_status_display }}</span>
+                </div>
+                <div>
+                    <strong>Veterinário:</strong>
+                    <span>{{ consulta.veterinario.get_full_name }}</span>
+                </div>
+            </div>
+            
+            <div class="detalhe-motivo">
+                <strong>Motivo da Consulta:</strong>
+                <p>{{ consulta.motivo|linebreaksbr }}</p>
+            </div>
+        </div>
+
+        <hr>
+
+        <div class="detalhe-secao">
+            <h2><i class="fas fa-paw"></i> Pet</h2>
+            <div class="detalhe-info-grid">
+                <div>
+                    <strong>Nome:</strong>
+                    <span>{{ consulta.pet.nome }}</span>
+                </div>
+                <div>
+                    <strong>Espécie:</strong>
+                    <span>{{ consulta.pet.especie }}</span>
+                </div>
+                <div>
+                    <strong>Raça:</strong>
+                    <span>{{ consulta.pet.raca|default:"Não informada" }}</span>
+                </div>
+            </div>
+        </div>
+        
+        <hr>
+
+        <div class="detalhe-secao">
+            <h2><i class="fas fa-money-check-alt"></i> Pagamento</h2>
+            <div class="detalhe-info-grid">
+                <div>
+                    <strong>Status Pagamento:</strong>
+                    <span class="pagamento-status-tag pagamento-{{ consulta.status_pagamento|lower }}">
+                        {{ consulta.get_status_pagamento_display }}
+                    </span>
+                </div>
+                {% comment %} Adicione lógica para exibir o valor se estiver definido {% endcomment %}
+                <div>
+                    <strong>Valor Estimado:</strong>
+                    <span>A definir</span>
+                </div>
+            </div>
+        </div>
+        
+        <div class="detalhe-actions">
+            {% if consulta.status == 'MARCADA' %}
+                <a href="{% url 'cancelar_consulta' consulta.pk %}" class="btn-cancelar-consulta"><i class="fas fa-times"></i> Cancelar Consulta</a>
+            {% elif consulta.status == 'REALIZADA' %}
+                <a href="{% url 'detalhe_prontuario' consulta.pk %}" class="btn-prontuario"><i class="fas fa-file-medical"></i> Ver Prontuário</a>
+            {% endif %}
+            <a href="{% url 'minhas_consultas' %}" class="btn-voltar">Voltar para a Lista</a>
+        </div>
+
+    </div>
+</div>
+{% endblock %}

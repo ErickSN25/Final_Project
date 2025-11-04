@@ -1,3 +1,4 @@
+import os
 """
 Django settings for SerraVet project.
 
@@ -11,8 +12,6 @@ https://docs.djangoproject.com/en/4.2/ref/settings/
 """
 
 from pathlib import Path
-
-# Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
 
 
@@ -76,10 +75,15 @@ WSGI_APPLICATION = 'SerraVet.wsgi.application'
 
 DATABASES = {
     'default': {
-        'ENGINE': 'django.db.backends.sqlite3',
-        'NAME': BASE_DIR / 'db.sqlite3',
+        'ENGINE': 'django.db.backends.postgresql',
+        'NAME': os.getenv('DJANGO_DB_NAME', 'django_db'),
+        'USER': os.getenv('DJANGO_DB_USER', 'django_user'),
+        'PASSWORD': os.getenv('DJANGO_DB_PASSWORD', 'django_pass'),
+        'HOST': os.getenv('DJANGO_DB_HOST', 'db'),
+        'PORT': '5432',
     }
 }
+
 
 
 # Password validation
@@ -116,8 +120,11 @@ USE_TZ = True
 # Static files (CSS, JavaScript, Images)
 # https://docs.djangoproject.com/en/4.2/howto/static-files/
 
-STATIC_URL = 'static/'
+MEDIA_ROOT = BASE_DIR / 'media'
 
+MEDIA_URL = '/media/'
+
+STATIC_URL = '/static/'
 STATICFILES_DIRS = [
     BASE_DIR / "static",
 ]
@@ -128,3 +135,6 @@ AUTH_USER_MODEL = 'clinica.CustomUser'
 # https://docs.djangoproject.com/en/4.2/ref/settings/#default-auto-field
 
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
+
+LOGIN_REDIRECT_URL = 'home_user'
+LOGOUT_REDIRECT_URL = 'login'

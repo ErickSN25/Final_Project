@@ -1,0 +1,114 @@
+{% extends "clinica/user/base_user.html" %}
+{% load static %}
+
+{% block title %}{{ titulo_pagina }}{% endblock %}
+
+{% block content %}
+<div class="form-container">
+    
+    <form method="post" enctype="multipart/form-data">
+        {% csrf_token %}
+
+        <div class="form-header-title">
+            <div class="header-left">
+                <span class="dot">●</span> 
+                <h1>{{ titulo_pagina }}</h1>
+            </div>
+            
+            <div class="header-actions">
+                <button type="submit" class="btn-submit-header">Adicionar</button>
+                <a href="{% url 'meus_pets' %}" class="btn-cancel-header">Cancelar</a>
+            </div>
+        </div>
+
+        <div class="form-fields-grid">
+            
+            <div class="form-row full-width">
+                <label>{{ form.foto_pet.label }}:</label>
+                {{ form.foto_pet }} 
+                <div class="file-info">
+                    <button type="button" class="btn-anexar">Anexar o arquivo</button>
+                    <span id="file-name-display">Nenhum arquivo anexado</span>
+                </div>
+                {{ form.foto_pet.errors }}
+            </div>
+            
+            <div class="form-row full-width">
+                <label>{{ form.nome.label }}:</label>
+                {{ form.nome }}
+                {{ form.nome.errors }}
+            </div>
+
+            <div class="form-row full-width">
+                <label>{{ form.especie.label }}:</label>
+                {{ form.especie }}
+                {{ form.especie.errors }}
+            </div>
+
+            <div class="form-row full-width">
+                <label>{{ form.raca.label }}:</label>
+                {{ form.raca }}
+                {{ form.raca.errors }}
+            </div>
+            
+            <div class="form-row third-width">
+                <label>Idade:</label>
+                <input type="text" placeholder="Ex: 3 anos">
+            </div>
+
+            <div class="form-row third-width">
+                <label>{{ form.peso.label }}:</label>
+                {{ form.peso }}
+                {{ form.peso.errors }}
+            </div>
+            
+            <div class="form-row third-width">
+                <label>{{ form.vacinas_em_dia.label }}?</label>
+                <div class="checkbox-options">
+                    {{ form.vacinas_em_dia }}
+                    <label for="{{ form.vacinas_em_dia.id_for_label }}">Opções de sim ou não</label>
+                </div>
+                {{ form.vacinas_em_dia.errors }}
+            </div>
+
+            <div class="form-row half-column">
+                <label>{{ form.alergias.label }}:</label>
+                {{ form.alergias }}
+                {{ form.alergias.errors }}
+            </div>
+
+            <div class="form-row half-column">
+                <label>{{ form.doencas.label }}:</label>
+                {{ form.doencas }}
+                {{ form.doencas.errors }}
+            </div>
+
+        </div>
+        
+    </form>
+</div>
+
+<script>
+    document.addEventListener('DOMContentLoaded', function() {
+        const fileInput = document.getElementById('{{ form.foto_pet.id_for_label }}');
+        const fileNameDisplay = document.getElementById('file-name-display');
+        const btnAnexar = document.querySelector('.btn-anexar');
+
+        if(fileInput) {
+            fileInput.style.display = 'none';
+
+            btnAnexar.addEventListener('click', function() {
+                fileInput.click();
+            });
+
+            fileInput.addEventListener('change', function() {
+                if (fileInput.files.length > 0) {
+                    fileNameDisplay.textContent = fileInput.files[0].name;
+                } else {
+                    fileNameDisplay.textContent = 'Nenhum arquivo anexado';
+                }
+            });
+        }
+    });
+</script>
+{% endblock content %}

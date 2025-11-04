@@ -1,0 +1,85 @@
+{% extends "clinica/atd/base_atendente.html" %}
+{% load static %}
+
+{% block content %}
+<div class="content">
+    <div class="stats-row">
+        <div class="stats-card">
+            <div class="card-title-main">Hoje</div>
+            <small class="card-subtitle-small">Consultas do dia</small>
+            <h2 class="card-number">{{ consultas_do_dia_count|default:"0" }}</h2>
+            <p class="card-text-small">consultas agendadas</p>
+        </div>
+
+        <div class="stats-card">
+            <div class="card-title-main">Agendadas</div>
+            <small class="card-subtitle-small">Total pendentes</small>
+            <h2 class="card-number warning">{{ consultas_pendentes_count|default:"0" }}</h2>
+            <p class="card-text-small">consultas pendentes</p>
+        </div>
+    </div>
+
+    <div class="consultas-section">
+        <div class="consultas-header">
+            <h4>Consultas Cadastradas</h4>
+            
+            <div class="search-container">
+                <input type="text" placeholder="Pesquisar" id="searchConsulta">
+                <span class="search-icon"><i class="fas fa-search"></i></span>
+            </div>
+        </div>
+
+        <ul class="consulta-list" id="consultaList">
+            {% if consultas_cadastradas %}
+                {% for consulta in consultas_cadastradas %}
+                    <li class="consulta-item">
+                        <div class="consulta-details">
+                            <span class="dot"></span>
+                            <div>
+                                <span>{{ consulta.pet.tutor.get_full_name }} - {{ consulta.veterinario.get_full_name }}</span>
+                                <small>{{ consulta.data_hora|date:"d/m/Y H:i" }}</small>
+                            </div>
+                        </div>
+                        
+                        {% if consulta.status == 'REALIZADO' %}
+                            <span class="status-badge status-concluida">Realizado</span>
+                        {% elif consulta.status == 'PENDENTE' %}
+                            <span class="status-badge status-agendada">Pendente</span>
+                        {% elif consulta.status == 'CONFIRMADO' %}
+                            <span class="status-badge status-confirmada">Confirmado</span>
+                        {% elif consulta.status == 'CANCELADO' %}
+                            <span class="status-badge status-cancelada">Cancelado</span>
+                        {% else %}
+                            <span class="status-badge">{{ consulta.status }}</span>
+                        {% endif %}
+                    </li>
+                {% endfor %}
+            {% else %}
+                <li class="consulta-item" style="justify-content: center;">
+                    <p class="text-muted" style="margin: 0; padding: 10px;">Nenhuma consulta cadastrada no momento.</p>
+                </li>
+            {% endif %}
+        </ul>
+    </div>
+</div>
+
+<!-- Script de filtragem -->
+<script>
+    const searchInput = document.getElementById("searchConsulta");
+    const consultaList = document.getElementById("consultaList").getElementsByTagName("li");
+
+    searchInput.addEventListener("keyup", function() {
+        const filtro = searchInput.value.toLowerCase();
+        
+        // Percorre todos os itens da lista
+        for (let i = 0; i < consultaList.length; i++) {
+            // Pega o texto completo do item (tutor, veterinário, data, status)
+            const itemText = consultaList[i].textContent.toLowerCase();
+            
+            // Se o texto incluir o filtro, exibe o item; senão, esconde
+            consultaList[i].style.display = itemText.includes(filtro) ? "" : "none";
+        }
+    });
+</script>
+
+{% endblock %}

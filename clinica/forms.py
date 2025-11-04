@@ -2,16 +2,34 @@ from django import forms
 from django.core.validators import RegexValidator, FileExtensionValidator
 from django.core.exceptions import ValidationError
 from django.db import transaction
-from .models import (
-    CustomUser,
-    ClientePerfil,
-    Pet,
-    Consulta,
-    Prontuario,
-    Ausencia,
-    HorarioDisponivel
-)
+from django.contrib.auth.forms import AuthenticationForm
+from django.contrib.auth.forms import UserCreationForm, UserChangeForm
+from .models import (CustomUser, ClientePerfil, Pet, Consulta, Prontuario, Ausencia, HorarioDisponivel)
 
+<<<<<<< HEAD
+=======
+class CustomAuthenticationForm(AuthenticationForm):
+    username = forms.EmailField(
+        label="E-mail",
+        max_length=254,
+        widget=forms.TextInput(attrs={'autofocus': True})
+    )
+    
+    def __init__(self, request=None, *args, **kwargs):
+        super().__init__(request=request, *args, **kwargs)
+        self.fields['username'].label = 'E-mail'
+
+class CustomUserCreationForm(UserCreationForm):
+    class Meta(UserCreationForm.Meta):
+        model = CustomUser
+        fields = ('email', 'nome', 'sobrenome', 'cpf', 'user_type')
+
+class CustomUserChangeForm(UserChangeForm):
+    class Meta:
+        model = CustomUser
+        fields = ('email', 'nome', 'sobrenome', 'cpf', 'user_type', 'is_active', 'is_staff', 'is_superuser')
+
+>>>>>>> f15c0c4d666df049388a13fdf66a37f1a3d6debf
 # -------------------------
 # Formulários para Ações do Atendente
 # -------------------------
@@ -24,7 +42,7 @@ class HorarioDisponivelForm(forms.ModelForm):
     
     class Meta:
         model = HorarioDisponivel
-        fields = ['veterinario', 'data']
+        fields = ['veterinario', 'data', 'disponivel']
         widgets = {
             'data': forms.DateTimeInput(attrs={'type': 'datetime-local'}),
         }
@@ -33,6 +51,11 @@ class HorarioDisponivelForm(forms.ModelForm):
         super().__init__(*args, **kwargs)
         self.fields['veterinario'].queryset = CustomUser.objects.filter(user_type='veterinario')
 
+<<<<<<< HEAD
+=======
+    
+
+>>>>>>> f15c0c4d666df049388a13fdf66a37f1a3d6debf
 
 # -------------------------
 # Formulário para Ação do Veterinário
@@ -107,36 +130,75 @@ class CadastroClienteForm(forms.Form):
     
     telefone = forms.CharField(
         label="Telefone",
-        required=False,
         validators=[RegexValidator(
             regex=r'^\(\d{2}\) \d{4,5}-\d{4}$',
             message="Digite o telefone no formato (00) 00000-0000 ou (00) 0000-0000."
         )],
         widget=forms.TextInput(attrs={'class': 'form-control'})
     )
+    
+    password = forms.CharField(
+        label="Senha",
+        strip=False,
+        widget=forms.PasswordInput(attrs={'class': 'form-control'})
+    )
+    password_confirm = forms.CharField(
+        label="Confirme a Senha",
+        strip=False,
+        widget=forms.PasswordInput(attrs={'class': 'form-control'})
+    )
+    
+    aceito = forms.BooleanField(
+    label="Concordo com as diretrizes do site",
+    required=True
+    )
 
     def clean_cpf(self):
         cpf = self.cleaned_data.get('cpf')
-        if CustomUser.objects.filter(cpf=cpf).exists():
-            raise forms.ValidationError("Este CPF já está cadastrado.")
-        return cpf
+        cpf_limpo = ''.join(filter(str.isdigit, cpf)) 
+        if len(cpf_limpo) != 11:
+            raise forms.ValidationError("O CPF deve conter exatamente 11 dígitos.")
+        return cpf 
+    
+    def clean_telefone(self):
+        telefone = self.cleaned_data.get('telefone')
+        telefone_limpo = ''.join(filter(str.isdigit, telefone))
+        if not (10 <= len(telefone_limpo) <= 11):
+            raise forms.ValidationError("O telefone deve ter 10 ou 11 dígitos.")
+        return telefone_limpo
 
     def clean_email(self):
         email = self.cleaned_data.get('email')
         if CustomUser.objects.filter(email=email).exists():
             raise forms.ValidationError("Este e-mail já está em uso.")
         return email
+    
+    def clean(self):
+        cleaned_data = super().clean()
+        password = cleaned_data.get("password")
+        password_confirm = cleaned_data.get("password_confirm")
 
+<<<<<<< HEAD
     def save(self):
+=======
+        if password and password_confirm and password != password_confirm:
+            self.add_error('password_confirm', "As senhas não coincidem.")
+            
+        return cleaned_data
+    
+
+    def save(self, commit=True):
+>>>>>>> f15c0c4d666df049388a13fdf66a37f1a3d6debf
         with transaction.atomic():
             user = CustomUser.objects.create_user(
                 email=self.cleaned_data['email'],
+                password=self.cleaned_data['password'],
                 nome=self.cleaned_data['nome'],
                 sobrenome=self.cleaned_data['sobrenome'],
                 cpf=self.cleaned_data['cpf'],
                 user_type='cliente'
             )
-            
+
             ClientePerfil.objects.create(
                 user=user,
                 telefone=self.cleaned_data.get('telefone', '')
@@ -148,30 +210,41 @@ class CadastroPetForm(forms.ModelForm):
     """ Formulário para o cliente cadastrar um novo pet. """
     class Meta:
         model = Pet
-        fields = ['nome', 'especie', 'raca', 'peso', 'vacinas_em_dia', 'alergias', 'doencas']
+        fields = ['foto_pet', 'nome', 'especie', 'raca', 'peso', 'vacinas_em_dia', 'alergias', 'doencas']
 
 
 class AgendamentoClienteForm(forms.Form):
+    # Campo 1: PET (O cliente só vê os seus)
     pet = forms.ModelChoiceField(
         queryset=Pet.objects.none(),
         label="Selecione o seu Pet"
     )
 
+    # Campo 2: VETERINÁRIO (Filtra todos os veterinários)
     veterinario = forms.ModelChoiceField(
         queryset=CustomUser.objects.none(),
         label="Selecione o Veterinário"
     )
 
-    horario = forms.ModelChoiceField(
-        queryset=HorarioDisponivel.objects.none(),
-        required=False,
-        label="Horário Disponível"
+    # Campo 3: HORÁRIO DISPONÍVEL (Será preenchido via AJAX/JS após selecionar o veterinário)
+    horario_agendado = forms.ModelChoiceField(
+        queryset=HorarioDisponivel.objects.none(), # Inicialmente vazio
+        label="Horário Disponível",
+        # Adicione o atributo 'id' para facilitar a manipulação com JS/AJAX
+        widget=forms.Select(attrs={'id': 'id_horario_agendado_ajax'}) 
     )
     
+    # Campo 4: MOTIVO
+    motivo = forms.CharField(
+        widget=forms.Textarea(attrs={'rows': 4, 'placeholder': 'Descreva o motivo da consulta...'}),
+        label="Motivo da Consulta"
+    )
+
     def __init__(self, *args, **kwargs):
         user = kwargs.pop('user', None)
         super().__init__(*args, **kwargs)
 
+<<<<<<< HEAD
         # Pets do cliente logado
         if user and user.is_authenticated:
             self.fields['pet'].queryset = Pet.objects.filter(tutor=user)
@@ -182,10 +255,63 @@ class AgendamentoClienteForm(forms.Form):
         # Horários disponíveis
         self.fields['horario'].queryset = HorarioDisponivel.objects.filter(disponivel=True)
 
+=======
+        if user and user.is_authenticated:
+            # Filtra os pets apenas para os que pertencem ao cliente logado
+            # (Assumo que o campo no Pet se chama 'tutor')
+            self.fields['pet'].queryset = Pet.objects.filter(tutor=user).order_by('nome')
+
+            # Filtra todos os usuários que são veterinários
+            self.fields['veterinario'].queryset = CustomUser.objects.filter(
+                user_type='veterinario'
+            ).order_by('nome')
+            
+    # O método clean garante que os dados sejam válidos, incluindo o horário
+    def clean(self):
+        cleaned_data = super().clean()
+        horario = cleaned_data.get('horario_agendado')
+        veterinario = cleaned_data.get('veterinario')
+        
+        # 1. Validação: Checa se o horário pertence ao veterinário selecionado
+        if horario and veterinario and horario.veterinario != veterinario:
+             self.add_error('horario_agendado', "O horário selecionado não pertence ao veterinário escolhido.")
+             
+        # 2. Validação: Checa se o horário ainda está disponível (Dupla checagem)
+        if horario and not horario.disponivel:
+             self.add_error('horario_agendado', "Este horário não está mais disponível.")
+             
+        return cleaned_data
+
+
+    def save(self, user):
+        """Salva a consulta e marca o HorarioDisponivel como indisponível."""
+        # Se você usar .get() diretamente em clean_data, você terá os objetos do model
+        pet_instance = self.cleaned_data.get('pet')
+        veterinario_instance = self.cleaned_data.get('veterinario')
+        horario_instance = self.cleaned_data.get('horario_agendado')
+        motivo = self.cleaned_data.get('motivo')
+        
+        with transaction.atomic():
+            # Cria a instância da consulta
+            consulta = Consulta.objects.create(
+                pet=pet_instance,
+                veterinario=veterinario_instance,
+                horario_agendado=horario_instance,
+                motivo=motivo,
+                status='MARCADA' 
+            )
+            
+            # Marca o horário como indisponível
+            horario_instance.disponivel = False
+            horario_instance.save()
+            
+            return consulta
+>>>>>>> f15c0c4d666df049388a13fdf66a37f1a3d6debf
 
 class ConsultaForm(forms.ModelForm):
     class Meta:
         model = Consulta
+<<<<<<< HEAD
         fields = ['data_hora', 'motivo']
         widgets = {
             'data_hora': forms.DateTimeInput(attrs={'type': 'datetime-local'}),
@@ -195,3 +321,74 @@ class ConsultaForm(forms.ModelForm):
             'data_hora': 'Data e Hora da Consulta',
             'motivo': 'Motivo da Consulta',
         }
+=======
+        fields = ['pet', 'veterinario', 'horario_agendado', 'motivo', 'status']
+        widgets = {
+            'motivo': forms.Textarea(attrs={'rows': 4}),
+        }
+        labels = {
+            'pet': 'Pet',
+            'veterinario': 'Veterinário',
+            'horario_agendado': 'Horário Agendado',
+            'motivo': 'Motivo da Consulta',
+            'status': 'Status',
+        } 
+        
+    def clean(self):
+        cleaned_data = super().clean()
+        veterinario = cleaned_data.get('veterinario')
+        horario = cleaned_data.get('horario_agendado')
+
+       
+        if veterinario and horario and veterinario != horario.veterinario:
+            raise forms.ValidationError(
+                "O veterinário selecionado deve corresponder ao veterinário do horário disponível."
+            )
+        
+        return cleaned_data
+
+
+#=====================
+#FILTROS
+#=====================
+
+class HorarioFiltroForm(forms.Form):
+    veterinario = forms.ModelChoiceField(
+        queryset=CustomUser.objects.filter(user_type='veterinario'),
+        required=False,
+        label="Veterinário"
+    )
+    data = forms.DateField(
+        required=False,
+        widget=forms.DateInput(attrs={'type': 'date'}),
+        label="Data"
+    )
+    apenas_disponiveis = forms.BooleanField(
+        required=False,
+        label="Apenas Disponíveis"
+    )
+
+class ConsultaFiltroForm(forms.Form):
+    
+    # Adiciona 'TODOS' como primeira opção de status
+    STATUS_CHOICES_FILTRO = [('TODOS', 'Todos os Status')] + list(Consulta.STATUS_CHOICES)
+    
+    status = forms.ChoiceField(
+        choices=STATUS_CHOICES_FILTRO,
+        required=False,
+        label="Status",
+        widget=forms.Select(attrs={'class': 'form-select'}) # Adicione classes CSS
+    )
+
+    data_inicio = forms.DateField(
+        required=False,
+        label="Data de Início",
+        widget=forms.DateInput(attrs={'type': 'date', 'class': 'form-control'}) # Type 'date' para calendário HTML5
+    )
+    
+    data_fim = forms.DateField(
+        required=False,
+        label="Data Final",
+        widget=forms.DateInput(attrs={'type': 'date', 'class': 'form-control'}) # Type 'date' para calendário HTML5
+    )
+>>>>>>> f15c0c4d666df049388a13fdf66a37f1a3d6debf

@@ -1,0 +1,37 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <title>{% block title %}Portal do Atendente {% endblock %}</title>
+    <link rel="stylesheet" href="{% static 'css/style_ate.css' %}">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    {% block extra_head %}{% endblock %}
+</head>
+<body> 
+    <!-- Navbar Superior -->
+    <header class="navbar">
+        <div class="navbar-logo">SerraVet</div>
+        <div class="navbar-user">
+            <span>{{ request.user.get_full_name }}</span>
+        </div>
+    </header>
+
+    <div class="layout">
+        <!-- Sidebar -->
+        <aside class="sidebar">
+            <h2>Menu</h2>
+            <ul>
+                <li><a href={%url 'home_atendente'%}>Início</a></li>
+                <li><a href={%url 'gerenciar_horarios'%}>Gerenciamento de Horarios</a></li>
+                <li><a href="#">Gerenciamento de pagamentos</a></li>
+            </ul>
+        </aside>
+
+        <!-- Área de conteúdo -->
+        <main class="content">
+            {% block content %}{% endblock %}
+        </main>
+    </div>
+</body>
+</html>
