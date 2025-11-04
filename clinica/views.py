@@ -245,6 +245,16 @@ def agendar_consulta_view(request):
     if request.method == 'POST':
         # Passa request.POST e o user para o form
         form = AgendamentoClienteForm(request.POST, user=request.user)
+        
+        veterinario_id = request.POST.get("veterinario")
+
+        # 🧠 Se o usuário escolheu um veterinário, atualizamos o queryset do campo de horário
+        if veterinario_id:
+            form.fields["horario_agendado"].queryset = HorarioDisponivel.objects.filter(
+                veterinario_id=veterinario_id,
+                disponivel=True
+            )
+
         if form.is_valid():
             try:
                 # O método save() do form lida com a criação da Consulta e atualização do HorarioDisponivel
