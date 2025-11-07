@@ -4,7 +4,10 @@ from django.core.exceptions import ValidationError
 from django.db import transaction
 from django.contrib.auth.forms import AuthenticationForm
 from django.contrib.auth.forms import UserCreationForm, UserChangeForm
-from .models import (CustomUser, ClientePerfil, Pet, Consulta, Prontuario, Ausencia, HorarioDisponivel)
+from .models import (CustomUser, ClientePerfil, Pet, Consulta, Prontuario, HorarioDisponivel)
+from django.contrib.auth.forms import PasswordChangeForm
+from django.contrib.auth import get_user_model
+User = get_user_model()
 
 class CustomAuthenticationForm(AuthenticationForm):
     username = forms.EmailField(
@@ -89,20 +92,6 @@ class ProntuarioForm(forms.ModelForm):
             'observacoes': 'Observações Adicionais',
         }
         
-
-class AusenciaForm(forms.ModelForm):
-    class Meta:
-        model = Ausencia
-        fields = ['inicio', 'fim', 'motivo']
-        widgets = {
-            'inicio': forms.DateTimeInput(attrs={'type': 'datetime-local'}),
-            'fim': forms.DateTimeInput(attrs={'type': 'datetime-local'}),
-            'motivo': forms.Textarea(attrs={'rows': 4}),
-        }
-        labels = {
-            'inicio': 'Início da Ausência',
-            'fim': 'Fim da Ausência',
-        }
 
 
 # -------------------------
@@ -202,7 +191,6 @@ class CadastroPetForm(forms.ModelForm):
         model = Pet
         fields = ['foto_pet', 'nome', 'especie', 'raca', 'peso', 'vacinas_em_dia', 'alergias', 'doencas']
 
-
 class AgendamentoClienteForm(forms.Form):
     # Campo 1: PET (O cliente só vê os seus)
     pet = forms.ModelChoiceField(
@@ -235,11 +223,7 @@ class AgendamentoClienteForm(forms.Form):
         super().__init__(*args, **kwargs)
 
         if user and user.is_authenticated:
-            # Filtra os pets apenas para os que pertencem ao cliente logado
-            # (Assumo que o campo no Pet se chama 'tutor')
             self.fields['pet'].queryset = Pet.objects.filter(tutor=user).order_by('nome')
-
-            # Filtra todos os usuários que são veterinários
             self.fields['veterinario'].queryset = CustomUser.objects.filter(
                 user_type='veterinario'
             ).order_by('nome')
@@ -284,7 +268,7 @@ class AgendamentoClienteForm(forms.Form):
             horario_instance.save()
             
             return consulta
-
+        
 class ConsultaForm(forms.ModelForm):
     class Meta:
         model = Consulta
@@ -312,6 +296,40 @@ class ConsultaForm(forms.ModelForm):
             )
         
         return cleaned_data
+    
+class ClientePerfilForm(forms.ModelForm):
+    # Definimos os campos que o usuário pode editar/completar
+    class Meta:
+        model = ClientePerfil
+        fields = ('foto_user', 'telefone', 'endereco', 'numero', 'bairro', 'cidade', 'estado')
+        
+        widgets = {
+            'foto_user': forms.FileInput(attrs={'class': 'form-control-file'}),
+            'telefone': forms.TextInput(attrs={'class': 'form-control', 'placeholder': '(XX) XXXXX-XXXX'}),
+            'endereco': forms.TextInput(attrs={'class': 'form-control', 'placeholder': 'Rua/Avenida...'}),
+            'numero': forms.TextInput(attrs={'class': 'form-control'}),
+            'bairro': forms.TextInput(attrs={'class': 'form-control'}),
+            'cidade': forms.TextInput(attrs={'class': 'form-control'}),
+            'estado': forms.Select(attrs={'class': 'form-control'}), 
+        }
+        
+        labels = {
+            'foto_user': 'Foto de Perfil',
+            'telefone': 'Telefone',
+            'endereco': 'Rua/Avenida (Logradouro)',
+            'numero': 'Número',
+            'bairro': 'Bairro',
+            'cidade': 'Cidade',
+            'estado': 'Estado',
+        }
+
+
+# 2. Formulário para Alteração de Senha (Mantido)
+class CustomPasswordChangeForm(PasswordChangeForm):
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+        for field in self.fields.values():
+            field.widget.attrs['class'] = 'form-control'
 
 
 #=====================
@@ -357,3 +375,83 @@ class ConsultaFiltroForm(forms.Form):
         label="Data Final",
         widget=forms.DateInput(attrs={'type': 'date', 'class': 'form-control'}) # Type 'date' para calendário HTML5
     )
+    
+# =====================
+# FILTROS - VETERINÁRIO
+# =====================
+
+class VeterinarioConsultaFiltroForm(forms.Form):
+    STATUS_CONSULTA_CHOICES = [('TODOS', 'Todos os Status')] + [
+        (s[0], s[1]) for s in Consulta.STATUS_CHOICES 
+        if s[0] in ['MARCADA', 'EM_ANDAMENTO', 'REALIZADA', 'CANCELADA']
+    ]
+    
+    STATUS_PRONTUARIO_CHOICES = [
+        ('TODOS', 'Todos'),
+        ('PENDENTE', 'Prontuário Pendente'),
+        ('FINALIZADO', 'Prontuário Finalizado'),
+    ]
+    
+    status = forms.ChoiceField(
+        choices=STATUS_CONSULTA_CHOICES,
+        required=False,
+        label="Status da Consulta",
+        widget=forms.Select(attrs={'class': 'form-select'})
+    )
+
+    prontuario_status = forms.ChoiceField(
+        choices=STATUS_PRONTUARIO_CHOICES,
+        required=False,
+        label="Status Prontuário",
+        widget=forms.Select(attrs={'class': 'form-select'})
+    )
+
+    data_inicio = forms.DateField(
+        required=False,
+        label="Data a Partir de",
+        widget=forms.DateInput(attrs={'type': 'date', 'class': 'form-control'})
+    )
+    
+    data_fim = forms.DateField(
+        required=False,
+        label="Data Até",
+        widget=forms.DateInput(attrs={'type': 'date', 'class': 'form-control'})
+    )
+    
+    pesquisa = forms.CharField(
+        required=False,
+        label="Pet/Tutor/Motivo",
+        widget=forms.TextInput(attrs={'class': 'form-control', 'placeholder': 'Nome do Pet ou Tutor...'})
+    )
+    
+    
+class ConsultaFinalizadasFiltroForm(forms.Form):
+    # Opções de Status de Prontuário
+    PRONTUARIO_STATUS_CHOICES = [
+        ('', 'Status Prontuário'),
+        ('pendente', 'Pendente'),
+        ('ok', 'Finalizado'),
+    ]
+    
+    # Filtro por Status da Consulta (Realizada ou Cancelada)
+    STATUS_CHOICES = [
+        ('', 'Status Consulta'),
+        ('REALIZADA', 'Realizada'),
+        ('CANCELADA', 'Cancelada'),
+    ]
+    
+    status = forms.ChoiceField(
+        choices=STATUS_CHOICES,
+        required=False,
+        widget=forms.Select(attrs={'class': 'form-control'})
+    )
+
+    prontuario_status = forms.ChoiceField(
+        choices=PRONTUARIO_STATUS_CHOICES,
+        required=False,
+        widget=forms.Select(attrs={'class': 'form-control'})
+    )
+class ConsultaAtivasFiltroForm(forms.Form):
+    data_inicio = forms.DateField(required=False, widget=forms.DateInput(attrs={'type': 'date', 'class': 'form-control'}))
+    data_fim = forms.DateField(required=False, widget=forms.DateInput(attrs={'type': 'date', 'class': 'form-control'}))
+   

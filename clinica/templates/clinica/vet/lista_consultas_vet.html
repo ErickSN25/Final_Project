@@ -1,0 +1,161 @@
+{% extends "clinica/vet/base_vet.html" %}
+{% load static %}
+
+{% block title %}Listagem de Consultas | Veterinário{% endblock %}
+
+{% block content %}
+    <div class="container">
+        <h1>🩺 Gerenciamento de Consultas</h1>
+        <p>Acompanhe consultas ativas (Marcadas e Em Andamento) e o histórico de finalizadas.</p>
+
+        <div class="consulta-section">
+            <h2>Próximas e em Andamento</h2>
+            
+            <div class="consulta-filtro-container">
+                <form method="GET" class="filtro-form">
+                    
+                    <div class="search-box">
+                        <input type="text" name="q_ativas" 
+                               placeholder="Pesquisar Pet, Tutor ou Status..." 
+                               value="{{ request.GET.q_ativas|default:'' }}">
+                        <button type="submit" class="btn-search">
+                            <i class="fas fa-search"></i>
+                        </button>
+                    </div>
+                    
+                    <div class="data-filtro">
+                        <label for="{{ form_ativas.data_inicio.id_for_label }}">De:</label>
+                        {{ form_ativas.data_inicio }}
+                    </div>
+                    
+                    <div class="data-filtro">
+                        <label for="{{ form_ativas.data_fim.id_for_label }}">Até:</label>
+                        {{ form_ativas.data_fim }}
+                    </div>
+                    
+                    <button type="submit" class="btn-filtrar">Aplicar</button>
+                    <a href="{% url 'lista_consultas_vet' %}" class="btn-limpar-filtro">Limpar</a>
+                </form>
+            </div>
+            
+            {% if consultas_ativas %}
+                <ul class="lista-consultas">
+                    {% for consulta in consultas_ativas %}
+                        <li class="consulta-item-{{ consulta.status|lower }}">
+                            
+                            <div class="pet-info-principal">
+                                <i class="fas fa-heart pet-icon"></i> 
+                                <div>
+                                    <span class="pet-name">{{ consulta.pet.nome }}</span>
+                                    <span class="tutor-name">Tutor: {{ consulta.pet.tutor.get_full_name }}</span>
+                                </div>
+                            </div>
+
+                            <div class="consulta-detalhes-agendamento">
+                                <div class="data-hora">
+                                    <span class="data"><i class="fas fa-calendar-alt"></i> {{ consulta.horario_agendado.data|date:"d/m/Y" }}</span>
+                                    <span class="hora"><i class="fas fa-clock"></i> {{ consulta.horario_agendado.data|date:"H:i" }}</span>
+                                </div>
+                                
+                                <div class="badges-group">
+                                    <span class="status-badge status-{{ consulta.status|lower }}">
+                                        {{ consulta.get_status_display }}
+                                    </span>
+                                    
+                                    <a href="{% url 'detalhe_consulta_vet' consulta.id %}" class="btn-acao-consulta">
+                                        {% if consulta.status == 'MARCADA' %}
+                                            Iniciar Consulta
+                                        {% elif consulta.status == 'EM_ANDAMENTO' %}
+                                            Continuar
+                                        {% endif %}
+                                    </a>
+                                </div>
+                            </div>
+                        </li>
+                    {% endfor %}
+                </ul>
+
+            {% else %}
+                <div class="no-results-card no-filter-active">
+                    <i class="fas fa-check-circle"></i>
+                    <p>Nenhuma consulta marcada ou em andamento encontrada.</p>
+                </div>
+            {% endif %}
+        </div>
+
+        <hr class="section-divider">
+
+        <div class="consulta-section">
+            <h2>Consultas Finalizadas (Histórico)</h2>
+
+            <div class="consulta-filtro-container">
+                <form method="GET" class="filtro-form filtro-finalizadas">
+                    
+                    {{ form_finalizadas.status }}
+
+                    {{ form_finalizadas.prontuario_status }}
+
+                    <div class="search-box">
+                        <input type="text" name="q_finalizadas" 
+                               placeholder="Pesquisar Pet ou Tutor..." 
+                               value="{{ request.GET.q_finalizadas|default:'' }}">
+                        <button type="submit" class="btn-search">
+                            <i class="fas fa-search"></i>
+                        </button>
+                    </div>
+
+                    <button type="submit" class="btn-filtrar">Aplicar</button>
+                    <a href="{% url 'lista_consultas_vet' %}" class="btn-limpar-filtro">Limpar</a>
+                </form>
+            </div>
+
+
+            {% if consultas_finalizadas %}
+                <ul class="lista-consultas">
+                    {% for consulta in consultas_finalizadas %}
+                        <li class="consulta-item-{{ consulta.status|lower }}">
+                            
+                            <div class="pet-info-principal">
+                                <i class="fas fa-heart pet-icon"></i> 
+                                <div>
+                                    <span class="pet-name">{{ consulta.pet.nome }}</span>
+                                    <span class="tutor-name">Tutor: {{ consulta.pet.tutor.get_full_name }}</span>
+                                </div>
+                            </div>
+
+                            <div class="consulta-detalhes-agendamento">
+                                <div class="data-hora">
+                                    <span class="data"><i class="fas fa-calendar-alt"></i> {{ consulta.horario_agendado.data|date:"d/m/Y" }}</span>
+                                    <span class="hora"><i class="fas fa-clock"></i> {{ consulta.horario_agendado.data|date:"H:i" }}</span>
+                                </div>
+                                
+                                <div class="badges-group">
+                                    <span class="status-badge status-{{ consulta.status|lower }}">
+                                        {{ consulta.get_status_display }}
+                                    </span>
+
+                                    {% if consulta.status == 'REALIZADA' %}
+                                        <span class="prontuario-badge {% if consulta.prontuario %}prontuario-ok{% else %}prontuario-pendente{% endif %}">
+                                            Prontuário {% if consulta.prontuario %}OK{% else %}Pendente{% endif %}
+                                        </span>
+                                    {% endif %}
+                                    
+                                    <a href="{% url 'detalhe_consulta_vet' consulta.id %}" class="btn-acao-consulta btn-ver-detalhes">
+                                        Ver Detalhes
+                                    </a>
+                                </div>
+                            </div>
+                        </li>
+                    {% endfor %}
+                </ul>
+
+
+            {% else %}
+                <div class="no-results-card no-filter-active">
+                    <i class="fas fa-clipboard-list"></i>
+                    <p>Nenhuma consulta finalizada encontrada com os filtros aplicados.</p>
+                </div>
+            {% endif %}
+        </div>
+    </div>
+{% endblock %}

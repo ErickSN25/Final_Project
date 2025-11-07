@@ -5,39 +5,52 @@
     <meta charset="UTF-8">
     <title>{% block title %}Portal do Cliente{% endblock %}</title>
     <link rel="stylesheet" href="{% static 'css/style_user.css' %}">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
 </head>
-<body> 
-    <!-- Navbar Superior -->
-    <header class="navbar">
-        <div class="navbar-logo">SerraVet</div>
-        <div class="navbar-user">
+
+<body>
+
+<header class="header-waves">
+    <div class="header-content">
+        <span class="logo">SerraVet</span>
+        <div class="user-info">
+            {% if request.user.is_authenticated %}
+            <a href="{% url 'perfil_user' %}" class="link-avatar-profile">
+                {% with perfil=request.user.clienteperfil %}
+                    <img class="avatar" 
+                         src="{% if perfil and perfil.foto_user %}{{ perfil.foto_user.url }}{% else %}{% static 'images/user_default.jpg' %}{% endif %}" 
+                         alt="Avatar do Usuário">
+                {% endwith %}
+            </a>
+            {% endif %}
+            
             <span>{{ request.user.get_full_name }}</span>
         </div>
-    </header>
-
-    <div class="layout">
-        <!-- Sidebar -->
-        <aside class="sidebar">
-            <h2>Menu</h2>
-            <ul>
-                <li><a href="{% url 'home_user' %}" {% if request.resolver_match.url_name == 'home_user' %}class="active"{% endif %}>Início</a></li>
-                <li><a href="{% url 'meus_pets' %}" {% if request.resolver_match.url_name == 'meus_pets' %}class="active"{% endif %}>Meus Pets</a></li>
-                <li><a href="{% url 'consultas_user' %}" {% if request.resolver_match.url_name == 'consultas_user' %}class="active"{% endif %}>Consultas</a></li>
-                <li><a href="#">Pagamento</a></li>
-                <li><a href="#">Notificações</a></li>
-                <li><a href="#">Perfil</a></li>
-            </ul>
-        </aside>
-
-        <!-- Área de conteúdo -->
-        <main class="content">
-            {% block content %}{% endblock %}
-        </main>
-        <!-- Área do script -->
-         <main class="extra_js">
-            {% block extra_js %}{% endblock %}
-        </main>
     </div>
+</header>
+
+<div class="layout">
+
+    <aside class="sidebar">
+        <h2>Menu</h2>
+        <ul>
+            <li><a href="{% url 'home_user' %}" {% if request.resolver_match.url_name == 'home_user' %}class="active"{% endif %}>Início</a></li>
+            <li><a href="{% url 'meus_pets' %}" {% if request.resolver_match.url_name == 'meus_pets' %}class="active"{% endif %}>Meus Pets</a></li>
+            <li><a href="{% url 'consultas_user' %}" {% if request.resolver_match.url_name == 'consultas_user' %}class="active"{% endif %}>Consultas</a></li>
+            <li><a href="#">Pagamento</a></li>
+            <li class="logout-item">
+                <form method="post" action="{% url 'logout' %}" style="display: inline;">
+                {% csrf_token %} 
+                <button type="submit" class="btn-sidebar-logout">Sair</button>
+                </form>
+            </li>
+        </ul>
+    </aside>
+
+    <main class="content">
+        {% block content %}{% endblock %}
+    </main>
+
+</div>
 </body>
 </html>

@@ -11,7 +11,7 @@
         <p class="subtitle">Selecione seu pet, um veterinário e um horário disponível para agendar.</p>
     </div>
 
-    <div class="card-shadow form-container form-agendamento">
+    <div class="card-shadow form-container form-agendamento motivo-consulta">
         <form method="post" id="form-agendamento">
             {% csrf_token %}
 
@@ -44,17 +44,18 @@
                     {% for error in form.horario_agendado.errors %}<span class="error-message">{{ error }}</span>{% endfor %}
                 </div>
             </div>
-
-            <div class="form-group full-width">
-                <label for="{{ form.motivo.id_for_label }}">{{ form.motivo.label }}</label>
-                {{ form.motivo }}
-                {% for error in form.motivo.errors %}<span class="error-message">{{ error }}</span>{% endfor %}
+            <div class="form-row">
+                <div class="form-group full-width">
+                    <label for="{{ form.motivo.id_for_label }}">{{ form.motivo.label }}</label>
+                    {{ form.motivo }}
+                    {% for error in form.motivo.errors %}<span class="error-message">{{ error }}</span>{% endfor %}
+                </div>
             </div>
-
             <div class="form-actions">
                 <button type="submit" class="btn-agendar-submit"><i class="fas fa-check"></i> Confirmar Agendamento</button>
                 <a href="{% url 'consultas_user' %}" class="btn-cancelar">Cancelar</a>
             </div>
+        </div>
         </form>
     </div>
 </div>
@@ -67,7 +68,7 @@ document.addEventListener('DOMContentLoaded', function() {
     console.log("✅ Script de agendamento carregado.");
 
     const veterinarioSelect = document.getElementById('id_veterinario');
-    const horarioSelect = document.getElementById('id_horario_agendado_ajax');
+    const horarioSelect = document.getElementById('id_horario_agendado_ajax'); 
 
     if (!veterinarioSelect || !horarioSelect) {
         console.error("❌ IDs incorretos nos selects!");
@@ -86,7 +87,7 @@ document.addEventListener('DOMContentLoaded', function() {
         }
 
         try {
-            const response = await fetch(`/ajax/obter_horarios/?veterinario_id=${veterinarioId}`);
+            const response = await fetch("{% url 'obter_horarios_disponiveis_ajax' %}?veterinario_id=" + veterinarioId);
             const data = await response.json();
 
             console.log("📅 Horários recebidos:", data);
@@ -116,5 +117,6 @@ document.addEventListener('DOMContentLoaded', function() {
     });
 });
 </script>
+
 
 {% endblock %}

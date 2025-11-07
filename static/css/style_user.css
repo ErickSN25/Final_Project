@@ -1,14 +1,49 @@
-/* Reset básico */
+/* ========================================= */
+/* 1. Estilos Base e Layout Estrutural */
+/* ========================================= */
+
 body {
-    margin: 0;
-    font-family: Arial, sans-serif;
-    background: #f5f5f5;
+    margin: 0 ;
+    padding: 0;
+    font-family: 'Arial', sans-serif;
+    background-color: #f0f2f5; /* Fundo leve para toda a página */
+    color: #333;
 }
 
-/* Navbar superior */
+
+.layout {
+    display: flex; /* Habilita o layout de duas colunas */
+    min-height: 100vh; /* Garante que o layout ocupe a altura total */
+    padding-top: 65px; /* Espaço para a barra superior fixa */
+}
+
+/* ========================================= */
+/* 2. Navbar Superior (Header) */
+/* ========================================= */
+
 .navbar {
-    background: #F3F7F8;
-    height: 60px;
+    position: fixed; /* Fixa no topo */
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 65px;
+    background: linear-gradient(to right, #6d7a89, #4a545f); /* Gradiente como na imagem */
+    color: #fff;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 0 20px;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+    z-index: 1000; /* Garante que fique acima de tudo */
+    box-sizing: border-box;
+}
+
+@import url('https://fonts.googleapis.com/css2?family=Poppins:wght@400;600;700&display=swap');
+
+
+.header-content {
+    background: #f0f2f5;
+    height: 65px;
     display: flex;
     justify-content: space-between;
     align-items: center;
@@ -16,55 +51,45 @@ body {
     border-bottom: 2px solid #ddd;
 }
 
-.navbar-logo {
-    font-family: 'Questrial', sans-serif;
-    font-size: 24px;  /* pode aumentar o tamanho */
-    font-weight: normal; /* Questrial é leve, mas você pode trocar */
-    color: #000000; /* mantém a cor azul que você já usa */
+.logo {
+    font-size: 26px;
+    color: var(--text-light);
+    font-weight: 700;
 }
-
-
-.navbar-user {
+.user-info {
     display: flex;
     align-items: center;
-    gap: 15px;
+    gap: 10px;
+}
+.avatar {
+    width: 38px;
+    height: 38px;
+    border-radius: 50%;
+    object-fit: cover;
 }
 
-.navbar-user span {
-    font-weight: bold;
-    color: #555;
-}
-
-.logout {
-    text-decoration: none;
-    color: #c0392b;
-    font-weight: bold;
-}
-
-/* Layout com sidebar */
+/* LAYOUT */
 .layout {
     display: flex;
-    min-height: calc(100vh - 60px); /* altura total menos a navbar */
+    margin-top: -60px;
 }
 
-/* Sidebar lateral */
+/* SIDEBAR */
 .sidebar {
-    width: 250px;
-    background: #ffffff;
+    width: 240px;
+    height: 100%;
     border-right: 2px solid #ddd;
+    height: calc(100vh - 60px);
+    overflow: auto;
+    top: 60px;
     padding: 20px;
-    box-sizing: border-box;
-    height: calc(100vh - 60px); /* altura total menos a navbar */
-    overflow-y: auto; /* permite rolagem se o conteúdo for maior que a altura */
-    position: sticky;
-    top: 60px; /* fixa a sidebar abaixo da navbar */
 }
-
 .sidebar h2 {
+    color: var(--text-light);
     text-align: center;
-    font-size: 25px;
-    margin-bottom: 20px;
-    font-weight: bold;
+    margin-bottom: 10px;
+    font-weight: 700;
+
 }
 
 .sidebar ul {
@@ -77,104 +102,138 @@ body {
     margin: 15px 0;
 }
 
-.sidebar ul li a {
-    text-align: center;
-    text-decoration: none;
-    color: #000000;
-    display: block;
-    padding: 8px 50px;
-    border-radius: 0 10px 10px 0;
-    transition: all 0.3s ease;
-}
 
-.sidebar ul li a:hover,
-.sidebar ul li a.active {
+.sidebar ul li a {
+    padding: 8px 50px;
+    display: block;
+    text-decoration: none;
+    color: #555;
+    border-radius: 0 10px 15px 0;
+    text-align: center;
+    transition: background-color 0.3s, color 0.3s;
+    border-left: 2px solid transparent;
+}
+.sidebar ul li a.active,
+.sidebar ul li a:hover {
     background: #e9ecef;  /* cor de fundo ao passar */
     font-weight: bold;
-    color: #000000;  /* cor do texto ao passar */
-}
-/* Conteúdo principal */
-.content {
-    flex: 1;
-    padding: 20px;
-    background: #fdfdfd;
-}
-.content h1 {
-    font-size: 24px;
-    margin-bottom: 20px;
-    color: #333;
-}
-
-.main-content {
-    flex: 1;       
-    padding: 20px;
+    color: #333;  /* cor do texto ao passar */
+    border-right: 2px solid #6d7a89;
 }
 
 
-/* Home page styles */
-
-/* Seção de boas-vindas */
-.welcome-section {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    background: #6d7a89;
-    color: #fff;
-    border-radius: 8px;
-    padding: 20px;
-    margin-bottom: 20px;
-}
-
-.welcome-section h2 {
-    margin: 0;
-    font-size: 20px;
-}
-
-.welcome-section p {
-    font-size: 14px;
-    margin-top: 5px;
-}
-
-.welcome-img img {
-    width: 120px;
-}
-
-/* Aviso importante */
-.notice-section {
-    background: #e1e1e1;
-    border-radius: 8px;
-    padding: 15px;
-    margin-bottom: 20px;
+.btn-sidebar-logout {
+    display: block;
+    width: 100%; 
     text-align: center;
+    text-decoration: none;
+    padding: 8px 50px;
+    color: #555;
+    background: none;
+    border: none; 
+    font-size: 1em; 
+    cursor: pointer;
+    border-radius: 0 10px 15px 0;
+    transition: background-color 0.3s, color 0.3s;
+    border-left: 2px solid transparent;
 }
 
-.notice-section h3 {
-    margin: 0 0 10px;
-    font-size: 18px;
+.btn-sidebar-logout:hover {
+    background: #e9ecef;
     font-weight: bold;
+    color: #333;
+    border-right: 2px solid #6d7a89;
 }
 
-/* Curiosidades */
-.curiosities-section {
-    background: #e1e1e1;
-    border-radius: 8px;
-    padding: 15px;
+.sidebar ul li.logout-item {
+    margin: 15px 0;
+    padding: 0;
 }
 
-.curiosities-section h3 {
-    margin-bottom: 10px;
-    font-size: 18px;
-    font-weight: bold;
+
+
+/* CONTENT */
+.content {
+    padding: 32px;
+    width: 100%;
 }
 
-.curiosities-section ul {
-    list-style: disc;
+.welcome-card {
+    position: relative;
+    background-color: #E7EEFF; 
+    text-align: center;
+    padding: 60px 20px 80px 20px; 
+    color: #4C587E; 
+    border-radius: 22px; 
+    overflow: hidden; 
+    box-shadow: 0 0 25px rgba(0,0,0,0.1);
+    margin-bottom: 50px;
+}
+
+.welcome-card::after {
+    content: '';
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    width: 100%;
+    height: 100px; 
+    background-color: #4C587E;
+    border-top-left-radius: 50% 100px; 
+    border-top-right-radius: 50% 100px;
+    transform: translateY(50px); 
+    z-index: 1; 
+}
+
+/* Garante que o conteúdo e o cachorro fiquem acima da onda simulada */
+.welcome-card h1, .welcome-card p, .floating-dog {
+    position: relative;
+    z-index: 5;
+    color: #333; /* Força o texto a ser escuro para contraste com o fundo claro */
+}
+
+.welcome-card h1 {
+    font-size: 32px;
+    font-weight: 700;
+}
+.welcome-card p {
+    margin-top: 10px;
+    opacity: 0.8;
+    color: #4C587E;
+}
+
+/* DOG FLUTUANDO - AJUSTES PARA NOVA ESTRUTURA */
+.floating-dog {
+    width: 250px;
+    position: absolute;
+    bottom: 0px; /* Alinha o dog à parte inferior do card */
+    right: 0px; /* Ajusta a posição para a direita */
+    left: 10%;
+    z-index: 10; /* Garante que fique acima de tudo */
+    animation: float 3s ease-in-out infinite;
+}
+
+
+/* CARDS ONDULADOS */
+.card {
+    background: var(--c2);
+    padding: 30px;
+    margin-top: 35px;
+    border-radius: 22px;
+    box-shadow: 0 0 15px rgba(0,0,0,.25);
+}
+.card h3 {
+    text-align: center;
+    color: var(--text-light);
+    margin-bottom: 18px;
+}
+.card ul {
+    margin-top: 6px;
     padding-left: 20px;
 }
-
-.curiosities-section li {
-    margin-bottom: 8px;
+.card li {
+    margin-bottom: 10px;
 }
+/* ========================================= */
 
 
 /* MY PETS */
@@ -206,11 +265,12 @@ body {
 
 /* Botão Cadastrar Pet */
 .btn-cadastrar-pet {
-    background-color: #a4c9b3; /* Um verde suave, similar ao da imagem */
+    background-color: #68735b; /* Um verde suave, similar ao da imagem */
     color: white;
-    padding: 8px 15px;
+    padding: 8px 30px;
     border: none;
-    border-radius: 5px;
+    border-radius: 22px;
+    text-align: center;
     text-decoration: none;
     font-weight: bold;
     transition: background-color 0.3s;
@@ -222,21 +282,21 @@ body {
 }
 
 .btn-cadastrar-pet:hover {
-    background-color: #8db89a;
+    background-color: #98a588;
 }
 
 /* Lista de Pets (Layout com Grid) */
 .pets-list {
     display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); /* Responsivo para 1 ou 2 colunas */
+    grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); 
     gap: 20px;
 }
 
 /* Card Individual do Pet */
 .pet-card {
     background-color: #fff;
-    border-radius: 10px;
-    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    border-radius: 15px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.25);
     padding: 20px;
     display: flex;
     flex-direction: column;
@@ -299,7 +359,7 @@ body {
 .pet-actions button {
     padding: 10px 20px;
     border: none;
-    border-radius: 5px;
+    border-radius: 10px;
     cursor: pointer;
     font-weight: 600;
     transition: background-color 0.3s, opacity 0.3s;
@@ -307,17 +367,22 @@ body {
 }
 
 .btn-detalhes {
-    background-color: #b2b2c2; /* Cor azul/cinza suave */
-    color: white;
+    border: none;
+    background:  #6e789a;
+    border-radius: 15px;
+    padding: 8px 15px;
+    color: #ffffff; 
+    text-decoration: none;
+    font-weight: bold;
+    transition: background-color 0.3s;
 }
-
 .btn-detalhes:hover {
-    background-color: #9a9aab;
+    background-color: #8e97b3;
 }
 
 .btn-excluir {
-    background-color: #c9a4a4; /* Cor rosa/marrom suave */
-    color: white;
+    background-color: #713e28; /* Cor rosa/marrom suave */
+    color: rgb(180, 177, 177);
 }
 
 .btn-excluir:hover {
@@ -330,7 +395,7 @@ body {
     background: #e9ecef; /* cor de fundo ao passar */
     font-weight: bold;
     color: #000000; /* cor do texto ao passar */
-    border-left: 5px solid #a4c9b3; /* Linha verde/azul do destaque */
+    border-left: 2px solid #000000; /* Linha verde/azul do destaque */
 }
 
 /* Estilos para a página de Detalhes do Pet (NOVO) */
@@ -377,8 +442,8 @@ body {
 }
 
 .btn-edit-details {
-    background-color: #a4c9b3; /* Verde do Cadastrar Pet */
-    color: white;
+    background-color: #68735b; /* Verde do Cadastrar Pet */
+    color: rgba(255, 255, 255, 0.777);
     padding: 8px 15px;
     border: none;
     border-radius: 5px;
@@ -389,11 +454,11 @@ body {
 }
 
 .btn-edit-details:hover {
-    background-color: #8db89a;
+    background-color: #9fa484;
 }
 
 .btn-voltar-details {
-    background-color: #c9a4a4; /* Marrom suave */
+    background-color: #713e28; /* Marrom suave */
     color: white;
     padding: 8px 15px;
     border: none;
@@ -412,8 +477,8 @@ body {
 
 .pet-details-card {
     background-color: #fff;
-    border-radius: 10px;
-    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    border-radius: 15px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.25);
     padding: 30px;
     display: flex;
     flex-direction: column; /* Para a foto ficar em cima dos dados */
@@ -497,8 +562,8 @@ body {
 .form-container {
     background: #fff;
     padding: 30px;
-    border-radius: 10px;
-    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.05);
+    border-radius: 15px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.25);
     max-width: 900px; /* Aumentado ligeiramente para melhor visualização */
     margin: 20px auto;
 }
@@ -520,7 +585,7 @@ body {
 
 .form-header-title .header-left .dot {
     font-size: 1.5em; 
-    color: #a4c9b3; /* Cor da bolinha */
+    color: #6B7984; /* Cor da bolinha */
     margin-right: 10px;
     line-height: 0; 
 }
@@ -541,7 +606,7 @@ body {
 
 /* Botão Adicionar/Salvar no header */
 .btn-submit-header {
-    background-color: #a4c9b3; 
+    background-color: #68735b; 
     color: white;
     padding: 8px 15px;
     border: none;
@@ -553,12 +618,12 @@ body {
 }
 
 .btn-submit-header:hover {
-    background-color: #8db89a;
+    background-color: #9fa484;
 }
 
 /* Botão Cancelar no header */
 .btn-cancel-header {
-    background-color: #c9a4a4; /* Marrom suave */
+    background-color: #713e28; /* Marrom suave */
     color: white;
     padding: 8px 15px;
     border: none;
@@ -571,7 +636,7 @@ body {
 }
 
 .btn-cancel-header:hover {
-    background-color: #b88f8f;
+    background-color: #835642;
 }
 
 /* Contêiner da foto e nome no card */
@@ -765,11 +830,11 @@ body {
     color: #777;
 }
 
-/* Botão Agendar Consulta */
+
 .btn-agendar {
-    background-color: #6c757d; /* Cinza suave como no mockup */
+    background-color: #4C587E; /* Cinza suave como no mockup */
     color: white;
-    padding: 10px 18px;
+    padding: 10px 25px;
     border-radius: 8px;
     font-size: 0.95rem;
     text-decoration: none;
@@ -780,7 +845,7 @@ body {
 }
 
 .btn-agendar:hover {
-    background-color: #5a6268;
+    background-color: #586695;
 }
 
 .consultas-list {
@@ -793,10 +858,9 @@ body {
 .consulta-card {
     background-color: white;
     padding: 20px;
-    border-radius: 12px;
+    border-radius: 15px;
     border: 1px solid #eee;
-    /* card-shadow deve ser uma classe genérica para sombra suave */
-    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05); 
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.25); 
 }
 
 .consulta-card .card-top {
@@ -835,7 +899,7 @@ body {
 
 .consulta-card .horario-agendado {
     font-size: 0.95rem;
-    color: #222;
+    color: #555;
     font-weight: 600;
     margin-bottom: 15px;
 }
@@ -849,93 +913,49 @@ body {
     text-transform: uppercase;
     align-self: flex-start; /* Alinha a tag ao topo */
 }
-
-/* Cores das Tags (Mapeamento do seu Models.py) */
 .status-marcada {
-    background-color: #e0f2f1; /* Ciano claro */
-    color: #00897b;
+    background-color: #8E90A7;
+    color: #363636;
+    border: 1px solid #ffeeba;
 }
+
+.status-Realizada {
+    background-color: #d4edda;
+    color: #155724;
+    border: 1px solid #c3e6cb;
+}
+
 .status-cancelada {
-    background-color: #fce4ec; /* Vermelho claro */
-    color: #d81b60;
-}
-.status-em_andamento {
-    background-color: #fffde7; /* Amarelo muito claro */
-    color: #fdd835;
-}
-.status-realizada {
-    background-color: #e8f5e9; /* Verde claro (como 'Concluída' no mockup) */
-    color: #43a047;
-}
+    background-color: #f8d7da;
+    color: #721c25;
+    border: 1px solid #f5c6cb;          
+}   
 
-/* ==================================== */
-/*     BLOCOS DE INFORMAÇÃO/ALERTA      */
-/* ==================================== */
-
-.info-box {
-    padding: 12px;
-    border-radius: 8px;
-    margin-bottom: 15px;
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    font-size: 0.9rem;
-}
-
-/* Bloco Aguardando (Amarelo/Laranja) */
-.info-aguardando {
-    background-color: #fef5e7; /* Laranja claro */
-    color: #cb7516;
-    border: 1px solid #f9e3c9;
-}
-
-/* Bloco Prontuário Disponível (Verde) */
-.info-prontuario {
-    background-color: #e6f6e6; /* Verde claro */
-    color: #388e3c;
-    border: 1px solid #c8e6c9;
-}
-
-.info-prontuario span {
-    font-weight: bold;
-}
-
-.info-em-andamento {
-    background-color: #fff8e1;
-    color: #fbc02d;
-    border: 1px solid #ffecb3;
-}
-
-.info-cancelada {
-    background-color: #ffebee;
-    color: #e53935;
-    border: 1px solid #ffcdd2;
+.status-em-andamento {
+    background-color: #cce5ff;
+    color: #004085;
+    border: 1px solid #b8daff;          
 }
 
 
-/* Botão "Ver" (Prontuário) */
-.btn-ver-prontuario {
-    background-color: #6e8e6e; /* Cor do botão 'Ver' no mockup */
-    color: white;
-    padding: 6px 15px;
-    border-radius: 6px;
-    text-decoration: none;
-    font-weight: bold;
-    transition: background-color 0.2s;
-}
-
-.btn-ver-prontuario:hover {
-    background-color: #5b795b;
-}
-
-/* Botão Detalhes (Pode ser um botão simples ou um link que se parece com texto) */
+/* Botão Detalhes da Consulta */
 .btn-detalhes {
-    /* Estilo de link que você preferir, ou adicione uma classe de botão. */
-    color: #4b6175;
-    text-decoration: underline;
-    font-size: 0.95rem;
+    background-color: #6e789a;
+    border: none;
+    border-radius: 10px;
+    color: #dbe2e9;
+    padding: 8px 10px;
+    font-size: 0.9rem;
     display: block;
-    text-align: right;
+}
+
+.card-actions {
+    display: flex; 
+    align-items: center; 
+    margin-top: 10px; 
+    width: 100%; 
+    justify-content: space-between; 
+
 }
 
 /* ==================================== */
@@ -947,14 +967,14 @@ body {
     padding: 15px 20px;
     border-radius: 8px;
     margin-bottom: 25px;
-    box-shadow: none; /* Remove a sombra do card se usar 'card-shadow' */
-    border: 1px solid #e9ecef;
+    box-shadow: none; 
+    border: 1px solid #ddd;
 }
 
 .form-filtro {
     display: flex;
     gap: 15px;
-    align-items: flex-end; /* Alinha os botões e campos */
+    align-items: flex-end; 
 }
 
 .form-group-inline {
@@ -995,10 +1015,13 @@ body {
 }
 
 .btn-limpar-filtro {
-    /* Estilo de link para limpar filtro */
-    color: #dc3545;
+    border: none;
+    background-color: #946b6b;
+    color: #ffffff;
     text-decoration: none;
-    padding: 10px 0;
+    padding: 10px 15px;
+    border-radius: 4px;
+    cursor: pointer;
     font-size: 0.9rem;
     transition: color 0.2s;
     white-space: nowrap; /* Impede que quebre a linha */
@@ -1076,3 +1099,492 @@ body {
     margin: 40px 0;
     font-size: 1.1rem;
 }
+
+
+/* ==================================== */
+/*     Agendamento de consulta    */
+/* ==================================== */
+
+.btn-agendar-submit {
+    background-color: #68735b; /* Verde de Agendar */
+    color: white;
+    padding: 10px 20px;
+    border: none;
+    border-radius: 8px;
+    cursor: pointer;
+    font-weight: bold;
+    transition: background-color 0.3s;
+}
+
+.btn-cancelar {
+    background-color: #713e28; /* Marrom de Cancelar */
+    color: white;
+    padding: 10px 20px;
+    border-radius: 8px;
+    text-decoration: none; /* Importante para links <a> */
+    display: inline-block; /* Para que o padding funcione corretamente no <a> */
+    font-weight: bold;
+    transition: background-color 0.3s;
+}
+
+.btn-agendar-submit:hover {
+    background-color: #9fa484;
+}   
+
+.btn-cancelar:hover {
+    background-color: #b88f8f;
+}
+
+/* Estilo específico para a área de texto (textarea) */
+.form-group.full-width textarea, /* Mire no textarea dentro do grupo Motivo */
+.form-row textarea /* Regra genérica para todos os textareas */
+{
+    /* 1. Definir uma altura mínima para dar espaço ao usuário */
+    min-height: 150px; 
+    
+    /* 2. Controlar o redimensionamento do usuário */
+    /* Permite redimensionar apenas na vertical (altura) */
+    resize: vertical; 
+    
+    /* OU, se preferir bloquear o redimensionamento: */
+    /* resize: none; */ 
+    
+    /* 3. Ajuste fino de padding (opcional, mas bom ter) */
+    padding: 12px;
+    
+    /* 4. Mantenha a cor da fonte escura para legibilidade */
+    color: #333;
+}
+
+/* ==================================================== */
+/* 🐾 ESTILOS PARA DETALHES DA CONSULTA (detalhes_consulta.html) */
+/* ==================================================== */
+
+.main-content-wrapper {
+    /* Garante que o conteúdo ocupe a largura total */
+    padding: 20px;
+}
+
+.content-header {
+    margin-bottom: 25px;
+    padding-bottom: 10px;
+    border-bottom: 1px solid #ddd;
+}
+
+.content-header h1 {
+    font-size: 1.8rem;
+    color: #333;
+    margin: 0;
+}
+
+.content-header .subtitle {
+    font-size: 0.95rem;
+    color: #777;
+    margin: 5px 0 0 0;
+}
+
+/* Card Principal de Detalhes */
+.detalhe-card {
+    background: #fff;
+    padding: 30px;
+    border-radius: 15px;
+    /* card-shadow deve ser definido em outro lugar, mas é um bom lembrete */
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1); 
+    max-width: 800px;
+    margin: 0 auto 30px auto; /* Centraliza o card na página */
+}
+
+/* Separação de Seções */
+.detalhe-secao {
+    margin-bottom: 25px;
+}
+
+.detalhe-secao h2 {
+    font-size: 1.35rem;
+    color: #4C587E; /* Cor de destaque */
+    margin-top: 0;
+    margin-bottom: 15px;
+    padding-bottom: 5px;
+    border-bottom: 2px solid #f0f0f0;
+}
+
+.detalhe-secao h2 i {
+    margin-right: 10px;
+}
+
+hr {
+    border: 0;
+    border-top: 1px dashed #e0e0e0;
+    margin: 25px 0;
+}
+
+/* Layout dos Itens de Informação (Grid) */
+.detalhe-info-grid {
+    display: grid;
+    /* Três colunas iguais (Data/Status/Veterinário ou Nome/Espécie/Raça) */
+    grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); 
+    gap: 20px 30px; 
+}
+
+.detalhe-info-grid > div {
+    display: flex;
+    flex-direction: column;
+    padding: 5px 0;
+}
+
+.detalhe-info-grid strong {
+    font-size: 0.9rem;
+    color: #555;
+    margin-bottom: 3px;
+    font-weight: 600;
+}
+
+.detalhe-info-grid span {
+    font-size: 1.05rem;
+    color: #333;
+    font-weight: 500;
+}
+
+/* Estilo específico para Motivo da Consulta */
+.detalhe-motivo {
+    margin-top: 20px;
+    padding-top: 15px;
+    border-top: 1px solid #f0f0f0;
+}
+
+.detalhe-motivo strong {
+    display: block;
+    font-size: 1rem;
+    color: #4C587E;
+    margin-bottom: 8px;
+    font-weight: 700;
+}
+
+.detalhe-motivo p {
+    background-color: #f9f9f9;
+    border: 1px solid #eee;
+    padding: 15px;
+    border-radius: 8px;
+    font-size: 0.95rem;
+    color: #666;
+    white-space: pre-wrap; /* Mantém a formatação de linebreaksbr do Django */
+}
+
+
+/* --- CARD DE PRONTUÁRIO --- */
+
+.prontuario-card {
+    margin-top: 30px;
+    padding: 20px;
+    background-color: #f8f8f8; /* Fundo mais claro para destacar */
+    border-radius: 10px;
+    border: 1px solid #ddd;
+}
+
+.prontuario-card h2 {
+    color: #333;
+    margin-bottom: 15px;
+    font-size: 1.25rem;
+    border-bottom: none;
+}
+
+.prontuario-status {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 15px;
+    border-radius: 8px;
+}
+
+.prontuario-status.finalizado {
+    background-color: #d4edda; /* Verde de sucesso */
+    border: 1px solid #c3e6cb;
+}
+
+.prontuario-status.em-andamento {
+    background-color: #fff3cd; /* Amarelo de alerta */
+    border: 1px solid #ffeeba;
+}
+
+.prontuario-status.pendente {
+    background-color: #e2e3e5; /* Cinza de pendente */
+    border: 1px solid #d6d8db;
+}
+
+.prontuario-status .status-label {
+    font-size: 1.05rem;
+    font-weight: bold;
+    color: #333;
+}
+
+.prontuario-status small {
+    display: block;
+    color: #6c757d;
+    font-style: italic;
+    margin-top: 5px;
+    font-size: 0.85rem;
+}
+
+/* Botão de Visualização do Prontuário */
+.btn-prontuario-view {
+    background-color: #4C587E;
+    color: white;
+    padding: 10px 15px;
+    border-radius: 8px;
+    text-decoration: none;
+    font-size: 0.9em;
+    font-weight: bold;
+    transition: background-color 0.2s;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    white-space: nowrap; /* Não quebrar a linha */
+}
+
+.btn-prontuario-view:hover {
+    background-color: #586695;
+}
+
+/* --- TAGS DE STATUS (Reutilizadas da página de consultas) --- */
+
+/* Estas classes devem ser as mesmas que você usa em 'consultas_user.html' */
+
+.status-tag {
+    padding: 4px 10px;
+    border-radius: 15px;
+    font-size: 0.8rem;
+    font-weight: bold;
+    text-transform: uppercase;
+}
+/* Exemplo de Tags de Status (você deve usar as cores que já tem) */
+.status-marcada { background-color: #8E90A7; color: white; }
+.status-realizada { background-color: #d4edda; color: #155724; }
+.status-cancelada { background-color: #f8d7da; color: #721c25; }
+
+/* Tags de Status de Pagamento */
+.pagamento-status-tag {
+    /* Use as mesmas cores do status-tag */
+    padding: 4px 10px;
+    border-radius: 15px;
+    font-size: 0.8rem;
+    font-weight: bold;
+    display: inline-block;
+}
+/* Exemplo de Tags de Pagamento (você deve usar as cores que já tem) */
+.pagamento-pago { background-color: #d4edda; color: #155724; }
+.pagamento-pendente { background-color: #fff3cd; color: #856404; }
+.pagamento-nao-cobrado { background-color: #e2e3e5; color: #383d41; }
+
+
+/* ==================================================== */
+/* 👤 ESTILOS PARA PERFIL DO USUÁRIO (perfil_user.html) */
+/* ==================================================== */
+
+.profile-card {
+    background: #fff;
+    padding: 30px;
+    border-radius: 15px;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.25); 
+    margin: 0 auto 30px auto; 
+}
+
+/* -------------------------------------- */
+/* NOVO: FOTO DE PERFIL NO TOPO DO CARD */
+/* -------------------------------------- */
+.profile-header-photo {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    padding-bottom: 15px;
+}
+
+.photo-display-container-lg {
+    width: 150px; 
+    height: 150px;
+    border-radius: 50%;
+    overflow: hidden;
+    border: 5px solid #f0f0f0;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+}
+
+.profile-photo-lg-fixed {
+    width: 100%;
+    height: 100%;
+    object-fit: cover; 
+}
+
+.separator-after-photo {
+    border: 0;
+    border-top: 1px solid #eee;
+    margin: 20px 0 30px 0;
+}
+
+
+/* Seções de Perfil */
+.profile-section h2 {
+    font-size: 1.4rem;
+    color: #4C587E;
+    margin-top: 0;
+    margin-bottom: 40px;
+    border-bottom: 2px solid #f0f0f0;
+    padding-bottom: 10px;
+}
+
+hr {
+    border: 0;
+    border-top: 1px dashed #e0e0e0;
+    margin: 30px 0;
+}
+
+/* -------------------------------------- */
+/* ESTILOS DE INFORMAÇÕES BÁSICAS (READONLY) */
+/* -------------------------------------- */
+.info-grid-readonly {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); 
+    gap: 20px 30px;
+}
+
+/* NOVO: O grid de perfil agora só tem informações de contato/endereço */
+.info-grid-perfil {
+    grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); 
+    gap: 20px 30px;
+}
+
+.section-readonly .info-item strong {
+    font-weight: 600;
+    color: #555;
+    font-size: 0.9em;
+    margin-bottom: 3px;
+}
+
+.section-readonly .info-item span {
+    color: #333;
+    font-weight: 500;
+    font-size: 1.05em;
+}
+
+.info-item.full-width {
+    grid-column: 1 / -1; 
+    padding-top: 15px;
+}
+
+.read-only-actions {
+    margin-top: 30px;
+    border-top: none; 
+    text-align: left; /* Alinha o botão de editar à esquerda */
+    padding-top: 0;
+}
+
+
+/* -------------------------------------- */
+/* ESTILOS PARA UPLOAD (MODO EDIÇÃO) */
+/* -------------------------------------- */
+
+.photo-upload-container {
+    padding: 10px 0;
+}
+
+.photo-input input[type="file"] {
+    border: none;
+    padding: 0;
+}
+
+.form-separator {
+    border: 0;
+    border-top: 1px dashed #e0e0e0;
+    margin: 15px 0 30px 0;
+}
+
+/* -------------------------------------- */
+/* ESTILOS DOS FORMULÁRIOS E BOTÕES */
+
+/* -------------------------------------- */
+
+.form-group {
+    margin-bottom: 15px; 
+}
+
+.form-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); 
+    gap: 40px;
+    margin-bottom: 25px;
+}
+
+.form-grid-senha {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); 
+    gap: 40px;
+    margin-bottom: 25px;
+}
+
+.form-group label {
+    font-weight: 600;
+}
+
+.form-group.full-width {
+    grid-column: 1 / -1;
+}
+
+.form-actions {
+    margin-top: 20px;
+    border-top: 1px solid #f0f0f0;
+    padding-top: 15px;
+    text-align: right;
+}
+
+.btn-primary {
+    background-color: #68735b;
+    color: white;
+    cursor: pointer;
+    padding: 8px 15px;
+    border: none;
+    border-radius: 5px;
+    text-decoration: none;
+    font-weight: bold;
+    transition: background-color 0.3s;
+    display: inline-block;
+    box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+
+}
+
+.btn-primary:hover {
+    background-color: #9fa484;
+}
+
+.btn-secondary {
+    background-color: #6B7984; 
+    color: white;
+    padding: 8px 15px;
+    border: none;
+    border-radius: 5px;
+    font-weight: bold;
+    cursor: pointer;
+    transition: background-color 0.3s;
+    box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+}
+
+.btn-secondary:hover {
+    background-color: #8095a5;  
+
+}
+
+.btn-cancelar {
+    background-color: #713e28;
+    color: white;
+    cursor: pointer;
+    padding: 8px 15px;
+    border: none;
+    border-radius: 5px;
+    text-decoration: none;
+    font-weight: bold;
+    transition: background-color 0.3s;
+    display: inline-block;
+    box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+}
+
+.btn-cancelar:hover {
+    background-color: #835642;
+}
+

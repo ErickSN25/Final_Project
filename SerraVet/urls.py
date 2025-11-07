@@ -17,7 +17,7 @@ Including another URLconf
 from django.contrib import admin
 from django.urls import path
 from django.contrib.auth.views import LogoutView
-from clinica.views import CustomLoginView, redirect_home, home_user, home_vet, cadastro, home, home_atendente
+from clinica.views import CustomLoginView, redirect_home, home_user, home_vet, cadastro, home, home_atendente, perfil_user
 from clinica import views
 from django.conf import settings
 from django.conf.urls.static import static
@@ -45,8 +45,14 @@ urlpatterns = [
     path('meus-pets/editar/<int:pet_id>/', views.editar_pet_form_view, name='editar_pet'),
     path('consultas/', views.minhas_consultas_view, name='consultas_user'), 
     path('agendar-consulta/', views.agendar_consulta_view, name='cadastrar_consulta'),
-    path('ajax/obter_horarios/', views.obter_horarios_disponiveis_ajax, name='obter_horarios_ajax'),
+    path('ajax/obter_horarios_disponiveis_ajax/', views.obter_horarios_disponiveis_ajax, name='obter_horarios_disponiveis_ajax'),
     path('consultas/<int:pk>/', views.detalhe_consulta_view, name='detalhes_consulta'),
+    path('perfil/', views.perfil_user, name='perfil_user'),
+    path('vet/dashboard/', views.home_vet, name='home_vet'),
+    path('vet/consultas/', views.lista_consultas_vet, name='lista_consultas_vet'),
+    path('vet/consulta/<int:consulta_id>/', views.detalhe_consulta_vet, name='detalhe_consulta_vet'),
+    path('vet/consulta/<int:consulta_id>/prontuario/', views.cadastrar_prontuario_vet, name='cadastrar_prontuario_vet'),
+    
 ]
 
 if settings.DEBUG:

@@ -1,5 +1,5 @@
 from django.contrib import admin
-from .models import CustomUser, VeterinarioInfo, ClientePerfil, Pet, Consulta, Prontuario, HorarioDisponivel, Ausencia, Notificacao, ValorPagamento, PagamentoCliente, GerenciamentoPagamento
+from .models import CustomUser, VeterinarioInfo, ClientePerfil, Pet, Consulta, Prontuario, HorarioDisponivel,  ValorPagamento, PagamentoCliente, GerenciamentoPagamento
 from .forms import CustomUserCreationForm, CustomUserChangeForm
 from django.contrib.auth.admin import UserAdmin
 from django.utils import timezone
@@ -63,15 +63,7 @@ class ConsultaAdmin(admin.ModelAdmin):
                 disponivel=True,
                 data__gte=timezone.now()
             )
-            ausencias = Ausencia.objects.filter(fim__gte=timezone.now())
-            
-            for ausencia in ausencias:
-                queryset_base = queryset_base.exclude(
-                    data__gte=ausencia.inicio, 
-                    data__lte=ausencia.fim
-                )
-                
-            kwargs["queryset"] = queryset_base.order_by('data')
+            kwargs["queryset"] = queryset_base 
             
         return super().formfield_for_foreignkey(db_field, request, **kwargs)
     
@@ -86,21 +78,6 @@ class HorarioDisponivelAdmin(admin.ModelAdmin):
     search_fields = ('veterinario__nome', 'veterinario__sobrenome')
     ordering = ('data',)
 
-class AusenciaAdmin(admin.ModelAdmin):
-    list_display = ('veterinario', 'inicio', 'fim', 'motivo')
-    list_filter = ('veterinario',)
-    search_fields = ('veterinario__nome', 'veterinario__sobrenome', 'motivo')
-    ordering = ('-inicio',)
-
-class NotificacaoAdmin(admin.ModelAdmin):
-    list_display = ('tutor', 'lida', 'mensagem_preview', 'criada_em')
-    list_filter = ('lida', 'criada_em')
-    search_fields = ('tutor__nome', 'tutor__sobrenome', 'mensagem')
-    ordering = ('-criada_em',)
-    
-    @admin.display(description='Mensagem (Preview)')
-    def mensagem_preview(self, obj):
-        return obj.mensagem[:75] + '...' if len(obj.mensagem) > 75 else obj.mensagem
 
 class ValorPagamentoAdmin(admin.ModelAdmin):
     list_display = ('consulta', 'valor', 'data_definicao')
@@ -156,8 +133,6 @@ admin.site.register(Pet, PetAdmin)
 admin.site.register(Consulta, ConsultaAdmin)
 admin.site.register(Prontuario, ProntuarioAdmin)
 admin.site.register(HorarioDisponivel, HorarioDisponivelAdmin)
-admin.site.register(Ausencia, AusenciaAdmin)
-admin.site.register(Notificacao, NotificacaoAdmin)
 admin.site.register(ValorPagamento, ValorPagamentoAdmin)
 admin.site.register(PagamentoCliente, PagamentoClienteAdmin)    
 admin.site.register(GerenciamentoPagamento, GerenciamentoPagamentoAdmin)

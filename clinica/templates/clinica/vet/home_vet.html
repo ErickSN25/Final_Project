@@ -1,73 +1,79 @@
 {% extends "clinica/vet/base_vet.html" %}
 {% load static %}
 
-{% block title %}Portal do Veterinário{% endblock %}
+{% block title %}Dashboard | Veterinário{% endblock %}
 
 {% block content %}
-<div class="container">
+    <div class="container">
+        <h1>Bem-vindo, Dr(a). {{ request.user.nome }}!</h1>
+        <p>Visão geral de seus compromissos e tarefas.</p>
 
-    <!-- Cards de Resumo -->
-    <div class="cards">
-        <div class="card">
-            <h3>Consultas</h3>
-            <p>{{ consultas_qtd }} <small>consultas agendadas</small></p>
+        <div class="cards">
+            
+            <div class="card card-inprogress">
+                <h3>Consultas em Andamento</h3>
+                <p>{{ count_em_andamento }}</p>
+                <small>Em atendimento no momento</small>
+            </div>
+
+            <div class="card card-scheduled">
+                <h3>Consultas Marcadas</h3>
+                <p>{{ count_marcadas }}</p>
+                <small>Total agendadas (Hoje e Futuras)</small>
+            </div>
+            
+            <div class="card card-pending">
+                <h3>Prontuários Pendentes</h3>
+                <p>{{ count_prontuarios_pendentes }}</p>
+                <small>Consultas a serem documentadas</small>
+                {% if count_prontuarios_pendentes > 0 %}
+                    <a href="{% url 'lista_consultas_vet' %}?prontuario_status=PENDENTE" class="card-action-link">
+                        Ver Pendentes →
+                    </a>
+                {% endif %}
+            </div>
+
         </div>
-        <div class="card">
-            <h3>Prontuários</h3>
-            <p>{{ prontuarios_pendentes_qtd }} <small>a finalizar</small></p>
-        </div>
+
+        <section class="card">
+            <h2>Próximas Consultas (Top 5)</h2>
+
+            {% if proximas_consultas %}
+                <ul class="lista-consultas">
+                    {% for consulta in proximas_consultas %}
+                        <li class="consulta-item-{{ consulta.status|lower }}">
+                            <div class="consulta-info-wrap">
+                                <p>
+                                    <strong>{{ consulta.horario_agendado.data|date:"d/m/Y" }}</strong> às 
+                                    <strong>{{ consulta.horario_agendado.data|date:"H:i" }}</strong> - 
+                                    Pet: <strong>{{ consulta.pet.nome }}</strong> (Tutor: {{ consulta.pet.tutor.get_full_name }})
+                                </p>
+                                <p class="motivo-status">
+                                    Motivo: {{ consulta.motivo|truncatechars:70 }} 
+                                    <span class="status-badge status-{{ consulta.status|lower }}">
+                                        {{ consulta.get_status_display }}
+                                    </span>
+                                </p>
+                            </div>
+                            <a href="{% url 'detalhe_consulta_vet' consulta.id %}" class="btn-detalhes">
+                                Detalhes e Iniciar
+                            </a>
+                        </li>
+                    {% endfor %}
+                </ul>
+                <div style="margin-top: 20px;">
+                     <a href="{% url 'lista_consultas_vet' %}" class="btn-ver-todas">
+                        Ver Todas as Consultas ({{ count_marcadas }} Ativas)
+                    </a>
+                </div>
+
+            {% else %}
+                <p>Nenhuma consulta marcada ou em andamento no momento.</p>
+                <a href="{% url 'lista_consultas_vet' %}" class="btn-ver-todas">
+                    Ver Histórico Completo
+                </a>
+            {% endif %}
+        </section>
+        
     </div>
-
-    <!-- Próximas Consultas -->
-    <section class="card full-width">
-        <h2>Próximas Consultas</h2>
-        {% if proximas_consultas %}
-            <ul class="lista-consultas">
-                {% for consulta in proximas_consultas %}
-                    <li>
-                        <strong>{{ consulta.pet.nome }}</strong> - {{ consulta.pet.tutor.get_full_name }} <br>
-                        Data: {{ consulta.data_hora|date:"d/m/Y H:i" }}
-                    </li>
-                {% endfor %}
-            </ul>
-        {% else %}
-            <p>Nenhuma consulta nos próximos 7 dias.</p>
-        {% endif %}
-    </section>
-
-    <!-- Histórico de Consultas Agendadas -->
-    <section class="card full-width">
-        <h2>Histórico de Consultas Agendadas</h2>
-
-        <input type="text" id="filtroConsulta" placeholder="Pesquisar por pet ou tutor...">
-
-        <ul id="historicoConsultas" class="lista-consultas">
-            {% for consulta in historico_consultas %}
-                <li data-pet="{{ consulta.pet.nome|lower }}" data-tutor="{{ consulta.pet.tutor.get_full_name|lower }}">
-                    <strong>{{ consulta.pet.nome }}</strong> - {{ consulta.pet.tutor.get_full_name }} <br>
-                    Data: {{ consulta.horario_agendado|date:"d/m/Y H:i" }}
-                </li>
-            {% endfor %}
-        </ul>
-    </section>
-</div>
-
-<!-- Script de filtragem -->
-<script>
-    const filtro = document.getElementById("filtroConsulta");
-    const lista = document.getElementById("historicoConsultas").getElementsByTagName("li");
-
-    filtro.addEventListener("keyup", function() {
-        let texto = filtro.value.toLowerCase();
-
-        for (let i = 0; i < lista.length; i++) {
-            let li = lista[i];
-            let pet = li.getAttribute("data-pet");
-            let tutor = li.getAttribute("data-tutor");
-
-            li.style.display = (pet.includes(texto) || tutor.includes(texto)) ? "" : "none";
-        }
-    });
-</script>
-
 {% endblock %}

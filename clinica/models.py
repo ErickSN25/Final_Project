@@ -285,68 +285,6 @@ class Prontuario(models.Model):
             consulta.save(update_fields=['status'])
 
 
-class Ausencia(models.Model):
-    veterinario = models.ForeignKey(CustomUser, on_delete=models.CASCADE, limit_choices_to={'user_type': 'veterinario'})
-    inicio = models.DateTimeField()
-    fim = models.DateTimeField()
-    motivo = models.TextField(blank=True, null=True)
-
-    def __str__(self):
-        return f"Ausência {self.veterinario.get_full_name()} de {self.inicio.strftime('%d/%m/%Y %H:%M')} até {self.fim.strftime('%d/%m/%Y %H:%M')}"
-
-    def save(self, *args, **kwargs):
-        is_new = self._state.adding
-        super().save(*args, **kwargs)
-
-        if is_new:
-            consultas_afetadas = Consulta.objects.filter(
-                veterinario=self.veterinario,
-                horario_agendado__data__gte=self.inicio, 
-                horario_agendado__data__lte=self.fim,
-                status__in=['MARCADA', 'EM_ANDAMENTO']
-            )
-            for consulta in consultas_afetadas:
-                consulta.status = 'CANCELADA'
-                consulta.save(update_fields=['status']) 
-                mensagem = (
-                    f"Sua consulta com {self.veterinario.get_full_name()} em "
-                    f"{consulta.horario_agendado.data.strftime('%d/%m/%Y às %H:%M')} foi cancelada devido a uma ausência do veterinário. "
-                    f"Motivo: {self.motivo or 'Motivo não especificado.'} Por favor, use a opção 'Remarcar' no seu painel."
-                )
-                Notificacao.objects.create(
-                    tutor=consulta.pet.tutor,
-                    mensagem=mensagem,
-                    consulta_afetada=consulta
-                )
-
-    class Meta:
-        verbose_name = "Ausência"
-        verbose_name_plural = "Ausências"
-
-
-# --- Modelos gerais ---
-
-
-class Notificacao(models.Model):
-    tutor = models.ForeignKey(CustomUser, on_delete=models.CASCADE, limit_choices_to={'user_type': 'cliente'})
-    consulta_afetada = models.ForeignKey(
-        'Consulta', 
-        on_delete=models.SET_NULL, 
-        null=True, 
-        blank=True
-    ) 
-    mensagem = models.TextField()
-    criada_em = models.DateTimeField(auto_now_add=True)
-    lida = models.BooleanField(default=False)
-
-    def __str__(self):
-        return f"Notificação para {self.tutor.get_full_name()} - {self.mensagem[:30]}"
-
-    class Meta:
-        verbose_name = "Notificação"
-        verbose_name_plural = "Notificações"
-        ordering = ['-criada_em']
-
 class ValorPagamento(models.Model):
     consulta = models.OneToOneField(
         'Consulta',

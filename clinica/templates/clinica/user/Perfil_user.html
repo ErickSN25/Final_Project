@@ -1,0 +1,178 @@
+{% extends "clinica/user/base_user.html" %}
+{% load static %}
+
+{% block title %}Meu Perfil{% endblock %}
+
+{% block content %}
+<div class="main-content-wrapper">
+    
+    <div class="content-header">
+        <h1>Meu Perfil</h1>
+        <p class="subtitle">Gerencie suas informações pessoais, endereço e segurança.</p>
+    </div>
+
+    <div class="profile-card card-shadow">
+        
+        <div class="profile-header-photo">
+            <div class="photo-display-container-lg">
+                {% if perfil.foto_user and perfil.foto_user.url %}
+                    <img src="{{ perfil.foto_user.url }}" alt="Foto Atual de Perfil" class="profile-photo-lg-fixed">
+                {% else %}
+                    <img src="{% static 'images/user_default.jpg' %}" alt="Foto Padrão" class="profile-photo-lg-fixed">
+                {% endif %}
+            </div>
+        </div>
+        
+        <hr class="separator-after-photo">
+
+        <div class="profile-section section-readonly">
+            <h2><i class="fas fa-user-circle"></i> Dados Pessoais</h2>
+            <div class="info-grid-readonly">
+                <div class="info-item">
+                    <strong>Nome Completo:</strong>
+                    <span>{{ request.user.get_full_name }}</span>
+                </div>
+                <div class="info-item">
+                    <strong>E-mail:</strong>
+                    <span>{{ request.user.email }}</span>
+                </div>
+                <div class="info-item">
+                    <strong>CPF/Identidade:</strong>
+                    <span>{{ request.user.cpf|default:"Não informado" }}</span>
+                </div>
+            </div>
+        </div>
+        
+        <hr>
+
+        <div class="profile-section section-perfil">
+            <h2><i class="fas fa-map-marker-alt"></i> Endereço e Contato</h2>
+            
+            <div id="read-only-perfil">
+                
+                <div class="info-grid-readonly info-grid-perfil">
+                    
+                    <div class="info-item">
+                        <strong>Telefone:</strong>
+                        <span>{{ perfil.telefone|default:"Não informado" }}</span>
+                    </div>
+
+                    <div class="info-item full-width">
+                        <strong>Endereço Completo:</strong>
+                        {% with end_parts=perfil.endereco|add:", "|add:perfil.numero|add:", "|add:perfil.bairro|add:", "|add:perfil.cidade|add:"/"|add:perfil.estado %}
+                            <span>{{ end_parts|default:"Endereço não cadastrado" }}</span>
+                        {% endwith %}
+                    </div>
+                </div>
+
+                <div class="form-actions read-only-actions">
+                    <button type="button" onclick="toggleEdit('perfil')" class="btn btn-secondary">
+                        <i class="fas fa-edit"></i> 
+                        {% if perfil.endereco %} Editar Informações 
+                        {% else %} Cadastrar Endereço e Foto 
+                        {% endif %}
+                    </button>
+                </div>
+            </div>
+            
+            <div id="edit-form-perfil" style="display: none;">
+                
+                <hr class="form-separator">
+                
+                <form method="post" class="form-endereco-contato" enctype="multipart/form-data"> 
+                    {% csrf_token %}
+                    
+                    <div class="photo-upload-container">
+                        <div class="form-group photo-input">
+                            <label for="{{ form_endereco.foto_user.id_for_label }}">Alterar Foto de Perfil (Atual no topo)</label>
+                            {{ form_endereco.foto_user }}
+                            {% for error in form_endereco.foto_user.errors %}<span class="error-message">{{ error }}</span>{% endfor %}
+                        </div>
+                    </div>
+
+                    <hr class="form-separator">
+                    
+                    <div class="form-grid">
+                        
+                        <div class="form-group">
+                            <label for="{{ form_endereco.telefone.id_for_label }}">Telefone</label>
+                            {{ form_endereco.telefone }}
+                            {% for error in form_endereco.telefone.errors %}<span class="error-message">{{ error }}</span>{% endfor %}
+                        </div>
+                        
+                        <div class="form-group full-width">
+                            <label for="{{ form_endereco.endereco.id_for_label }}">Rua/Avenida (Logradouro)</label>
+                            {{ form_endereco.endereco }}
+                            {% for error in form_endereco.endereco.errors %}<span class="error-message">{{ error }}</span>{% endfor %}
+                        </div>
+                        
+                        <div class="form-group">
+                            <label for="{{ form_endereco.numero.id_for_label }}">Número</label>
+                            {{ form_endereco.numero }}
+                            {% for error in form_endereco.numero.errors %}<span class="error-message">{{ error }}</span>{% endfor %}
+                        </div>
+
+                        <div class="form-group">
+                            <label for="{{ form_endereco.bairro.id_for_label }}">Bairro</label>
+                            {{ form_endereco.bairro }}
+                            {% for error in form_endereco.bairro.errors %}<span class="error-message">{{ error }}</span>{% endfor %}
+                        </div>
+
+                        <div class="form-group">
+                            <label for="{{ form_endereco.cidade.id_for_label }}">Cidade</label>
+                            {{ form_endereco.cidade }}
+                            {% for error in form_endereco.cidade.errors %}<span class="error-message">{{ error }}</span>{% endfor %}
+                        </div>
+                        
+                        <div class="form-group">
+                            <label for="{{ form_endereco.estado.id_for_label }}">Estado</label>
+                            {{ form_endereco.estado }}
+                            {% for error in form_endereco.estado.errors %}<span class="error-message">{{ error }}</span>{% endfor %}
+                        </div>
+
+                    </div>
+
+                    <div class="form-actions">
+                        <button type="button" onclick="toggleEdit('perfil')" class="btn btn-cancelar"><i class="fas fa-times"></i> Cancelar</button>
+                        <button type="submit" name="submit_endereco" class="btn btn-primary">
+                            <i class="fas fa-save"></i> Salvar Alterações
+                        </button>
+                    </div>
+                </form>
+            </div>
+            </div>
+        
+        <hr>
+
+        <div class="profile-section section-security">
+            <h2><i class="fas fa-lock"></i> Alterar Senha</h2>
+            
+            <form method="post" class="form-security">
+                {% csrf_token %}
+                
+                <div class="form-grid-senha">
+                    
+                    {% for field in form_password_change %}
+                        <div class="form-group">
+                            <label for="{{ field.id_for_label }}">{{ field.label }}</label>
+                            {{ field }}
+                            {% for error in field.errors %}<span class="error-message">{{ error }}</span>{% endfor %}
+                        </div>
+                    {% endfor %}
+                    
+                </div>
+                
+                <div class="form-actions">
+                    <button type="submit" name="submit_senha" class="btn btn-secondary">
+                        <i class="fas fa-key"></i> Alterar Senha
+                    </button>
+                </div>
+            </form>
+            
+        </div>
+
+    </div>
+</div>
+
+{% include "clinica/user/perfil_js.html" %} 
+{% endblock %}
