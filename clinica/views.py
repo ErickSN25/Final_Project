@@ -1,9 +1,6 @@
 from django.shortcuts import render, get_object_or_404, redirect
-from django.http import HttpResponseRedirect
 from django.urls import reverse, reverse_lazy  # Adicionei reverse_lazy
-from django.db import transaction
 from .models import (
-    CustomUser,
     ClientePerfil,
     Pet,
     Consulta,
@@ -14,11 +11,9 @@ from .forms import (
     CadastroPetForm,
     ProntuarioForm,
     HorarioDisponivelForm,
-    ConsultaForm,
     HorarioFiltroForm,
     AgendamentoClienteForm,
     ConsultaFiltroForm,
-    VeterinarioConsultaFiltroForm,
     ConsultaAtivasFiltroForm,
     ConsultaFinalizadasFiltroForm,
 )
@@ -36,10 +31,8 @@ from django.views.decorators.http import require_GET
 from django.utils.timezone import localtime
 from django.contrib.auth import update_session_auth_hash
 from .forms import ClientePerfilForm, CustomPasswordChangeForm
-from django.db.models import Count, Case, When, BooleanField, OuterRef, Subquery, Exists
+from django.db.models import OuterRef, Exists
 from django.utils.timezone import now
-from django import template
-from django.utils.http import urlencode
 
 
 # --- VIEWS PÚBLICAS / BÁSICAS ---

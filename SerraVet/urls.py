@@ -26,7 +26,6 @@ from clinica.views import (
     cadastro,
     home,
     home_atendente,
-    perfil_user,
 )
 from clinica import views
 from django.conf import settings

@@ -5,8 +5,6 @@ from django.contrib.auth.models import (
     BaseUserManager,
 )
 from django.core.exceptions import ValidationError
-from django.db.models import Q
-from django.utils import timezone
 
 
 # --- Modelos usuarios ---
