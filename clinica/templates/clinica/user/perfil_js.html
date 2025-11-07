@@ -1,0 +1,30 @@
+<script>
+    function toggleEdit(sectionName) {
+        const readOnlyBlock = document.getElementById('read-only-' + sectionName);
+        const editFormBlock = document.getElementById('edit-form-' + sectionName);
+
+        if (editFormBlock.style.display === 'none' || editFormBlock.style.display === '') {
+            // Mudar para o modo edição
+            readOnlyBlock.style.display = 'none';
+            editFormBlock.style.display = 'block';
+        } else {
+            // Mudar para o modo visualização
+            readOnlyBlock.style.display = 'block';
+            editFormBlock.style.display = 'none';
+            
+            // Opcional: Recarrega a página para limpar o formulário e garantir os dados mais recentes
+            // window.location.reload(); 
+        }
+    }
+
+    // Lógica para manter o formulário de edição visível se houver erros de validação
+    document.addEventListener('DOMContentLoaded', function() {
+        const errors = document.querySelectorAll('#edit-form-perfil .error-message');
+        if (errors.length > 0) {
+            toggleEdit('perfil');
+            // Remove a mensagem de erro padrão que pode cobrir o form de edição
+            const alert = document.querySelector('.alert-error');
+            if (alert) alert.remove();
+        }
+    });
+</script>

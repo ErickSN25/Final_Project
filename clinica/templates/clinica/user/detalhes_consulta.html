@@ -74,15 +74,35 @@
             </div>
         </div>
         
-        <div class="detalhe-actions">
-            {% if consulta.status == 'MARCADA' %}
-                <a href="{% url 'cancelar_consulta' consulta.pk %}" class="btn-cancelar-consulta"><i class="fas fa-times"></i> Cancelar Consulta</a>
-            {% elif consulta.status == 'REALIZADA' %}
-                <a href="{% url 'detalhe_prontuario' consulta.pk %}" class="btn-prontuario"><i class="fas fa-file-medical"></i> Ver Prontuário</a>
-            {% endif %}
-            <a href="{% url 'minhas_consultas' %}" class="btn-voltar">Voltar para a Lista</a>
-        </div>
+        <div class="prontuario-card">
+                <h2><i class="fas fa-file-medical"></i> Prontuário Médico</h2>
+                
+                {% if consulta.prontuario_medico %}
+                    <div class="prontuario-status finalizado">
+                        <span class="status-label">Status: **Finalizado**</span>
+                        <a href="{% url 'visualizar_prontuario' consulta.prontuario_medico.pk %}" class="btn-prontuario-view">
+                            Ver Prontuário Completo <i class="fas fa-arrow-right"></i>
+                        </a>
+                    </div>
+                {% else %}
+                    {% if consulta.status == 'REALIZADA' %}
+                    <div class="prontuario-status em-andamento">
+                        <span class="status-label">Status: **Em Andamento** (Aguardando preenchimento)</span>
+                        <small>O prontuário estará disponível logo após a finalização pelo veterinário.</small>
+                    </div>
+                    {% else %}
+                    <div class="prontuario-status pendente">
+                        <span class="status-label">Status: **Pendente** (A consulta ainda não foi realizada)</span>
+                    </div>
+                    {% endif %}
+                {% endif %}
 
+            </div>
+            
+        
+            
+        </div>
+        
     </div>
 </div>
 {% endblock %}

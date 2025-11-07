@@ -31,26 +31,26 @@
 
         <ul class="consulta-list" id="consultaList">
             {% if consultas_cadastradas %}
-                {% for consulta in consultas_cadastradas %}
+                {% for horario in horarios %}
                     <li class="consulta-item">
                         <div class="consulta-details">
                             <span class="dot"></span>
                             <div>
-                                <span>{{ consulta.pet.tutor.get_full_name }} - {{ consulta.veterinario.get_full_name }}</span>
-                                <small>{{ consulta.data_hora|date:"d/m/Y H:i" }}</small>
+                                <span>{{ horario.pet.tutor.get_full_name }} - {{ horario.veterinario.get_full_name }}</span>
+                                <small>{{ horario.data_hora|date:"d/m/Y H:i" }}</small>
                             </div>
                         </div>
-                        
-                        {% if consulta.status == 'REALIZADO' %}
+
+                        {% if horario.status == 'REALIZADO' %}
                             <span class="status-badge status-concluida">Realizado</span>
-                        {% elif consulta.status == 'PENDENTE' %}
+                        {% elif horario.status == 'PENDENTE' %}
                             <span class="status-badge status-agendada">Pendente</span>
-                        {% elif consulta.status == 'CONFIRMADO' %}
+                        {% elif horario.status == 'CONFIRMADO' %}
                             <span class="status-badge status-confirmada">Confirmado</span>
-                        {% elif consulta.status == 'CANCELADO' %}
+                        {% elif horario.status == 'CANCELADO' %}
                             <span class="status-badge status-cancelada">Cancelado</span>
                         {% else %}
-                            <span class="status-badge">{{ consulta.status }}</span>
+                            <span class="status-badge">{{ horario.status }}</span>
                         {% endif %}
                     </li>
                 {% endfor %}
@@ -64,6 +64,10 @@
 </div>
 
 <!-- Script de filtragem -->
+
+{% endblock %}
+
+{% block extra_js %}
 <script>
     const searchInput = document.getElementById("searchConsulta");
     const consultaList = document.getElementById("consultaList").getElementsByTagName("li");
@@ -81,5 +85,4 @@
         }
     });
 </script>
-
-{% endblock %}
+{%endblock%}

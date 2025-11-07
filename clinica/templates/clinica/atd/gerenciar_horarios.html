@@ -58,9 +58,6 @@
                 <td>
                     <a href="{% url 'editar_horario' horario.id %}" class="btn btn-primary btn-table">Editar</a>
                     <a href="{% url 'excluir_horario' horario.id %}" class="btn btn-danger btn-table">Excluir</a>
-                    {% if horario.disponivel %}
-                        <a href="{% url 'reservar_horario' horario.id %}" class="btn btn-success btn-table">Reservar</a>
-                    {% endif %}
                 </td>
             </tr>
             {% empty %}

@@ -4,31 +4,37 @@
 <head>
     <meta charset="UTF-8">
     <title>{% block title %}Portal do Veterinário{% endblock %}</title>
-    <link rel="stylesheet" href="{% static 'css/style_vet.css' %}">
+    <link rel="stylesheet" href="{% static 'css/style_vet.css' %}"> 
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
 </head>
+
 <body> 
-    <!-- Navbar Superior -->
-    <header class="navbar">
-        <div class="navbar-logo">SerraVet</div>
-        <div class="navbar-user">
-            <span>{{ request.user.get_full_name }}</span>
+
+<header class="header-waves">   
+    <div class="header-content">   
+         <div class="logo">SerraVet</div> 
+          <div class="user-info">
+            <span>{{ request.veterinarioperfil.get_full_name }}</span>
         </div>
-    </header>
+    </div>
+</header>
 
-    <div class="layout">
-        <!-- Sidebar -->
-        <aside class="sidebar">
-            <h2>Menu</h2>
-            <ul>
-                <li><a href="{% url 'home_vet' %}">Início</a></li>
-                <li><a href="#">Consultas</a></li>
-                <li><a href="#">Perfil</a></li>
-            </ul>
-        </aside>
+<div class="layout">
+    <aside class="sidebar">
+        <h2>Menu</h2>
+        <ul>
+            <li><a href="{% url 'home_vet' %}" class="{% if request.resolver_match.url_name == 'home_vet' %}active{% endif %}">Início</a></li>
+            <li><a href="{% url 'lista_consultas_vet' %}" class="{% if request.resolver_match.url_name == 'lista_consultas_vet' %}active{% endif %}">Consultas</a></li> 
+            <li class="logout-item">
+                <form method="post" action="{% url 'logout' %}" style="display: inline;">
+                {% csrf_token %} 
+                <button type="submit" class="btn-sidebar-logout">Sair</button>
+                </form>
+            </li>
+        </ul>
+    </aside>
 
-        <!-- Área de conteúdo -->
-        <main class="content">
+                <main class="content">
             {% block content %}{% endblock %}
         </main>
     </div>

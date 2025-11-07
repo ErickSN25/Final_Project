@@ -54,12 +54,12 @@
                 
                 <div class="card-top">
                     <div class="pet-info">
-                        
-                        {% with foto_url=consulta.pet.foto.url|default:'' %}
-                        <img src="{% if foto_url %}{{ foto_url }}{% else %}{% static 'images/foto_padrao_pet.png' %}{% endif %}" 
-                             alt="{{ consulta.pet.nome }}" 
-                             class="pet-foto">
-                        {% endwith %}
+
+                        {% if consulta.pet.foto_pet %}
+                        <img src="{{ consulta.pet.foto_pet.url }}" alt="Foto de {{ consulta.pet.nome }}" class="pet-photo">
+                        {% else %}
+                        <img src="{% static 'img/default_pet.png' %}" alt="Foto Padrão" class="pet-photo">
+                        {% endif %}
                         
                         <div>
                             <h3>{{ consulta.pet.nome }}</h3>
@@ -76,17 +76,11 @@
 
                 <div class="card-bottom">
                     <p class="horario-agendado">
-                        <i class="fas fa-calendar-alt"></i> {{ consulta.horario_agendado.data|date:"d/m/Y" }} às {{ consulta.horario_agendado.data|date:"H:i" }}
+                        <i class="fas fa-calendar-alt"></i> dia da consulta: {{ consulta.horario_agendado.data|date:"d/m/Y" }} às {{ consulta.horario_agendado.data|date:"H:i" }}
                     </p>
 
                     <div class="card-actions">
-                        {% with pagamento_display=consulta.get_status_pagamento_display %}
-                        <span class="pagamento-status-tag pagamento-{{ consulta.status_pagamento|lower }}">
-                            Pagamento: {{ pagamento_display }}
-                        </span>
-                        {% endwith %}
-
-                        <a href="{% url 'detalhes_consulta' consulta.pk %}" class="btn-detalhes">Ver Detalhes <i class="fas fa-chevron-right"></i></a>
+                        <a href="{% url 'detalhes_consulta' consulta.pk %}" class="btn-detalhes">Detalhes da consulta <i class="fas fa-chevron-right"></i></a>
                     </div>
                 </div>
             </div>
