@@ -1,5 +1,5 @@
 from django.shortcuts import render, get_object_or_404, redirect
-from django.urls import reverse, reverse_lazy  # Adicionei reverse_lazy
+from django.urls import reverse, reverse_lazy  
 from .models import (
     ClientePerfil,
     Pet,
@@ -35,7 +35,9 @@ from django.db.models import OuterRef, Exists
 from django.utils.timezone import now
 
 
-# --- VIEWS PÚBLICAS / BÁSICAS ---
+#=====================
+# BASIC VIEWS
+#=====================
 
 
 def home(request):
@@ -72,7 +74,9 @@ def cadastro(request):
     return render(request, "clinica/cadastro.html", context)
 
 
-# --- VIEW DE LOGIN CUSTOMIZADA ---
+#=====================
+# CUSTOM LOGIN VIEWS
+#=====================
 
 
 class CustomLoginView(LoginView):
@@ -99,7 +103,9 @@ class CustomLoginView(LoginView):
         return reverse_lazy("home")
 
 
-# --- VIEWS DE REDIRECIONAMENTO  ---
+#=====================
+# REDIRECT VIEWS
+#=====================
 
 
 @login_required
@@ -116,7 +122,11 @@ def redirect_home(request):
     return redirect("home")
 
 
-# --- VIEWS DE CLIENTE ---
+#=====================
+# CLIENT VIEWS
+#=====================
+
+
 @login_required
 def home_user(request):
     pets = Pet.objects.filter(tutor=request.user)
@@ -278,7 +288,7 @@ def agendar_consulta_view(request):
                 veterinario=horario.veterinario,
                 horario_agendado=horario,
                 motivo=motivo,
-                status="agendada",
+                status="MARCADA",
             )
 
             horario.disponivel = False
@@ -395,7 +405,14 @@ def perfil_user(request):
     return render(request, "clinica/user/perfil_user.html", context)
 
 
-# --- VIEWS DE VETERINÁRIO ---
+
+
+
+#=====================
+# VETS VIEWS
+#=====================
+
+
 
 
 @login_required
@@ -454,7 +471,7 @@ def lista_consultas_vet(request):
     veterinario = request.user
     hoje = timezone.now().date()
 
-    # --- 1. CONSULTAS ATIVAS (Marcadas e Em Andamento) ---
+
     form_ativas = ConsultaAtivasFiltroForm(request.GET)
 
     consultas_ativas_qs = (
@@ -487,14 +504,13 @@ def lista_consultas_vet(request):
                 | Q(status__icontains=query_busca_ativas)
             )
 
-    # --- Paginação Ativas ---
     paginator_ativas = Paginator(consultas_ativas_qs, 5)
     page_number_ativas = request.GET.get(
         "page_ativas"
-    )  # Usa 'page_ativas' para não conflitar
+    )
     consultas_ativas = paginator_ativas.get_page(page_number_ativas)
 
-    # --- 2. CONSULTAS FINALIZADAS (Realizadas e Canceladas) ---
+
     form_finalizadas = ConsultaFinalizadasFiltroForm(request.GET)
 
     consultas_finalizadas_qs = (
@@ -505,7 +521,7 @@ def lista_consultas_vet(request):
         .order_by("-horario_agendado__data")
     )
 
-    # Aplica a anotação para verificar a existência do prontuário (JOIN)
+
     consultas_finalizadas_qs = consultas_finalizadas_qs.annotate(
         has_prontuario=Exists(Prontuario.objects.filter(consulta_id=OuterRef("pk")))
     )
@@ -525,7 +541,7 @@ def lista_consultas_vet(request):
                 has_prontuario=True
             )
         elif prontuario_filter == "pendente":
-            # Só faz sentido ter prontuário pendente se o status for REALIZADA
+
             consultas_finalizadas_qs = consultas_finalizadas_qs.filter(
                 has_prontuario=False, status="REALIZADA"
             )
@@ -537,14 +553,14 @@ def lista_consultas_vet(request):
                 | Q(pet__tutor__last_name__icontains=query_busca_finalizadas)
             )
 
-    # --- Paginação Finalizadas ---
+
     paginator_finalizadas = Paginator(consultas_finalizadas_qs, 5)
     page_number_finalizadas = request.GET.get(
         "page_finalizadas"
-    )  # Usa 'page_finalizadas'
+    )
     consultas_finalizadas = paginator_finalizadas.get_page(page_number_finalizadas)
 
-    # --- Contexto Final ---
+
     context = {
         "consultas_ativas": consultas_ativas,
         "form_ativas": form_ativas,
@@ -658,25 +674,29 @@ def cadastrar_prontuario_vet(request, consulta_id):
     return render(request, "clinica/vet/cadastrar_prontuario_vet.html", context)
 
 
-# --- VIEWS DE ATENDENTE ---
+#=====================
+# ATTENDANT VIEWS
+#=====================
+
+
 @login_required
 def home_atendente(request):
     hoje = timezone.localdate()  # pega a data atual (sem hora)
 
-    # Consultas do dia (usando o campo dentro de horario_agendado)
+
     consultas_do_dia = Consulta.objects.filter(horario_agendado__data__date=hoje)
 
-    # Consultas pendentes
+
     consultas_pendentes = Consulta.objects.filter(status='PENDENTE')
 
-    # Todas as consultas cadastradas
+
     consultas_cadastradas = Consulta.objects.all().select_related('horario_agendado').order_by('-horario_agendado__data')
 
     contexto = {
         'consultas_do_dia_count': consultas_do_dia.count(),
         'consultas_pendentes_count': consultas_pendentes.count(),
         'consultas_cadastradas': consultas_cadastradas,
-        'horarios': consultas_cadastradas,  # o template usa “horarios”
+        'horarios': consultas_cadastradas,
     }
     return render(request, "clinica/atd/home_atendente.html", contexto)
 

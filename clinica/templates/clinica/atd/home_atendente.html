@@ -63,7 +63,7 @@
     </div>
 </div>
 
-<!-- Script de filtragem -->
+
 
 {% endblock %}
 
@@ -75,12 +75,12 @@
     searchInput.addEventListener("keyup", function() {
         const filtro = searchInput.value.toLowerCase();
         
-        // Percorre todos os itens da lista
+
         for (let i = 0; i < consultaList.length; i++) {
-            // Pega o texto completo do item (tutor, veterinário, data, status)
+
             const itemText = consultaList[i].textContent.toLowerCase();
             
-            // Se o texto incluir o filtro, exibe o item; senão, esconde
+
             consultaList[i].style.display = itemText.includes(filtro) ? "" : "none";
         }
     });

@@ -14,8 +14,13 @@ from .models import (
 from django.contrib.auth.forms import PasswordChangeForm
 from django.contrib.auth import get_user_model
 
-User = get_user_model()
 
+#=====================
+# CUSTOM USERS FORMS
+#=====================
+
+
+User = get_user_model()
 
 class CustomAuthenticationForm(AuthenticationForm):
     username = forms.EmailField(
@@ -50,9 +55,9 @@ class CustomUserChangeForm(UserChangeForm):
         )
 
 
-# -------------------------
-# Formulários para Ações do Atendente
-# -------------------------
+#=====================
+# ATTENDANT FORMS
+#=====================
 
 
 class HorarioDisponivelForm(forms.ModelForm):
@@ -74,10 +79,9 @@ class HorarioDisponivelForm(forms.ModelForm):
         )
 
 
-# -------------------------
-# Formulário para Ação do Veterinário
-# -------------------------
-
+#=====================
+# VETS FORMS
+#=====================
 
 class ProntuarioForm(forms.ModelForm):
     receita_prescrita = forms.FileField(
@@ -116,9 +120,9 @@ class ProntuarioForm(forms.ModelForm):
         }
 
 
-# -------------------------
-# Formulários para Ações do Cliente
-# -------------------------
+#=====================
+# USERS FORMS
+#=====================
 
 
 class CadastroClienteForm(forms.Form):
@@ -208,6 +212,10 @@ class CadastroClienteForm(forms.Form):
             )
         return user
 
+#=====================
+# PETS FORMS
+#=====================
+
 
 class CadastroPetForm(forms.ModelForm):
     """Formulário para o cliente cadastrar um novo pet."""
@@ -227,25 +235,25 @@ class CadastroPetForm(forms.ModelForm):
 
 
 class AgendamentoClienteForm(forms.Form):
-    # Campo 1: PET (O cliente só vê os seus)
+
     pet = forms.ModelChoiceField(
         queryset=Pet.objects.none(), label="Selecione o seu Pet"
     )
 
-    # Campo 2: VETERINÁRIO (Filtra todos os veterinários)
+
     veterinario = forms.ModelChoiceField(
         queryset=CustomUser.objects.none(), label="Selecione o Veterinário"
     )
 
-    # Campo 3: HORÁRIO DISPONÍVEL (Será preenchido via AJAX/JS após selecionar o veterinário)
+
     horario_agendado = forms.ModelChoiceField(
-        queryset=HorarioDisponivel.objects.none(),  # Inicialmente vazio
+        queryset=HorarioDisponivel.objects.none(),  
         label="Horário Disponível",
-        # Adicione o atributo 'id' para facilitar a manipulação com JS/AJAX
+
         widget=forms.Select(attrs={"id": "id_horario_agendado_ajax"}),
     )
 
-    # Campo 4: MOTIVO
+
     motivo = forms.CharField(
         widget=forms.Textarea(
             attrs={"rows": 4, "placeholder": "Descreva o motivo da consulta..."}
@@ -265,20 +273,20 @@ class AgendamentoClienteForm(forms.Form):
                 user_type="veterinario"
             ).order_by("nome")
 
-    # O método clean garante que os dados sejam válidos, incluindo o horário
+
     def clean(self):
         cleaned_data = super().clean()
         horario = cleaned_data.get("horario_agendado")
         veterinario = cleaned_data.get("veterinario")
 
-        # 1. Validação: Checa se o horário pertence ao veterinário selecionado
+
         if horario and veterinario and horario.veterinario != veterinario:
             self.add_error(
                 "horario_agendado",
                 "O horário selecionado não pertence ao veterinário escolhido.",
             )
 
-        # 2. Validação: Checa se o horário ainda está disponível (Dupla checagem)
+
         if horario and not horario.disponivel:
             self.add_error("horario_agendado", "Este horário não está mais disponível.")
 
@@ -286,14 +294,14 @@ class AgendamentoClienteForm(forms.Form):
 
     def save(self, user):
         """Salva a consulta e marca o HorarioDisponivel como indisponível."""
-        # Se você usar .get() diretamente em clean_data, você terá os objetos do model
+
         pet_instance = self.cleaned_data.get("pet")
         veterinario_instance = self.cleaned_data.get("veterinario")
         horario_instance = self.cleaned_data.get("horario_agendado")
         motivo = self.cleaned_data.get("motivo")
 
         with transaction.atomic():
-            # Cria a instância da consulta
+
             consulta = Consulta.objects.create(
                 pet=pet_instance,
                 veterinario=veterinario_instance,
@@ -302,7 +310,7 @@ class AgendamentoClienteForm(forms.Form):
                 status="MARCADA",
             )
 
-            # Marca o horário como indisponível
+
             horario_instance.disponivel = False
             horario_instance.save()
 
@@ -336,9 +344,11 @@ class ConsultaForm(forms.ModelForm):
 
         return cleaned_data
 
-
+#=====================
+# PERFIL FORMS
+#=====================
 class ClientePerfilForm(forms.ModelForm):
-    # Definimos os campos que o usuário pode editar/completar
+
     class Meta:
         model = ClientePerfil
         fields = (
@@ -376,7 +386,7 @@ class ClientePerfilForm(forms.ModelForm):
         }
 
 
-# 2. Formulário para Alteração de Senha (Mantido)
+
 class CustomPasswordChangeForm(PasswordChangeForm):
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
@@ -385,7 +395,7 @@ class CustomPasswordChangeForm(PasswordChangeForm):
 
 
 # =====================
-# FILTROS
+# FILTERS FORMS
 # =====================
 
 
@@ -403,7 +413,7 @@ class HorarioFiltroForm(forms.Form):
 
 class ConsultaFiltroForm(forms.Form):
 
-    # Adiciona 'TODOS' como primeira opção de status
+
     STATUS_CHOICES_FILTRO = [("TODOS", "Todos os Status")] + list(
         Consulta.STATUS_CHOICES
     )
@@ -412,7 +422,7 @@ class ConsultaFiltroForm(forms.Form):
         choices=STATUS_CHOICES_FILTRO,
         required=False,
         label="Status",
-        widget=forms.Select(attrs={"class": "form-select"}),  # Adicione classes CSS
+        widget=forms.Select(attrs={"class": "form-select"}),  
     )
 
     data_inicio = forms.DateField(
@@ -420,7 +430,7 @@ class ConsultaFiltroForm(forms.Form):
         label="Data de Início",
         widget=forms.DateInput(
             attrs={"type": "date", "class": "form-control"}
-        ),  # Type 'date' para calendário HTML5
+        ),  
     )
 
     data_fim = forms.DateField(
@@ -428,12 +438,12 @@ class ConsultaFiltroForm(forms.Form):
         label="Data Final",
         widget=forms.DateInput(
             attrs={"type": "date", "class": "form-control"}
-        ),  # Type 'date' para calendário HTML5
+        ),  
     )
 
 
 # =====================
-# FILTROS - VETERINÁRIO
+# VETS FILTER FORMS
 # =====================
 
 
@@ -486,14 +496,14 @@ class VeterinarioConsultaFiltroForm(forms.Form):
 
 
 class ConsultaFinalizadasFiltroForm(forms.Form):
-    # Opções de Status de Prontuário
+
     PRONTUARIO_STATUS_CHOICES = [
         ("", "Status Prontuário"),
         ("pendente", "Pendente"),
         ("ok", "Finalizado"),
     ]
 
-    # Filtro por Status da Consulta (Realizada ou Cancelada)
+
     STATUS_CHOICES = [
         ("", "Status Consulta"),
         ("REALIZADA", "Realizada"),

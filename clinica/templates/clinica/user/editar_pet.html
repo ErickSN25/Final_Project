@@ -121,8 +121,8 @@
                 if (fileInput.files.length > 0) {
                     fileNameDisplay.textContent = fileInput.files[0].name;
                 } else {
-                    // Mantém o nome do arquivo existente se o usuário cancelar a seleção
-                    // Note: No Django, a ausência de um novo arquivo mantém o arquivo anterior.
+
+                    
                     fileNameDisplay.textContent = '{{ pet.foto_pet.name|cut:"fotos_pet/"|default:"Nenhum arquivo anexado" }}';
                 }
             });

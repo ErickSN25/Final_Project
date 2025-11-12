@@ -7,7 +7,9 @@ from django.contrib.auth.models import (
 from django.core.exceptions import ValidationError
 
 
-# --- Modelos usuarios ---
+#=====================
+# USERS MODELS
+#=====================
 
 
 class UsuarioManager(BaseUserManager):
@@ -138,7 +140,9 @@ class ClientePerfil(models.Model):
         verbose_name_plural = "Perfis dos Clientes"
 
 
-# --- Modelos cliente ---
+#=====================
+# PETS MODELS
+#=====================
 
 
 class Pet(models.Model):
@@ -264,7 +268,9 @@ class Consulta(models.Model):
         ordering = ["horario_agendado__data"]
 
 
-# --- Modelos atendente ---
+#=====================
+# ATTENDANT MODELS
+#=====================
 
 
 class HorarioDisponivel(models.Model):
@@ -286,7 +292,9 @@ class HorarioDisponivel(models.Model):
         verbose_name_plural = "Horários Disponíveis"
 
 
-# --- Modelos veterinario ---
+#=====================
+# VETS MODELS
+#=====================
 
 
 class Prontuario(models.Model):
