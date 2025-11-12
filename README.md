@@ -22,6 +22,7 @@ O Sistema SerraVet é uma aplicação web desenvolvida com o **framework Django*
    venv\Scripts\activate
 
 3. Instale django 
+   ```bash
    pip install django
 
 4. Instale as dependências:
