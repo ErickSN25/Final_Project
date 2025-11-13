@@ -1,26 +1,21 @@
-/* Reset básico */
 * {
     margin: 0;
     padding: 0;
     box-sizing: border-box;
-    /* Use 'Questrial' se for a fonte principal do projeto */
+
     font-family: 'Questrial', sans-serif; 
 }
 
 body {
     background-color: #fff;
 }
-
-/* ---------------------- */
-/*   CABEÇALHO (FLUTUANTE PARA TELA DE LOGIN) */
-/* ---------------------- */
 .topo-flutuante {
     display: flex;
     justify-content: space-between;
     align-items: center;
     width: 100%;
     padding: 25px 40px; 
-    position: absolute; /* Corrigido: Remover a barra invertida */
+    position: absolute; 
     top: 0;
     left: 0;
     z-index: 100; 
@@ -33,7 +28,7 @@ body {
     color: #222;
 }
 
-/* Estilo do botão "Sobre nós" */
+
 .botao-sobre {
     background-color: #5a654d;
     color: white;
@@ -52,7 +47,6 @@ body {
 /*   LAYOUT DE LOGIN  */
 /* ---------------------- */
 
-/* Container principal - Ocupa a tela inteira por baixo do header */
 .login-page-wrapper {
     display: flex;
     width: 100%;
@@ -62,9 +56,8 @@ body {
     font-family: 'Questrial', sans-serif;
 }
 
-/* FORMULÁRIO - Lado Esquerdo */
 .login-form-area {
-    width: 45%; /* 45% da tela */
+    width: 45%; 
     background-color: #fff;
     display: flex;
     justify-content: center;
@@ -104,7 +97,7 @@ body {
     margin-bottom: 20px;
 }
 
-/* CAMPOS */
+
 .login-container label {
     display: block;
     text-align: left;
@@ -132,7 +125,7 @@ body {
     text-decoration: none;
 }
 
-/* BOTÃO ENTRAR */
+
 .btn-entrar {
     width: 100%;
     margin-top: 15px;
@@ -150,7 +143,7 @@ body {
     background-color: #3b556e;
 }
 
-/* CRIAR CONTA */
+
 .novo-cliente {
     margin-top: 15px;
     font-size: 0.85rem;
@@ -168,7 +161,7 @@ body {
 /*   IMAGEM DIAGONAL    */
 /* ---------------------- */
 .login-image-area {
-    width: 55%; /* 55% da tela */
+    width: 55%; 
     height: 100%;
     position: relative;
     overflow: hidden;
@@ -195,9 +188,8 @@ body {
 /*   LAYOUT DE CADASTRO  */
 /* ---------------------- */
 
-/* FORMULÁRIO - Lado Esquerdo */
 .cadastro-form-area {
-    width: 45%; /* 45% da tela */
+    width: 45%; 
     background-color: #fff;
     display: flex;
     justify-content: center;
@@ -242,7 +234,7 @@ body {
 
 
 /* ---------------------- */
-/*   RESPONSIVIDADE (Manter para telas menores) */
+/*   RESPONSIVIDADE  */
 /* ---------------------- */
 @media (max-width: 900px) {
     .topo-flutuante {
@@ -264,7 +256,7 @@ body {
     .login-image-area {
         width: 100%;
         height: 250px;
-        clip-path: none; /* Remove o corte no mobile */
+        clip-path: none; 
         transform: none;
         margin-left: 0;
     }

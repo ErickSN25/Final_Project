@@ -6,35 +6,35 @@ body {
     margin: 0 ;
     padding: 0;
     font-family: 'Arial', sans-serif;
-    background-color: #f0f2f5; /* Fundo leve para toda a página */
+    background-color: #f0f2f5; 
     color: #333;
 }
 
 
 .layout {
-    display: flex; /* Habilita o layout de duas colunas */
-    min-height: 100vh; /* Garante que o layout ocupe a altura total */
-    padding-top: 65px; /* Espaço para a barra superior fixa */
+    display: flex; 
+    min-height: 100vh; 
+    padding-top: 65px; 
 }
 
 /* ========================================= */
-/* 2. Navbar Superior (Header) */
+/* Navbar Superior (Header) */
 /* ========================================= */
 
 .navbar {
-    position: fixed; /* Fixa no topo */
+    position: fixed; 
     top: 0;
     left: 0;
     width: 100%;
     height: 65px;
-    background: linear-gradient(to right, #6d7a89, #4a545f); /* Gradiente como na imagem */
+    background: linear-gradient(to right, #6d7a89, #4a545f); 
     color: #fff;
     display: flex;
     justify-content: space-between;
     align-items: center;
     padding: 0 20px;
     box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
-    z-index: 1000; /* Garante que fique acima de tudo */
+    z-index: 1000; 
     box-sizing: border-box;
 }
 
@@ -68,13 +68,11 @@ body {
     object-fit: cover;
 }
 
-/* LAYOUT */
 .layout {
     display: flex;
     margin-top: -60px;
 }
 
-/* SIDEBAR */
 .sidebar {
     width: 240px;
     height: 100%;
@@ -115,9 +113,9 @@ body {
 }
 .sidebar ul li a.active,
 .sidebar ul li a:hover {
-    background: #e9ecef;  /* cor de fundo ao passar */
+    background: #e9ecef;  
     font-weight: bold;
-    color: #333;  /* cor do texto ao passar */
+    color: #333;  
     border-right: 2px solid #6d7a89;
 }
 
@@ -150,9 +148,6 @@ body {
     padding: 0;
 }
 
-
-
-/* CONTENT */
 .content {
     padding: 32px;
     width: 100%;
@@ -184,11 +179,10 @@ body {
     z-index: 1; 
 }
 
-/* Garante que o conteúdo e o cachorro fiquem acima da onda simulada */
 .welcome-card h1, .welcome-card p, .floating-dog {
     position: relative;
     z-index: 5;
-    color: #333; /* Força o texto a ser escuro para contraste com o fundo claro */
+    color: #333; 
 }
 
 .welcome-card h1 {
@@ -201,19 +195,16 @@ body {
     color: #4C587E;
 }
 
-/* DOG FLUTUANDO - AJUSTES PARA NOVA ESTRUTURA */
 .floating-dog {
     width: 250px;
     position: absolute;
-    bottom: 0px; /* Alinha o dog à parte inferior do card */
-    right: 0px; /* Ajusta a posição para a direita */
+    bottom: 0px; 
+    right: 0px; 
     left: 10%;
-    z-index: 10; /* Garante que fique acima de tudo */
+    z-index: 10; 
     animation: float 3s ease-in-out infinite;
 }
 
-
-/* CARDS ONDULADOS */
 .card {
     background: var(--c2);
     padding: 30px;
@@ -234,21 +225,16 @@ body {
     margin-bottom: 10px;
 }
 /* ========================================= */
-
-
 /* MY PETS */
-
-/* Estilos Específicos para a página Meus Pets */
+/* ========================================= */
 .pets-container {
     padding: 20px;
 }
-
-/* Cabeçalho da Seção */
 .pets-header {
     display: flex;
     flex-direction: column;
     margin-bottom: 25px;
-    position: relative; /* Para posicionar o botão de cadastro */
+    position: relative; 
 }
 
 .pets-header h1 {
@@ -263,9 +249,8 @@ body {
     margin: 0;
 }
 
-/* Botão Cadastrar Pet */
 .btn-cadastrar-pet {
-    background-color: #68735b; /* Um verde suave, similar ao da imagem */
+    background-color: #68735b; 
     color: white;
     padding: 8px 30px;
     border: none;
@@ -277,7 +262,7 @@ body {
     position: absolute;
     top: 0;
     right: 0;
-    align-self: flex-start; /* Garante que fique no canto superior direito */
+    align-self: flex-start; 
     box-shadow: 0 2px 4px rgba(0,0,0,0.1);
 }
 
@@ -285,14 +270,12 @@ body {
     background-color: #98a588;
 }
 
-/* Lista de Pets (Layout com Grid) */
 .pets-list {
     display: grid;
     grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); 
     gap: 20px;
 }
 
-/* Card Individual do Pet */
 .pet-card {
     background-color: #fff;
     border-radius: 15px;
@@ -331,7 +314,6 @@ body {
     font-weight: normal;
 }
 
-/* Detalhes do Pet */
 .pet-details p {
     margin: 8px 0;
     font-size: 0.95em;
@@ -343,15 +325,14 @@ body {
 .pet-details strong {
     font-weight: 600;
     color: #333;
-    min-width: 100px; /* Alinha os valores */
+    min-width: 100px; 
     margin-right: 10px;
 }
 
-/* Ações (Botões) */
 .pet-actions {
     display: flex;
     gap: 10px;
-    margin-top: auto; /* Empurra os botões para o final do card */
+    margin-top: auto; 
     padding-top: 15px;
     border-top: 1px solid #eee;
 }
@@ -363,7 +344,7 @@ body {
     cursor: pointer;
     font-weight: 600;
     transition: background-color 0.3s, opacity 0.3s;
-    flex-grow: 1; /* Faz os botões dividirem o espaço */
+    flex-grow: 1; 
 }
 
 .btn-detalhes {
@@ -381,7 +362,7 @@ body {
 }
 
 .btn-excluir {
-    background-color: #713e28; /* Cor rosa/marrom suave */
+    background-color: #713e28; 
     color: rgb(180, 177, 177);
 }
 
@@ -390,15 +371,13 @@ body {
 }
 
 
-/* Detalhes do Pet - Página */
 .sidebar ul li a.active {
-    background: #e9ecef; /* cor de fundo ao passar */
+    background: #e9ecef; 
     font-weight: bold;
-    color: #000000; /* cor do texto ao passar */
-    border-left: 2px solid #000000; /* Linha verde/azul do destaque */
+    color: #000000; 
+    border-left: 2px solid #000000; 
 }
 
-/* Estilos para a página de Detalhes do Pet (NOVO) */
 .details-container {
     padding: 20px;
 }
@@ -408,7 +387,7 @@ body {
     justify-content: space-between;
     align-items: center;
     margin-bottom: 25px;
-    border-bottom: 1px solid #eee; /* Linha de separação */
+    border-bottom: 1px solid #eee; 
     padding-bottom: 15px;
 }
 
@@ -429,10 +408,10 @@ body {
 }
 
 .details-header .header-left .dot {
-    font-size: 1.5em; /* Tamanho da bolinha */
-    color: #a4c9b3; /* Cor da bolinha */
+    font-size: 1.5em; 
+    color: #a4c9b3; 
     margin-right: 10px;
-    line-height: 0; /* Alinha verticalmente com o texto */
+    line-height: 0; 
 }
 
 .details-header h1 {
@@ -442,7 +421,7 @@ body {
 }
 
 .btn-edit-details {
-    background-color: #68735b; /* Verde do Cadastrar Pet */
+    background-color: #68735b; 
     color: rgba(255, 255, 255, 0.777);
     padding: 8px 15px;
     border: none;
@@ -458,7 +437,7 @@ body {
 }
 
 .btn-voltar-details {
-    background-color: #713e28; /* Marrom suave */
+    background-color: #713e28; 
     color: white;
     padding: 8px 15px;
     border: none;
@@ -473,16 +452,14 @@ body {
     background-color: #b88f8f;
 }
 
-
-
 .pet-details-card {
     background-color: #fff;
     border-radius: 15px;
     box-shadow: 0 4px 8px rgba(0, 0, 0, 0.25);
     padding: 30px;
     display: flex;
-    flex-direction: column; /* Para a foto ficar em cima dos dados */
-    align-items: center; /* Centraliza a foto */
+    flex-direction: column; 
+    align-items: center; 
 }
 
 .pet-photo-display img {
@@ -496,45 +473,45 @@ body {
 
 .pet-info-grid {
     display: grid;
-    grid-template-columns: 1fr 1fr; /* Duas colunas para os detalhes */
-    gap: 15px 30px; /* Espaço entre as linhas e colunas */
-    width: 100%; /* Ocupa a largura total do card */
-    max-width: 600px; /* Limita a largura para melhor leitura */
+    grid-template-columns: 1fr 1fr; 
+    gap: 15px 30px; 
+    width: 100%; 
+    max-width: 600px; 
 }
 
 .detail-row {
     display: flex;
     justify-content: space-between;
-    align-items: baseline; /* Alinha os textos pela base */
+    align-items: baseline; 
     padding: 5px 0;
-    border-bottom: 1px solid #eee; /* Linha inferior de cada detalhe */
-    margin: 0; /* Remove margem padrão do p */
+    border-bottom: 1px solid #eee; 
+    margin: 0; 
 }
 
 .detail-row:last-of-type {
-    border-bottom: none; /* Remove a linha do último item */
+    border-bottom: none; 
 }
 
 .detail-row strong {
     color: #555;
     font-weight: 600;
-    margin-right: 10px; /* Espaço entre o label e o valor */
-    flex-shrink: 0; /* Impede que o label encolha */
+    margin-right: 10px; 
+    flex-shrink: 0; 
 }
 
 .detail-row span {
     color: #333;
     text-align: right;
-    flex-grow: 1; /* Permite que o valor ocupe o espaço restante */
+    flex-grow: 1; 
     font-weight: 500;
 }
 
 .detail-row.full-width {
-    grid-column: 1 / -1; /* Ocupa a largura total */
-    flex-direction: column; /* Label em cima, valor embaixo */
+    grid-column: 1 / -1; 
+    flex-direction: column; 
     align-items: flex-start;
     padding-top: 15px;
-    border-top: 1px dashed #eee; /* Uma linha diferente para observações */
+    border-top: 1px dashed #eee; 
 }
 
 .detail-row.full-width strong {
@@ -550,25 +527,22 @@ body {
     padding: 10px;
     width: 100%;
     box-sizing: border-box;
-    min-height: 80px; /* Altura mínima para observações */
+    min-height: 80px; 
 }
 
-
 /* ============================================== */
-/* ESTILOS ESPECÍFICOS PARA O FORMULÁRIO DE CADASTRO/EDIÇÃO (image_099b99.png) */
+/* ESTILOS ESPECÍFICOS PARA O FORMULÁRIO DE CADASTRO/EDIÇÃO */
 /* ============================================== */
 
-/* Container geral do formulário */
 .form-container {
     background: #fff;
     padding: 30px;
     border-radius: 15px;
     box-shadow: 0 4px 8px rgba(0, 0, 0, 0.25);
-    max-width: 900px; /* Aumentado ligeiramente para melhor visualização */
+    max-width: 900px; 
     margin: 20px auto;
 }
 
-/* --- Novo Header do Formulário --- */
 .form-header-title {
     display: flex;
     justify-content: space-between;
@@ -585,7 +559,7 @@ body {
 
 .form-header-title .header-left .dot {
     font-size: 1.5em; 
-    color: #6B7984; /* Cor da bolinha */
+    color: #6B7984; 
     margin-right: 10px;
     line-height: 0; 
 }
@@ -594,7 +568,7 @@ body {
     font-size: 1.8em;
     color: #333;
     margin: 0;
-    border-bottom: none; /* Remove a linha de baixo do H1 padrão */
+    border-bottom: none; 
     padding-bottom: 0;
 }
 
@@ -603,8 +577,6 @@ body {
     gap: 10px;
 }
 
-
-/* Botão Adicionar/Salvar no header */
 .btn-submit-header {
     background-color: #68735b; 
     color: white;
@@ -621,9 +593,8 @@ body {
     background-color: #9fa484;
 }
 
-/* Botão Cancelar no header */
 .btn-cancel-header {
-    background-color: #713e28; /* Marrom suave */
+    background-color: #713e28; 
     color: white;
     padding: 8px 15px;
     border: none;
@@ -639,7 +610,6 @@ body {
     background-color: #835642;
 }
 
-/* Contêiner da foto e nome no card */
 .pet-card .pet-info-header {
     display: flex;
     align-items: center;
@@ -648,10 +618,10 @@ body {
     border-bottom: 1px solid #f0f0f0;
 }
 
-/* --- Layout dos Campos do Formulário --- */
+
 .form-fields-grid {
     display: flex;
-    flex-wrap: wrap; /* Permite que os itens quebrem para a próxima linha */
+    flex-wrap: wrap; 
     gap: 20px;
 }
 
@@ -660,24 +630,22 @@ body {
     flex-direction: column;
 }
 
-/* Campos de largura total (100%): Nome, Espécie, Raça */
 .form-row.full-width {
     width: 100%;
 }
 
-/* Campos de um terço (1/3): Idade, Peso, Vacinas */
+
 .form-row.third-width {
-    width: calc(33.333% - 14px); /* 1/3 do container menos o gap (20px) */
+    width: calc(33.333% - 14px); 
     box-sizing: border-box;
 }
 
-/* Campos de meia coluna (1/2): Alergias, Doenças */
+
 .form-row.half-column {
-    width: calc(50% - 10px); /* 1/2 do container menos o gap (20px) */
+    width: calc(50% - 10px); 
     box-sizing: border-box;
 }
 
-/* --- Estilo Base dos Campos --- */
 .form-row label {
     font-weight: 500;
     color: #333;
@@ -698,17 +666,12 @@ body {
     font-size: 1em;
 }
 
-/* Estilo específico para Textareas em 1/2 coluna (Alergias/Doenças) */
 .form-row.half-column textarea {
     min-height: 120px;
     resize: vertical;
     width: 100%; 
 }
 
-
-/* --- Layout Customizado do Campo de Foto --- */
-
-/* Esconde o input file padrão (manipulado via JS no template) */
 .form-row input[type="file"] {
     display: none; 
 }
@@ -742,13 +705,12 @@ body {
 .form-row .file-info span {
     color: #777;
     font-style: italic;
-    white-space: nowrap; /* Evita quebra de linha do texto do arquivo */
+    white-space: nowrap; 
     overflow: hidden;
     text-overflow: ellipsis;
     max-width: 100%;
 }
 
-/* --- Layout Customizado para Checkbox (Vacinas em dia) --- */
 .form-row .checkbox-options {
     display: flex;
     align-items: center;
@@ -759,7 +721,6 @@ body {
     border-radius: 5px;
     padding: 0 10px;
     box-sizing: border-box;
-    /* Faz o bloco ficar visualmente alinhado com a altura dos inputs text */
     min-height: 48px; 
 }
 
@@ -768,7 +729,6 @@ body {
     margin-right: 8px;
 }
 
-/* Estilo para erros de formulário (opcional, mas bom ter) */
 .form-row ul.errorlist {
     list-style: none;
     padding: 5px 0 0 0;
@@ -777,24 +737,21 @@ body {
     font-size: 0.85em;
 }
 
-/* Remove margem inferior para a última linha de campos */
 .form-fields-grid:last-child {
     margin-bottom: 0;
 }
 
-/* --- Estilo da Pré-Visualização na Edição (current-photo-edit) --- */
-
 .current-photo-edit {
     display: flex;
     flex-direction: column;
-    align-items: flex-start; /* Alinhado à esquerda do campo */
+    align-items: flex-start; 
     margin-bottom: 15px;
 }
 
 .current-photo-edit img {
-    width: 80px; /* Tamanho da pré-visualização */
+    width: 80px; 
     height: 80px;
-    border-radius: 10px; /* Borda quadrada/arredondada para pré-visualização */
+    border-radius: 10px; 
     object-fit: cover;
     border: 1px solid #ccc;
     margin-bottom: 5px;
@@ -807,10 +764,8 @@ body {
 }
 
 
-/* ============================================== */
-
 /* ==================================== */
-/*     TELA MINHAS CONSULTAS (9912a6)    */
+/*     TELA MINHAS CONSULTAS  */
 /* ==================================== */
 
 .consultas-header {
@@ -832,7 +787,7 @@ body {
 
 
 .btn-agendar {
-    background-color: #4C587E; /* Cinza suave como no mockup */
+    background-color: #4C587E; 
     color: white;
     padding: 10px 25px;
     border-radius: 8px;
@@ -854,7 +809,6 @@ body {
     gap: 20px;
 }
 
-/* Cartão Individual da Consulta */
 .consulta-card {
     background-color: white;
     padding: 20px;
@@ -904,14 +858,13 @@ body {
     margin-bottom: 15px;
 }
 
-/* Tags de Status */
 .status-tag {
     padding: 4px 10px;
     border-radius: 15px;
     font-size: 0.75rem;
     font-weight: bold;
     text-transform: uppercase;
-    align-self: flex-start; /* Alinha a tag ao topo */
+    align-self: flex-start; 
 }
 .status-marcada {
     background-color: #8E90A7;
@@ -938,7 +891,6 @@ body {
 }
 
 
-/* Botão Detalhes da Consulta */
 .btn-detalhes {
     background-color: #6e789a;
     border: none;
@@ -963,7 +915,7 @@ body {
 /* ==================================== */
 
 .filter-bar {
-    background-color: #f8f9fa; /* Fundo mais claro para a barra */
+    background-color: #f8f9fa; 
     padding: 15px 20px;
     border-radius: 8px;
     margin-bottom: 25px;
@@ -980,7 +932,7 @@ body {
 .form-group-inline {
     display: flex;
     flex-direction: column;
-    flex: 1; /* Distribui o espaço entre os campos */
+    flex: 1; 
     min-width: 150px;
 }
 
@@ -998,7 +950,6 @@ body {
     width: 100%;
 }
 
-/* Estilo do Botão Filtrar */
 .btn-filtro {
     background-color: #4b6175;
     color: white;
@@ -1024,7 +975,7 @@ body {
     cursor: pointer;
     font-size: 0.9rem;
     transition: color 0.2s;
-    white-space: nowrap; /* Impede que quebre a linha */
+    white-space: nowrap; 
 }
 
 .btn-limpar-filtro:hover {
@@ -1052,7 +1003,7 @@ body {
 
 .page-item {
     border: 1px solid #dee2e6;
-    margin-left: -1px; /* Remove a borda dupla */
+    margin-left: -1px; 
 }
 
 .page-item:first-child {
@@ -1092,7 +1043,6 @@ body {
     background-color: #f8f9fa;
 }
 
-/* Mensagem de lista vazia */
 .mensagem-vazia {
     text-align: center;
     color: #777;
@@ -1106,7 +1056,7 @@ body {
 /* ==================================== */
 
 .btn-agendar-submit {
-    background-color: #68735b; /* Verde de Agendar */
+    background-color: #68735b; 
     color: white;
     padding: 10px 20px;
     border: none;
@@ -1117,12 +1067,12 @@ body {
 }
 
 .btn-cancelar {
-    background-color: #713e28; /* Marrom de Cancelar */
+    background-color: #713e28; 
     color: white;
     padding: 10px 20px;
     border-radius: 8px;
-    text-decoration: none; /* Importante para links <a> */
-    display: inline-block; /* Para que o padding funcione corretamente no <a> */
+    text-decoration: none; 
+    display: inline-block; 
     font-weight: bold;
     transition: background-color 0.3s;
 }
@@ -1135,33 +1085,21 @@ body {
     background-color: #b88f8f;
 }
 
-/* Estilo específico para a área de texto (textarea) */
-.form-group.full-width textarea, /* Mire no textarea dentro do grupo Motivo */
-.form-row textarea /* Regra genérica para todos os textareas */
+
+.form-group.full-width textarea, 
+.form-row textarea 
 {
-    /* 1. Definir uma altura mínima para dar espaço ao usuário */
     min-height: 150px; 
-    
-    /* 2. Controlar o redimensionamento do usuário */
-    /* Permite redimensionar apenas na vertical (altura) */
     resize: vertical; 
-    
-    /* OU, se preferir bloquear o redimensionamento: */
-    /* resize: none; */ 
-    
-    /* 3. Ajuste fino de padding (opcional, mas bom ter) */
     padding: 12px;
-    
-    /* 4. Mantenha a cor da fonte escura para legibilidade */
     color: #333;
 }
 
 /* ==================================================== */
-/* 🐾 ESTILOS PARA DETALHES DA CONSULTA (detalhes_consulta.html) */
+/* ESTILOS PARA DETALHES DA CONSULTA  */
 /* ==================================================== */
 
 .main-content-wrapper {
-    /* Garante que o conteúdo ocupe a largura total */
     padding: 20px;
 }
 
@@ -1183,25 +1121,22 @@ body {
     margin: 5px 0 0 0;
 }
 
-/* Card Principal de Detalhes */
 .detalhe-card {
     background: #fff;
     padding: 30px;
     border-radius: 15px;
-    /* card-shadow deve ser definido em outro lugar, mas é um bom lembrete */
     box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1); 
     max-width: 800px;
-    margin: 0 auto 30px auto; /* Centraliza o card na página */
+    margin: 0 auto 30px auto; 
 }
 
-/* Separação de Seções */
 .detalhe-secao {
     margin-bottom: 25px;
 }
 
 .detalhe-secao h2 {
     font-size: 1.35rem;
-    color: #4C587E; /* Cor de destaque */
+    color: #4C587E; 
     margin-top: 0;
     margin-bottom: 15px;
     padding-bottom: 5px;
@@ -1218,10 +1153,8 @@ hr {
     margin: 25px 0;
 }
 
-/* Layout dos Itens de Informação (Grid) */
 .detalhe-info-grid {
     display: grid;
-    /* Três colunas iguais (Data/Status/Veterinário ou Nome/Espécie/Raça) */
     grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); 
     gap: 20px 30px; 
 }
@@ -1245,7 +1178,6 @@ hr {
     font-weight: 500;
 }
 
-/* Estilo específico para Motivo da Consulta */
 .detalhe-motivo {
     margin-top: 20px;
     padding-top: 15px;
@@ -1267,16 +1199,13 @@ hr {
     border-radius: 8px;
     font-size: 0.95rem;
     color: #666;
-    white-space: pre-wrap; /* Mantém a formatação de linebreaksbr do Django */
+    white-space: pre-wrap; 
 }
-
-
-/* --- CARD DE PRONTUÁRIO --- */
 
 .prontuario-card {
     margin-top: 30px;
     padding: 20px;
-    background-color: #f8f8f8; /* Fundo mais claro para destacar */
+    background-color: #f8f8f8; 
     border-radius: 10px;
     border: 1px solid #ddd;
 }
@@ -1297,17 +1226,17 @@ hr {
 }
 
 .prontuario-status.finalizado {
-    background-color: #d4edda; /* Verde de sucesso */
+    background-color: #d4edda; 
     border: 1px solid #c3e6cb;
 }
 
 .prontuario-status.em-andamento {
-    background-color: #fff3cd; /* Amarelo de alerta */
+    background-color: #fff3cd; 
     border: 1px solid #ffeeba;
 }
 
 .prontuario-status.pendente {
-    background-color: #e2e3e5; /* Cinza de pendente */
+    background-color: #e2e3e5; 
     border: 1px solid #d6d8db;
 }
 
@@ -1325,7 +1254,7 @@ hr {
     font-size: 0.85rem;
 }
 
-/* Botão de Visualização do Prontuário */
+
 .btn-prontuario-view {
     background-color: #4C587E;
     color: white;
@@ -1338,16 +1267,12 @@ hr {
     display: flex;
     align-items: center;
     gap: 8px;
-    white-space: nowrap; /* Não quebrar a linha */
+    white-space: nowrap; 
 }
 
 .btn-prontuario-view:hover {
     background-color: #586695;
 }
-
-/* --- TAGS DE STATUS (Reutilizadas da página de consultas) --- */
-
-/* Estas classes devem ser as mesmas que você usa em 'consultas_user.html' */
 
 .status-tag {
     padding: 4px 10px;
@@ -1356,28 +1281,24 @@ hr {
     font-weight: bold;
     text-transform: uppercase;
 }
-/* Exemplo de Tags de Status (você deve usar as cores que já tem) */
 .status-marcada { background-color: #8E90A7; color: white; }
 .status-realizada { background-color: #d4edda; color: #155724; }
 .status-cancelada { background-color: #f8d7da; color: #721c25; }
 
-/* Tags de Status de Pagamento */
 .pagamento-status-tag {
-    /* Use as mesmas cores do status-tag */
     padding: 4px 10px;
     border-radius: 15px;
     font-size: 0.8rem;
     font-weight: bold;
     display: inline-block;
 }
-/* Exemplo de Tags de Pagamento (você deve usar as cores que já tem) */
 .pagamento-pago { background-color: #d4edda; color: #155724; }
 .pagamento-pendente { background-color: #fff3cd; color: #856404; }
 .pagamento-nao-cobrado { background-color: #e2e3e5; color: #383d41; }
 
 
 /* ==================================================== */
-/* 👤 ESTILOS PARA PERFIL DO USUÁRIO (perfil_user.html) */
+/* ESTILOS PARA PERFIL DO USUÁRIO  */
 /* ==================================================== */
 
 .profile-card {
@@ -1388,9 +1309,6 @@ hr {
     margin: 0 auto 30px auto; 
 }
 
-/* -------------------------------------- */
-/* NOVO: FOTO DE PERFIL NO TOPO DO CARD */
-/* -------------------------------------- */
 .profile-header-photo {
     display: flex;
     justify-content: center;
@@ -1419,8 +1337,6 @@ hr {
     margin: 20px 0 30px 0;
 }
 
-
-/* Seções de Perfil */
 .profile-section h2 {
     font-size: 1.4rem;
     color: #4C587E;
@@ -1436,16 +1352,13 @@ hr {
     margin: 30px 0;
 }
 
-/* -------------------------------------- */
-/* ESTILOS DE INFORMAÇÕES BÁSICAS (READONLY) */
-/* -------------------------------------- */
+
 .info-grid-readonly {
     display: grid;
     grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); 
     gap: 20px 30px;
 }
 
-/* NOVO: O grid de perfil agora só tem informações de contato/endereço */
 .info-grid-perfil {
     grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); 
     gap: 20px 30px;
@@ -1472,14 +1385,9 @@ hr {
 .read-only-actions {
     margin-top: 30px;
     border-top: none; 
-    text-align: left; /* Alinha o botão de editar à esquerda */
+    text-align: left; 
     padding-top: 0;
 }
-
-
-/* -------------------------------------- */
-/* ESTILOS PARA UPLOAD (MODO EDIÇÃO) */
-/* -------------------------------------- */
 
 .photo-upload-container {
     padding: 10px 0;
@@ -1496,10 +1404,6 @@ hr {
     margin: 15px 0 30px 0;
 }
 
-/* -------------------------------------- */
-/* ESTILOS DOS FORMULÁRIOS E BOTÕES */
-
-/* -------------------------------------- */
 
 .form-group {
     margin-bottom: 15px; 
