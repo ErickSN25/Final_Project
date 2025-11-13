@@ -49,32 +49,24 @@ Para acessar o sistema, cada cliente terá que fazer seu cadastro. O administrad
 | **Detalhes** | Selecionar dias e horas de forma personalizada para cada Veterinário. | 
 | **Importância** | **\[ X \] Obrigatório** \[  \] Importante  \[  \] Desejável |
 
-| RF004 | Atendente poderá realizar o cadastro de consulta do animal de estimação sem necessidade de cadastro do tutor. | 
-| :---- | ----- |
-| **Detalhes** | A solicitação deve obrigatoriamente conter o nome & Sobrenome e CPF do cliente, os dados do animal de estimação é obrigatório conter também. |
-| **Importância** | \[ \] Obrigatório **\[ X \] Importante**  \[  \] Desejável |
 
-| RF005 | Cliente deve realizar o cadastro para acessar o sistema |
+| RF004 | Cliente deve realizar o cadastro para acessar o sistema |
 | :---- | ----- |
 | **Detalhes** | Dados Obrigatórios: nome & Sobrenome, CPF, Gmail e telefone |
 | **Importância** | **\[ X \] Obrigatório** \[  \] Importante  \[  \] Desejável |
 
-| RF006 | O cliente cadastrado poderá solicitar consulta para seu(s) Animais de Estimação |
+| RF005 | O cliente cadastrado poderá solicitar consulta para seu(s) Animais de Estimação |
 | :---- | ----- |
 | **Detalhes** | Dados Obrigatórios do animal: nome, espécie, peso atual, vacinas em dia(SIM/NÃO). Dados opcionais: raça, alergias, doenças. Será possível também escolher dia, horário e Veterinário, entre os disponíveis. |
 | **Importância** | **\[ X \] Obrigatório** \[  \] Importante  \[  \] Desejável |
 
-| RF007 | O veterinário poderá solicitar prontuário anterior do animal de estimação |
-| :---- | ----- |
-| **Detalhes** |  Um prontuário já existente do animal que tenha sido feito a doiscsemestres antes da consulta que está sendo realizada. |
-| **Importância** | **\[ X \] Obrigatório** \[  \] Importante  \[  \] Desejável |
 
-| RF008 | O Veterinário deve poder gerar ou editar o prontuário sobre a consulta realizada. |
+| RF006 | O Veterinário deve poder gerar o prontuário sobre a consulta realizada. |
 | :---- | ----- |
 | **Detalhes** | Dados do prontuário: identificador do pet, diagnóstico, sintomas e observações. Isso enquanto ainda estive ocorrendo o acompanhamento do animal da estimação. |
 | **Importância** | **\[ X \] Obrigatório** \[  \] Importante  \[  \] Desejável |
 
-| RF009 | Veterinário deve Inserir receita do medicamento virtual |
+| RF007 | Veterinário deve Inserir receita do medicamento virtual |
 | :---- | ----- |
 | **Detalhes** | Documento em pdf que será disponibilizado na página do tutor. Para o sistema, o documento será apenas anexado. A criação e edição do documento será feita por softwares de terceiros.  |
 | **Importância** | \[  \] Obrigatório **\[ X \] Importante**  \[  \] Desejável |
@@ -82,53 +74,32 @@ Para acessar o sistema, cada cliente terá que fazer seu cadastro. O administrad
 
 **3.1 Requisitos não Funcionais**
 
-| RNF001 | Administrador deve poder consultar os valores obtidos deconsultas e o montante do período selecionado |
-| :---- | :---- |
-| **Detalhes** |  Pesquisa deve escolher o período: o mês, ano, semana e dia.  |
 
-	
-
-| RNF002 | Veterinário deve poder deixar uma notificação para clientes marcarem o retorno |
-| :---- | :---- |
-| **Detalhes** | Tais notificações devem ser mostradas de forma assíncrona. |
-
-	
-
-| RNF003 | O administrador irá fazer o backup do banco de dados a cada 7 dias |
+| RNF001 | O administrador irá fazer o backup do banco de dados a cada 7 dias |
 | :---- | :---- |
 | **Detalhes** | Os backup serão feitos de forma configurada e iniciada em um dia específico pelo administrador. |
 
 
-| RNF004 | Identificação de acesso deve ser feito via login |
+| RNF002 | Identificação de acesso deve ser feito via login |
 | :---- | :---- |
 | **Detalhes** | Os tipos de identificações são referentes o administrador, Veterinários, Atendente e clientes.. |
 
-| RNF005 | Serviço deve estar disponível 24 horas por dia |
+| RNF003 | Serviço deve estar disponível 24 horas por dia |
 | :---- | :---- |
 | **Detalhes** | Disponibilidade |
 
-| RNF006 | Veterinários deve poder manipular os dados da consulta até o fechamento do chamado |
+| RNF004 | Veterinários deve poder manipular os dados da consulta até o fechamento do chamado |
 | :---- | :---- |
 | **Detalhes** | Após isso, poder somente adicionar comentários. |
 
-| RNF007 | Consultas podem ser canceladas, no mínimo 24 horas antes |
-| :---- | :---- |
-| **Detalhes** | As consultas marcadas terão o prazo de no mínimo 24 horas para serem canceladas, após isso o tutor só poderá cancelar pessoalmente. |
 
-| RNF008 | O sistema deve notificar o tutor, caso o veterinário cadastre um aviso de ausência |
-| :---- | :---- |
-| **Detalhes** | A notificação somente deve ser enviada, caso o horário de ausência do Veterinário englobe o horário da consulta. E Cliente com consulta marcada no horário da ausência do veterinário, devem receber uma outra notificação para a remarcação da consulta. |
-
-| RNF009 | Somente o veterinário e o tutor podem ver os dados da consultas |
+| RNF005 | Somente o veterinário e o tutor podem ver os dados da consultas |
 | :---- | :---- |
 | **Detalhes** | Privacidade.|
 
-| RNF010 | Somente o administrador pode ver os dados do veterinário e Atendente |
+| RNF006 | Somente o administrador pode ver os dados do veterinário e Atendente |
 | :---- | :---- |
 | **Detalhes** | Privacidade |
 
-| RNF011 | O atendente poderá somente ver os dados básico como nome & sobrenome, CPF e Gmail do Cliente |
-| :---- | :---- |
-| **Detalhes** | Privacidade |
 
 

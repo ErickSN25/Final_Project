@@ -324,7 +324,7 @@ def obter_horarios_disponiveis_ajax(request):
         ]
         return JsonResponse(horarios_data, safe=False)
     except Exception as e:
-        print("❌ ERRO AO OBTER HORÁRIOS:", e)
+        print("ERRO AO OBTER HORÁRIOS:", e)
         return JsonResponse([], safe=False)
 
 
@@ -406,13 +406,9 @@ def perfil_user(request):
 
 
 
-
-
 #=====================
 # VETS VIEWS
 #=====================
-
-
 
 
 @login_required
@@ -681,7 +677,7 @@ def cadastrar_prontuario_vet(request, consulta_id):
 
 @login_required
 def home_atendente(request):
-    hoje = timezone.localdate()  # pega a data atual (sem hora)
+    hoje = timezone.localdate() 
 
 
     consultas_do_dia = Consulta.objects.filter(horario_agendado__data__date=hoje)

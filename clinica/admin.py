@@ -7,9 +7,6 @@ from .models import (
     Consulta,
     Prontuario,
     HorarioDisponivel,
-    ValorPagamento,
-    PagamentoCliente,
-    GerenciamentoPagamento,
 )
 from .forms import CustomUserCreationForm, CustomUserChangeForm
 from django.contrib.auth.admin import UserAdmin
@@ -94,9 +91,8 @@ class ConsultaAdmin(admin.ModelAdmin):
         "veterinario",
         "get_data_hora",
         "status",
-        "status_pagamento",
-    )  # NOVO CAMPO
-    list_filter = ("status", "status_pagamento", "horario_agendado__data")
+    )  
+    list_filter = ("status", "horario_agendado__data")
     ordering = ("horario_agendado__data",)
     search_fields = ("pet__nome", "veterinario__nome", "veterinario__sobrenome")
 
@@ -131,66 +127,10 @@ class HorarioDisponivelAdmin(admin.ModelAdmin):
     ordering = ("data",)
 
 
-class ValorPagamentoAdmin(admin.ModelAdmin):
-    list_display = ("consulta", "valor", "data_definicao")
-    list_filter = ("data_definicao",)
-    search_fields = ("consulta__cliente",)
-    ordering = ("-data_definicao",)
-
-
-class PagamentoClienteAdmin(admin.ModelAdmin):
-    list_display = ("consulta", "comprovante", "data_envio")
-    list_filter = ("data_envio",)
-    search_fields = ("consulta__cliente",)
-    ordering = ("-data_envio",)
-
-
-class GerenciamentoPagamentoAdmin(admin.ModelAdmin):
-    list_display = (
-        "consulta_link",
-        "comprovante_link",
-        "atendente",
-        "status",
-        "data_atualizacao",
-    )
-    list_filter = ("status", "atendente")
-    search_fields = ("consulta__pet__nome", "atendente__email", "observacao")
-    ordering = ("-data_atualizacao",)
-    readonly_fields = ("consulta_link", "comprovante_link", "data_atualizacao")
-    fields = ("consulta_link", "comprovante_link", "atendente", "status", "observacao")
-    autocomplete_fields = ("atendente",)
-
-    @admin.display(description="Consulta")
-    def consulta_link(self, obj):
-        return f"Consulta {obj.consulta.id} - Pet: {obj.consulta.pet.nome} ({obj.consulta.get_status_pagamento_display()})"
-
-    @admin.display(description="Comprovante")
-    def comprovante_link(self, obj):
-        pagamentos = obj.consulta.pagamentos_cliente.all().order_by("-data_envio")
-        if pagamentos.exists():
-            ultimo_pagamento = pagamentos[0]
-            if ultimo_pagamento.comprovante:
-                return format_html(
-                    '<a href="{}" target="_blank">Ver Comprovante</a>',
-                    ultimo_pagamento.comprovante.url,
-                )
-        return "Sem comprovante"
-
-    def has_add_permission(self, request, obj=None):
-        return False
-
-    def formfield_for_foreignkey(self, db_field, request, **kwargs):
-        if db_field.name == "atendente":
-            kwargs["queryset"] = CustomUser.objects.filter(user_type="atendente")
-        return super().formfield_for_foreignkey(db_field, request, **kwargs)
-
-
 admin.site.register(VeterinarioInfo, VeterinarioInfoAdmin)
 admin.site.register(ClientePerfil, ClientePerfilAdmin)
 admin.site.register(Pet, PetAdmin)
 admin.site.register(Consulta, ConsultaAdmin)
 admin.site.register(Prontuario, ProntuarioAdmin)
 admin.site.register(HorarioDisponivel, HorarioDisponivelAdmin)
-admin.site.register(ValorPagamento, ValorPagamentoAdmin)
-admin.site.register(PagamentoCliente, PagamentoClienteAdmin)
-admin.site.register(GerenciamentoPagamento, GerenciamentoPagamentoAdmin)
+

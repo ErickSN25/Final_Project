@@ -9,7 +9,6 @@
     {% block extra_head %}{% endblock %}
 </head>
 <body> 
-    <!-- Navbar Superior -->
     <header class="navbar">
         <div class="navbar-logo">SerraVet</div>
         <div class="navbar-user">
@@ -18,17 +17,13 @@
     </header>
 
     <div class="layout">
-        <!-- Sidebar -->
         <aside class="sidebar">
             <h2>Menu</h2>
             <ul>
                 <li><a href={%url 'home_atendente'%}>Início</a></li>
                 <li><a href={%url 'gerenciar_horarios'%}>Gerenciamento de Horarios</a></li>
-                <li><a href="#">Gerenciamento de pagamentos</a></li>
             </ul>
         </aside>
-
-        <!-- Área de conteúdo -->
         <main class="content">
             {% block content %}{% endblock %}
         </main>

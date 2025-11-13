@@ -65,13 +65,13 @@
 
 <script>
 document.addEventListener('DOMContentLoaded', function() {
-    console.log("✅ Script de agendamento carregado.");
+    console.log(" Script de agendamento carregado.");
 
     const veterinarioSelect = document.getElementById('id_veterinario');
     const horarioSelect = document.getElementById('id_horario_agendado_ajax'); 
 
     if (!veterinarioSelect || !horarioSelect) {
-        console.error("❌ IDs incorretos nos selects!");
+        console.error(" IDs incorretos nos selects!");
         return;
     }
 
@@ -111,7 +111,7 @@ document.addEventListener('DOMContentLoaded', function() {
             });
 
         } catch (err) {
-            console.error("❌ Erro na requisição AJAX:", err);
+            console.error(" Erro na requisição AJAX:", err);
             horarioSelect.innerHTML = '<option>Erro ao carregar horários</option>';
         }
     });

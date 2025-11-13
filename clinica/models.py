@@ -76,9 +76,6 @@ class VeterinarioInfo(models.Model):
         limit_choices_to={"user_type": "veterinario"},
     )
     crmv = models.CharField(max_length=10, unique=True, verbose_name="CRMV")
-    foto_veterinario = models.ImageField(
-        upload_to="fotos_perfil/", blank=True, null=True
-    )
 
     def __str__(self):
         return f"CRMV: {self.crmv} - {self.user.get_full_name()}"
@@ -178,9 +175,7 @@ class Pet(models.Model):
         verbose_name = "Pet"
         verbose_name_plural = "Pets"
 
-
 class Consulta(models.Model):
-
     pet = models.ForeignKey(Pet, on_delete=models.CASCADE)
     veterinario = models.ForeignKey(
         CustomUser,
@@ -197,6 +192,7 @@ class Consulta(models.Model):
     )
 
     motivo = models.TextField(verbose_name="Motivo da Consulta")
+
     STATUS_CHOICES = [
         ("MARCADA", "Marcada"),
         ("CANCELADA", "Cancelada"),
@@ -210,21 +206,6 @@ class Consulta(models.Model):
         verbose_name="Status da Consulta",
     )
 
-    STATUS_PAGAMENTO_CHOICES = [
-        ("PENDENTE", "Pendente de Pagamento"),
-        ("AGUARDANDO_VALOR", "Aguardando Definição de Valor"),
-        ("AGUARDANDO_PAGAMENTO", "Aguardando Pagamento do Cliente"),
-        ("EM_ANALISE", "Comprovante em Análise"),
-        ("APROVADO", "Pagamento Aprovado/Concluído"),
-        ("RECUSADO", "Pagamento Recusado"),
-    ]
-    status_pagamento = models.CharField(
-        max_length=25,
-        choices=STATUS_PAGAMENTO_CHOICES,
-        default="PENDENTE",
-        verbose_name="Status do Pagamento",
-    )
-
     def __str__(self):
         data_formatada = self.horario_agendado.data.strftime("%d/%m/%Y às %H:%M")
         return f"Consulta {self.pet.nome} - {self.veterinario.get_full_name()} ({data_formatada})"
@@ -232,33 +213,20 @@ class Consulta(models.Model):
     def save(self, *args, **kwargs):
         is_new = self._state.adding
 
+        
         if self.veterinario != self.horario_agendado.veterinario:
             raise ValidationError(
                 "O veterinário da consulta deve ser o mesmo cadastrado no Horário Disponível selecionado."
             )
+
         if is_new:
             self.horario_agendado.disponivel = False
             self.horario_agendado.save()
 
+        
         elif self.status == "CANCELADA" and not self.horario_agendado.disponivel:
             self.horario_agendado.disponivel = True
             self.horario_agendado.save()
-
-        if self.pk:
-            antiga = (
-                type(self)
-                .objects.filter(pk=self.pk)
-                .values("status", "status_pagamento")
-                .first()
-            )
-            status_antigo = antiga["status"] if antiga else None
-            status_pagamento_antigo = antiga["status_pagamento"] if antiga else None
-        else:
-            status_antigo = None
-            status_pagamento_antigo = None
-
-        if self.status == "FINALIZADA" and self.status_pagamento == "PENDENTE":
-            self.status_pagamento = "AGUARDANDO_VALOR"
 
         super().save(*args, **kwargs)
 
@@ -281,8 +249,7 @@ class HorarioDisponivel(models.Model):
     )
     data = models.DateTimeField()
     disponivel = models.BooleanField(default=True)
-    disponivel = models.BooleanField(default=True)  # 👈 Novo campo!
-
+    disponivel = models.BooleanField(default=True)  
     def __str__(self):
         status = "Disponível" if self.disponivel else "Indisponível"
         return f"{self.veterinario} - {self.data.strftime('%d/%m/%Y %H:%M')} ({status})"
@@ -331,103 +298,3 @@ class Prontuario(models.Model):
             consulta.status = "REALIZADA"
             consulta.save(update_fields=["status"])
 
-
-class ValorPagamento(models.Model):
-    consulta = models.OneToOneField(
-        "Consulta", on_delete=models.CASCADE, related_name="valor_pagamento"
-    )
-    valor = models.DecimalField(max_digits=8, decimal_places=2)
-    data_definicao = models.DateTimeField(auto_now_add=True)
-
-    def save(self, *args, **kwargs):
-        is_new = self.pk is None
-        super().save(*args, **kwargs)
-
-        if is_new:
-            consulta = self.consulta
-            if consulta.status_pagamento in ["AGUARDANDO_VALOR", "PENDENTE"]:
-                consulta.status_pagamento = "AGUARDANDO_PAGAMENTO"
-                consulta.save(update_fields=["status_pagamento"])
-
-    def __str__(self):
-        return f"Valor - {self.consulta} ({self.valor} R$)"
-
-    class Meta:
-        verbose_name = "Valor de Pagamento"
-        verbose_name_plural = "Valores de Pagamento"
-
-
-class PagamentoCliente(models.Model):
-    consulta = models.ForeignKey(
-        "Consulta", on_delete=models.CASCADE, related_name="pagamentos_cliente"
-    )
-    comprovante = models.FileField(upload_to="comprovantes_pagamento/")
-    data_envio = models.DateTimeField(auto_now_add=True)
-
-    def save(self, *args, **kwargs):
-        is_new = self.pk is None
-        super().save(*args, **kwargs)
-
-        consulta = self.consulta
-
-        if is_new:
-            if consulta.status_pagamento == "AGUARDANDO_PAGAMENTO":
-                consulta.status_pagamento = "EM_ANALISE"
-                consulta.save(update_fields=["status_pagamento"])
-
-            GerenciamentoPagamento.objects.get_or_create(
-                consulta=consulta, defaults={"atendente": None}
-            )
-
-    def __str__(self):
-        return f"Pagamento - {self.consulta}"
-
-    class Meta:
-        verbose_name = "Pagamento do Cliente"
-        verbose_name_plural = "Pagamentos dos Clientes"
-
-
-class GerenciamentoPagamento(models.Model):
-    STATUS_GERENCIAMENTO = [
-        ("EM_ANALISE", "Em análise"),
-        ("APROVADO", "Aprovado"),
-        ("RECUSADO", "Recusado"),
-    ]
-
-    consulta = models.OneToOneField(
-        "Consulta", on_delete=models.CASCADE, related_name="gerenciamento_pagamento"
-    )
-
-    atendente = models.ForeignKey(
-        CustomUser,
-        on_delete=models.SET_NULL,
-        null=True,
-        blank=True,
-        limit_choices_to={"user_type": "atendente"},
-    )
-
-    status = models.CharField(
-        max_length=20, choices=STATUS_GERENCIAMENTO, default="EM_ANALISE"
-    )
-    observacao = models.TextField(blank=True, null=True)
-    data_atualizacao = models.DateTimeField(auto_now=True)
-
-    def save(self, *args, **kwargs):
-        super().save(*args, **kwargs)
-
-        consulta = self.consulta
-        if self.status == "APROVADO" and consulta.status_pagamento != "APROVADO":
-            consulta.status_pagamento = "APROVADO"
-        elif self.status == "RECUSADO" and consulta.status_pagamento != "RECUSADO":
-            consulta.status_pagamento = "RECUSADO"
-        elif self.status == "EM_ANALISE" and consulta.status_pagamento != "EM_ANALISE":
-            consulta.status_pagamento = "EM_ANALISE"
-
-        consulta.save(update_fields=["status_pagamento"])
-
-    def __str__(self):
-        return f"Gerenciamento - Consulta {self.consulta.id} ({self.status})"
-
-    class Meta:
-        verbose_name = "Gerenciamento de Pagamento"
-        verbose_name_plural = "Gerenciamento de Pagamentos"
