@@ -1,0 +1,79 @@
+{% extends "clinica/user/base_user.html" %}
+{% load static %}
+{% block title %}Prontuário Clínico{% endblock title %}
+{% block content %}
+<div class="container my-5">
+    
+    <div class="header-prontuario mb-4 border-bottom pb-3">
+        <h2 class="text-primary"><i class="fas fa-file-medical me-2"></i> Prontuário Clínico</h2>
+        <h4 class="text-secondary">Paciente: {{ pet.nome }} ({{ pet.raca }})</h4>
+        <p class="text-muted">
+            Consulta realizada em {{ consulta.horario_agendado.data|date:"d/m/Y" }} às {{ consulta.horario_agendado.data|date:"H:i" }} pelo Dr(a). {{ consulta.veterinario.get_full_name }}.
+        </p>
+    </div>
+
+    <div class="row">
+        
+        <div class="col-lg-12 mb-4">
+            <div class="card shadow-sm info-card-rounded">
+                <div class="card-header bg-success text-white">
+                    <h5 class="mb-0"><i class="fas fa-stethoscope me-2"></i> 1. Diagnóstico e Queixas (Sinais Clínicos)</h5>
+                </div>
+                <div class="card-body">
+                    <div class="mb-3 border-bottom pb-3">
+                        <p class="section-title">Sinais Clínicos Apresentados:</p>
+                        <p>{{ prontuario.sinais_clinicos|default:"Não especificado." }}</p>
+                    </div>
+                    <div>
+                        <p class="section-title">Diagnóstico:</p>
+                        <p class="lead text-success fw-bold">{{ prontuario.diagnostico|default:"Não especificado." }}</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="col-lg-6 mb-4">
+            <div class="card h-100 shadow-sm info-card-rounded">
+                <div class="card-header bg-info text-white">
+                    <h5 class="mb-0"><i class="fas fa-vial me-2"></i> 2. Tratamento e Exames</h5>
+                </div>
+                <div class="card-body">
+                    <div class="mb-3 border-bottom pb-3">
+                        <p class="section-title">Imunização / Vacinas Aplicadas:</p>
+                        <p>{{ prontuario.imunizacao_aplicada|default:"Nenhuma imunização ou vacina aplicada nesta consulta." }}</p>
+                    </div>
+                    <div>
+                        <p class="section-title">Exames Realizados:</p>
+                        <p>{{ prontuario.exames_realizados|default:"Nenhum exame detalhado nesta consulta." }}</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+        <div class="col-lg-6 mb-4">
+            <div class="card h-100 shadow-sm info-card-rounded">
+                <div class="card-header bg-primary text-white">
+                    <h5 class="mb-0"><i class="fas fa-notes-medical me-2"></i> 3. Receita e Observações</h5>
+                </div>
+                <div class="card-body">
+                    <div class="mb-3 border-bottom pb-3">
+                        <p class="section-title">Observações Adicionais (Próximos passos, cuidados, etc.):</p>
+                        <p>{{ prontuario.observacoes|default:"Nenhuma observação adicional." }}</p>
+                    </div>
+                    
+                    <p class="section-title">Receita Prescrita:</p>
+                    {% if prontuario.receita_prescrita %}
+                        <a href="{{ prontuario.receita_prescrita.url }}" target="_blank" class="btn btn-primary btn-sm mt-2">
+                            <i class="fas fa-file-download me-2"></i> Baixar Receita (PDF/Imagem)
+                        </a>
+                    {% else %}
+                        <p class="text-muted">Nenhuma receita ou documento anexado.</p>
+                    {% endif %}
+                </div>
+            </div>
+        </div>
+        
+    </div>
+
+</div>
+{% endblock content %}

@@ -1226,7 +1226,7 @@ hr {
 }
 
 .prontuario-status.finalizado {
-    background-color: #d4edda; 
+    background-color: #b4c0a4; 
     border: 1px solid #c3e6cb;
 }
 
@@ -1256,8 +1256,8 @@ hr {
 
 
 .btn-prontuario-view {
-    background-color: #4C587E;
-    color: white;
+    background-color: #6b7c5b;
+    color: #ffffff;
     padding: 10px 15px;
     border-radius: 8px;
     text-decoration: none;
@@ -1271,7 +1271,7 @@ hr {
 }
 
 .btn-prontuario-view:hover {
-    background-color: #586695;
+    background-color: #95997f;
 }
 
 .status-tag {
@@ -1285,16 +1285,6 @@ hr {
 .status-realizada { background-color: #d4edda; color: #155724; }
 .status-cancelada { background-color: #f8d7da; color: #721c25; }
 
-.pagamento-status-tag {
-    padding: 4px 10px;
-    border-radius: 15px;
-    font-size: 0.8rem;
-    font-weight: bold;
-    display: inline-block;
-}
-.pagamento-pago { background-color: #d4edda; color: #155724; }
-.pagamento-pendente { background-color: #fff3cd; color: #856404; }
-.pagamento-nao-cobrado { background-color: #e2e3e5; color: #383d41; }
 
 
 /* ==================================================== */
@@ -1490,5 +1480,412 @@ hr {
 
 .btn-cancelar:hover {
     background-color: #835642;
+}
+
+/* ============================================== */
+/* Visualização Prontuário */
+/* ============================================== */
+
+body {
+    background: #f7f9fc;
+    font-family: 'Poppins', sans-serif;
+}
+
+.container {
+    animation: fadeIn 0.5s ease-in-out;
+}
+
+@keyframes fadeIn {
+    from { opacity: 0; transform: translateY(15px); }
+    to { opacity: 1; transform: translateY(0); }
+}
+
+.header-prontuario {
+    background: #DCDFD6;
+    padding: 25px;
+    border-radius: 12px;
+    color: #2C3E50;
+    box-shadow: 0 5px 20px rgba(130, 137, 151, 0.4);
+}
+
+.header-prontuario h2 {
+    font-weight: 700;
+}
+
+.header-prontuario h4 {
+    margin-top: 8px;
+    font-weight: 500;
+    opacity: 0.95;
+}
+
+.info-card-rounded {
+    border-radius: 16px;
+    color: #000;
+    overflow: hidden;
+    background: white;
+    border: none;
+    transition: transform 0.2s ease, box-shadow 0.2s;
+}
+
+.info-card-rounded:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 10px 25px rgba(0,0,0,0.12);
+}
+
+.card-header {
+    font-weight: 600;
+    letter-spacing: 0.5px;
+    padding: 15px 15px;
+    border-bottom: none;
+    border-radius: 12px 12px 0 0;
+}
+
+.card-header.bg-success {
+    background: #d5b893 !important;
+}
+
+.card-header.bg-info {
+    background: #d5b893 !important;
+}
+
+.card-header.bg-primary {
+    background: #d5b893 !important;
+}
+
+.card-body {
+    padding: 25px;
+    background: #ffffff;
+}
+
+.section-title {
+    font-weight: 600;
+    color: #2C3E50;
+    margin-bottom: 6px;
+}
+
+.btn-primary {
+    background: #ebdcc5;
+    border: none;
+    border-radius: 8px;
+    padding: 8px 18px;
+    font-weight: 500;
+    transition: 0.2s ease;
+    color: #2C3E50;
+    cursor: pointer;
+}
+
+.btn-primary:hover {
+    background: #d5b893;
+    transform: scale(1.03);
+}
+
+.text-muted {
+    opacity: 0.75;
+}
+
+.lead {
+    font-size: 1.15rem;
+}
+
+.border-bottom {
+    border-bottom: 2px dashed #e2e2e2 !important;
+}
+
+/* ============================================== */
+/* Responsividade das telas */
+/* ============================================== */
+
+@media (max-width: 1200px) {
+    .layout {
+        padding-top: 65px;
+    }
+
+    .sidebar {
+        width: 210px;
+    }
+
+    .content {
+        padding: 20px;
+    }
+
+    .pets-list {
+        grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+    }
+}
+
+@media (max-width: 992px) {
+    .sidebar {
+        position: fixed;
+        left: -250px;
+        top: 65px;
+        width: 240px;
+        height: calc(100vh - 65px);
+        background: #fff;
+        transition: left 0.3s ease-in-out;
+        z-index: 999;
+        padding: 20px;
+    }
+
+    .sidebar.open {
+        left: 0;
+    }
+
+    .navbar .menu-toggle {
+        display: block;
+        font-size: 26px;
+        cursor: pointer;
+        margin-right: 10px;
+        color: #fff;
+    }
+
+    .layout {
+        margin-left: 0;
+    }
+
+    .content {
+        padding: 20px;
+    }
+
+    .pets-list {
+        grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+    }
+
+    .form-fields-grid {
+        gap: 15px;
+    }
+
+    .form-row.third-width,
+    .form-row.half-column {
+        width: 100%;
+    }
+
+    .pet-info-grid {
+        grid-template-columns: 1fr;
+    }
+}
+
+
+@media (max-width: 768px) {
+
+    .navbar {
+        height: 60px;
+        padding: 0 15px;
+    }
+
+    .avatar {
+        width: 32px;
+        height: 32px;
+    }
+
+    .sidebar {
+        width: 220px;
+    }
+
+    .content {
+        padding: 15px;
+    }
+
+    .welcome-card h1 {
+        font-size: 26px;
+    }
+
+    .floating-dog {
+        width: 180px;
+        left: 20%;
+    }
+
+    .pets-header {
+        flex-direction: column;
+        align-items: flex-start;
+    }
+
+    .btn-cadastrar-pet {
+        position: static;
+        margin-top: 10px;
+        align-self: flex-end;
+    }
+
+    .pet-card {
+        padding: 15px;
+    }
+
+    .pet-info-header {
+        flex-direction: column;
+        text-align: center;
+    }
+
+    .pet-photo {
+        margin-bottom: 10px;
+    }
+
+    .consulta-card .card-top {
+        flex-direction: column;
+        gap: 10px;
+        text-align: center;
+    }
+
+    .pet-info {
+        flex-direction: column;
+    }
+
+    .card-actions {
+        flex-direction: column;
+        gap: 10px;
+    }
+
+    .form-filtro {
+        flex-direction: column;
+        gap: 10px;
+    }
+}
+
+
+@media (max-width: 576px) {
+
+    .content {
+        padding: 10px;
+    }
+
+    .logo {
+        font-size: 20px;
+    }
+
+    .sidebar ul li a {
+        padding: 8px 15px;
+        font-size: 0.95rem;
+    }
+
+    .welcome-card {
+        padding: 40px 15px 70px 15px;
+    }
+
+    .floating-dog {
+        width: 150px;
+        left: 25%;
+    }
+
+    .pets-list {
+        grid-template-columns: 1fr;
+    }
+
+    .pet-card {
+        padding: 15px;
+    }
+
+    .pet-details-card {
+        padding: 20px;
+    }
+
+    .pet-photo-display img {
+        width: 100px;
+        height: 100px;
+    }
+
+    .pet-info-grid {
+        grid-template-columns: 1fr;
+        gap: 10px;
+    }
+
+    .form-container {
+        padding: 20px;
+    }
+
+    .form-header-title {
+        flex-direction: column;
+        align-items: flex-start;
+        gap: 10px;
+    }
+
+    .header-actions {
+        width: 100%;
+        display: flex;
+        justify-content: flex-end;
+    }
+
+    .form-fields-grid {
+        gap: 10px;
+    }
+
+    .form-row label {
+        font-size: 1em;
+    }
+
+    .form-row input,
+    .form-row textarea,
+    .form-row select {
+        padding: 8px;
+    }
+
+    .filter-bar {
+        padding: 12px;
+    }
+
+    .form-group-inline label {
+        font-size: 0.85rem;
+    }
+
+    .cards-list {
+        gap: 15px;
+    }
+
+    .consulta-card {
+        padding: 15px;
+    }
+
+    .consulta-card h3 {
+        font-size: 1.15rem;
+    }
+
+    .page-link {
+        padding: 6px 10px;
+        font-size: 0.85rem;
+    }
+}
+
+@media (max-width: 420px) {
+
+    .navbar {
+        padding: 0 10px;
+    }
+
+    .content {
+        padding: 8px;
+    }
+
+    .logo {
+        font-size: 18px;
+    }
+
+    .floating-dog {
+        width: 120px;
+        left: 30%;
+    }
+
+    .pet-photo {
+        width: 50px;
+        height: 50px;
+    }
+
+    .btn-cadastrar-pet {
+        width: 100%;
+        text-align: center;
+    }
+
+    .btn-detalhes,
+    .btn-excluir {
+        padding: 8px;
+        font-size: 0.8rem;
+    }
+
+    .btn-submit-header,
+    .btn-cancel-header {
+        padding: 6px 12px;
+        font-size: 0.85rem;
+    }
+
+    .page-link {
+        padding: 6px;
+        font-size: 0.8rem;
+    }
 }
 

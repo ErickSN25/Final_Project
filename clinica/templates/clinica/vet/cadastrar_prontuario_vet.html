@@ -1,0 +1,123 @@
+{% extends "clinica/vet/base_vet.html" %}
+{% load static %}
+{% block title %} Prontuário Clínico{% endblock title %}
+{% block content %}
+<div class="container prontuario-container my-5">
+
+    <div class="prontuario-header mb-4 p-4 shadow-sm">
+        {% if is_new %}
+            <h2 class="title">Novo Prontuário de {{ consulta.pet.nome }}</h2>
+        {% else %}
+            <h2 class="title">Editar Prontuário de {{ consulta.pet.nome }}</h2>
+        {% endif %}
+
+        <p class="subtitle">
+            Consulta: {{ consulta.horario_agendado.data|date:"d/m/Y H:i" }}  
+            | Veterinário: {{ consulta.veterinario.get_full_name }}
+        </p>
+    </div>
+
+    <form method="post" enctype="multipart/form-data" novalidate>
+        {% csrf_token %}
+
+        <div class="row">
+            <div class="col-lg-6">
+                <div class="pront-card mb-4">
+                    <div class="pront-card-header gradient-blue">
+                        <i class="fas fa-microscope me-2"></i> 1. Sinais Clínicos (Queixas)
+                    </div>
+                    <div class="pront-card-body">
+                        <label>{{ form.sinais_clinicos.label }}</label>
+                        {{ form.sinais_clinicos }}
+                        {% for error in form.sinais_clinicos.errors %}
+                            <p class="error">{{ error }}</p>
+                        {% endfor %}
+                        <small class="help">Descreva os sintomas observados e relatados pelo tutor.</small>
+                    </div>
+                </div>
+                <div class="pront-card mb-4">
+                    <div class="pront-card-header gradient-green">
+                        <i class="fas fa-stethoscope me-2"></i> 2. Diagnóstico
+                    </div>
+                    <div class="pront-card-body">
+                        <label>{{ form.diagnostico.label }}</label>
+                        {{ form.diagnostico }}
+                        {% for error in form.diagnostico.errors %}
+                            <p class="error">{{ error }}</p>
+                        {% endfor %}
+                        <small class="help">Diagnóstico definitivo ou diferencial.</small>
+                    </div>
+                </div>
+
+            </div>
+            <div class="col-lg-6">
+                <div class="pront-card mb-4">
+                    <div class="pront-card-header gradient-cyan">
+                        <i class="fas fa-vial me-2"></i> 3. Exames Realizados
+                    </div>
+                    <div class="pront-card-body">
+                        <label>{{ form.exames_realizados.label }}</label>
+                        {{ form.exames_realizados }}
+                        {% for error in form.exames_realizados.errors %}
+                            <p class="error">{{ error }}</p>
+                        {% endfor %}
+                    </div>
+                </div>
+                <div class="pront-card mb-4">
+                    <div class="pront-card-header gradient-yellow">
+                        <i class="fas fa-syringe me-2"></i> 4. Imunização/Vacinas Aplicadas
+                    </div>
+                    <div class="pront-card-body">
+                        <label>{{ form.imunizacao_aplicada.label }}</label>
+                        {{ form.imunizacao_aplicada }}
+                        {% for error in form.imunizacao_aplicada.errors %}
+                            <p class="error">{{ error }}</p>
+                        {% endfor %}
+                    </div>
+                </div>
+                <div class="pront-card mb-4">
+                    <div class="pront-card-header gradient-purple">
+                        <i class="fas fa-notes-medical me-2"></i> 5. Observações e Receita
+                    </div>
+                    <div class="pront-card-body">
+
+                        <label>{{ form.observacoes.label }}</label>
+                        {{ form.observacoes }}
+                        {% for error in form.observacoes.errors %}
+                            <p class="error">{{ error }}</p>
+                        {% endfor %}
+
+                        <hr>
+
+                        <label class="mt-2">{{ form.receita_prescrita.label }}</label>
+                        {{ form.receita_prescrita }}
+                        {% for error in form.receita_prescrita.errors %}
+                            <p class="error">{{ error }}</p>
+                        {% endfor %}
+                        <small class="help">{{ form.receita_prescrita.help_text|safe }}</small>
+
+                        {% if prontuario.receita_prescrita %}
+                            <p class="mt-3">
+                                <strong>Arquivo atual:</strong>  
+                                <a href="{{ prontuario.receita_prescrita.url }}" target="_blank">Ver Receita</a>
+                            </p>
+                        {% endif %}
+    
+                <div class="pront-buttons mt-4">
+                    <button type="submit" name="action" value="salvar" class="btn-main">
+                        <i class="fas fa-save me-2"></i> Salvar como Rascunho
+                    </button>
+
+                    <button type="submit" name="action" value="finalizar" class="btn-green">
+                        <i class="fas fa-check-circle me-2"></i> Finalizar Consulta
+                    </button>
+
+                    <a href="{% url 'detalhe_consulta_vet' consulta.id %}" class="btn-outline">
+                        <i class="fas fa-arrow-left me-2"></i> Voltar sem salvar
+                    </a>
+                </div>
+            </div>
+        </div>
+    </form>
+</div>
+{% endblock content %}

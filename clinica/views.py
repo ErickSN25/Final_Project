@@ -345,9 +345,16 @@ def detalhe_consulta_view(request, pk):
             status=404,
         )
 
+    try:
+        prontuario = Prontuario.objects.get(consulta=consulta)
+        
+    except Prontuario.DoesNotExist:
+            prontuario = None
+
     context = {
-        "consulta": consulta,
-    }
+            "consulta": consulta,
+            "prontuario": prontuario,   
+        }
     return render(request, "clinica/user/detalhes_consulta.html", context)
 
 
@@ -403,6 +410,25 @@ def perfil_user(request):
         "perfil": perfil,
     }
     return render(request, "clinica/user/perfil_user.html", context)
+
+@login_required
+def prontuario_view(request, pk):
+    prontuario = get_object_or_404(
+        Prontuario.objects.select_related("consulta__pet", "consulta__veterinario"),
+        pk=pk
+    )
+
+    consulta = prontuario.consulta
+    pet = consulta.pet
+
+    context = {
+        "prontuario": prontuario,
+        "consulta": consulta,
+        "pet": pet,
+    }
+
+    return render(request, "clinica/user/prontuario_user.html", context)
+
 
 
 
@@ -613,22 +639,17 @@ def detalhe_consulta_vet(request, consulta_id):
     }
     return render(request, "clinica/vet/detalhe_consulta_vet.html", context)
 
-
 @login_required
 def cadastrar_prontuario_vet(request, consulta_id):
-    """Cria ou edita o prontuário de uma consulta."""
     consulta = get_object_or_404(
         Consulta.objects.select_related("pet__tutor"),
         id=consulta_id,
         veterinario=request.user,
     )
+    if consulta.status == "MARCADA":
+        consulta.status = "EM_ANDAMENTO"
+        consulta.save(update_fields=["status"])
 
-    if consulta.status not in ["EM_ANDAMENTO", "REALIZADA"]:
-        messages.warning(
-            request,
-            "O prontuário só pode ser preenchido/editado quando a consulta está 'Em Andamento' ou 'Realizada'.",
-        )
-        return redirect("detalhe_consulta_vet", consulta_id=consulta.id)
     try:
         prontuario = Prontuario.objects.get(consulta=consulta)
     except Prontuario.DoesNotExist:
@@ -654,7 +675,6 @@ def cadastrar_prontuario_vet(request, consulta_id):
                 )
 
             prontuario_salvo.save()
-
             return redirect("detalhe_consulta_vet", consulta_id=consulta.id)
 
     else:
@@ -673,28 +693,6 @@ def cadastrar_prontuario_vet(request, consulta_id):
 #=====================
 # ATTENDANT VIEWS
 #=====================
-
-
-@login_required
-def home_atendente(request):
-    hoje = timezone.localdate() 
-
-
-    consultas_do_dia = Consulta.objects.filter(horario_agendado__data__date=hoje)
-
-
-    consultas_pendentes = Consulta.objects.filter(status='PENDENTE')
-
-
-    consultas_cadastradas = Consulta.objects.all().select_related('horario_agendado').order_by('-horario_agendado__data')
-
-    contexto = {
-        'consultas_do_dia_count': consultas_do_dia.count(),
-        'consultas_pendentes_count': consultas_pendentes.count(),
-        'consultas_cadastradas': consultas_cadastradas,
-        'horarios': consultas_cadastradas,
-    }
-    return render(request, "clinica/atd/home_atendente.html", contexto)
 
 
 def gerenciar_horarios(request):
@@ -727,7 +725,7 @@ def gerenciar_horarios(request):
         "filtro_form": filtro_form,
     }
 
-    return render(request, "clinica/atd/gerenciar_horarios.html", contexto)
+    return render(request, "clinica/atd/home_atendente.html", contexto)
 
 
 def criar_horario(request):
@@ -736,7 +734,7 @@ def criar_horario(request):
         if form.is_valid():
             form.save()
             messages.success(request, "Horário criado com sucesso!")
-            return redirect("gerenciar_horarios")
+            return redirect("home_atendente")
     else:
         form = HorarioDisponivelForm()
 
@@ -750,7 +748,7 @@ def editar_horario(request, horario_id):
         form = HorarioDisponivelForm(request.POST, instance=horario)
         if form.is_valid():
             form.save()
-            return redirect("gerenciar_horarios")
+            return redirect("home_atendente")
     else:
         form = HorarioDisponivelForm(instance=horario)
 
@@ -764,5 +762,5 @@ def excluir_horario(request, horario_id):
     horario = get_object_or_404(HorarioDisponivel, id=horario_id)
     if request.method == "POST":
         horario.delete()
-        return redirect("gerenciar_horarios")
+        return redirect("home_atendente")
     return render(request, "clinica/atd/excluir_horario.html", {"horario": horario})

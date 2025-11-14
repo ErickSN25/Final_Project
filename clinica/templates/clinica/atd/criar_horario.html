@@ -1,31 +1,17 @@
 {% extends "clinica/atd/base_atendente.html" %}
 {% block title %}Criar Horário{% endblock %}
-
-{% block extra_head %}
-<style>
-body { font-family: Arial, sans-serif; background-color: #f5f5f5; }
-.container { width: 80%; margin: 30px auto; }
-h2 { margin-bottom: 20px; color: #333; }
-form { background-color: #fff; padding: 20px; border-radius: 6px; box-shadow: 0 2px 5px rgba(0,0,0,0.1); }
-label { display: block; margin-top: 10px; font-weight: bold; }
-input, select { width: 100%; padding: 8px; margin-top: 5px; border-radius: 4px; border: 1px solid #ccc; }
-.btn { display: inline-block; padding: 6px 12px; font-size: 14px; text-decoration: none; border-radius: 4px; color: #fff; cursor: pointer; margin-top: 15px; }
-.btn-success { background-color: #28a745; }
-.btn-danger { background-color: #dc3545; }
-.btn:hover { opacity: 0.9; }
-</style>
-{% endblock %}
-
 {% block content %}
-<h2>{% if horario %}Editar Horário{% else %}Criar Horário{% endif %}</h2>
 
-<form method="POST">
-    {% csrf_token %}
-    {{ form.as_p }}
+<div class="form-card">
+    <h2>Criar Horário</h2>
 
-    <button type="submit" class="btn btn-success">
-        {% if horario %}Atualizar{% else %}Criar{% endif %}
-    </button>
-    <a href="{% url 'gerenciar_horarios' %}" class="btn btn-secondary">Cancelar</a>
-</form>
-{% endblock %}
+    <form method="POST">
+        {% csrf_token %}
+        {{ form.as_p }}
+
+        <button type="submit" class="btn btn-success">Criar</button>
+        <a href="{% url 'home_atendente' %}" class="btn btn-secondary">Cancelar</a>
+    </form>
+</div>
+
+{% endblock content %}

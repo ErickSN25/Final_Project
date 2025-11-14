@@ -237,37 +237,158 @@ body {
 /*   RESPONSIVIDADE  */
 /* ---------------------- */
 @media (max-width: 900px) {
+
     .topo-flutuante {
-        position: relative;
         padding: 15px 20px;
+        position: relative;
     }
-    
-    .login-page-wrapper {
+
+    .login-page-wrapper,
+    .cadastro-page-wrapper {
         flex-direction: column;
         height: auto;
     }
 
-    .login-form-area {
+    .login-form-area,
+    .cadastro-form-area {
         width: 100%;
-        box-shadow: none;
         padding: 40px 20px;
+        box-shadow: none;
+    }
+
+    .login-container,
+    .cadastro-container {
+        width: 100%;
+        max-width: 380px;
+        box-shadow: none;
+        padding: 25px;
     }
 
     .login-image-area {
         width: 100%;
-        height: 250px;
-        clip-path: none; 
-        transform: none;
-        margin-left: 0;
+        height: 280px;
+        clip-path: none;
+        margin: 0;
     }
-    
+
     .login-image-area img {
+        width: 100%;
+        height: 100%;
+        object-fit: cover;
         transform: none;
         margin-left: 0;
     }
-    
-    .login-container {
-        width: 100%;
-        box-shadow: none;
+}
+
+@media (max-width: 768px) {
+
+    .topo-flutuante .logo {
+        font-size: 1.2rem;
     }
-  }
+
+    .botao-sobre {
+        padding: 5px 12px;
+        font-size: 13px;
+    }
+
+    .login-container,
+    .cadastro-container {
+        max-width: 330px;
+        padding: 22px;
+    }
+
+    .login-container h2,
+    .cadastro-container h2 {
+        font-size: 1.25rem;
+    }
+}
+
+
+@media (max-width: 600px) {
+
+    .login-image-area {
+        height: 230px;
+    }
+
+    .login-container,
+    .cadastro-container {
+        max-width: 300px;
+        padding: 20px;
+    }
+
+    .login-container input,
+    .cadastro-container input {
+        padding: 7px;
+        font-size: 0.85rem;
+    }
+
+    .btn-entrar {
+        padding: 9px;
+        font-size: 0.95rem;
+    }
+}
+
+
+@media (max-width: 480px) {
+
+    .topo-flutuante {
+        padding: 12px 15px;
+    }
+
+    .topo-flutuante .logo {
+        font-size: 1rem;
+    }
+
+    .botao-sobre {
+        font-size: 12px;
+        padding: 4px 10px;
+    }
+
+    .login-container,
+    .cadastro-container {
+        max-width: 260px;
+        padding: 18px;
+    }
+
+    .login-avatar {
+        width: 45px;
+        height: 45px;
+    }
+
+    .login-container h2,
+    .cadastro-container h2 {
+        font-size: 1.1rem;
+    }
+
+    .subtitle, .subtitle-cadastro {
+        font-size: 0.8rem;
+    }
+}
+
+@media (max-width: 360px) {
+
+    .login-container,
+    .cadastro-container {
+        max-width: 230px;
+        padding: 14px;
+    }
+
+    .login-container h2,
+    .cadastro-container h2 {
+        font-size: 1rem;
+    }
+
+    .login-container label,
+    .cadastro-container label {
+        font-size: 0.8rem;
+    }
+
+    .btn-entrar {
+        font-size: 0.85rem;
+        padding: 8px;
+    }
+
+    .novo-cliente {
+        font-size: 0.75rem;
+    }
+}

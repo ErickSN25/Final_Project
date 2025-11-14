@@ -718,78 +718,213 @@ a {
 }
 
 
+/*========================================= */
+/* Cadastro/edição de prontuario */
+/*========================================= */
+.prontuario-container {
+    max-width: 1200px;
+}
+
+.prontuario-header {
+    background: #DCDFD6;
+    border-radius: 15px 15px 0 0;
+    padding: 15px;
+    text-align: center;
+    box-shadow: 0 5px 20px rgba(130, 137, 151, 0.4);
+    margin-bottom: 20px;
+}
+
+.prontuario-header h2 {
+    color: #333;
+}
+
+.prontuario-header .title {
+    font-size: 2rem;
+    font-weight: 700;
+}
+
+.prontuario-header .subtitle {
+    font-size: 1rem;
+    opacity: 0.9;
+}
+
+.pront-card {
+    border-radius: 18px;
+    overflow: hidden;
+    background: #fff;
+    box-shadow: 0 4px 15px rgba(0,0,0,0.08);
+}
+
+.pront-card-header {
+    padding: 12px 18px;
+    font-weight: 600;
+    color: rgb(0, 0, 0);
+}
+
+.gradient-blue     { background:#d5b893; }
+.gradient-green    { background:#d5b893; }
+.gradient-cyan     { background:#d5b893; }
+.gradient-yellow   { background:#d5b893; }
+.gradient-purple   { background:#d5b893; }
+
+.pront-card-body {
+    padding: 20px 22px;
+}
+
+.pront-card-body textarea,
+.pront-card-body input,
+.pront-card-body select {
+    width: 100%;
+    border-radius: 12px;
+    padding: 12px;
+    border: 1px solid #d6d6d6;
+    font-size: 0.95rem;
+    transition: 0.2s;
+}
+
+.pront-card-body textarea:focus,
+.pront-card-body input:focus,
+.pront-card-body select:focus {
+    border-color: #7b4ff7;
+    box-shadow: 0 0 0 3px rgba(123, 79, 247, 0.2);
+    outline: none;
+}
+
+.pront-card-body label {
+    font-weight: 600;
+    margin-bottom: 6px;
+    display: block;
+}
+
+.help {
+    font-size: 0.85rem;
+    color: #666;
+}
+
+.error {
+    color: #c62828;
+    font-size: 0.9rem;
+    margin-top: 4px;
+}
+
+.pront-buttons {
+    display: flex;
+    gap: 15px;
+    flex-wrap: wrap;
+}
+
+.btn-main {
+    background: #5a3dce;
+    color: #fff;
+    padding: 14px 22px;
+    border-radius: 12px;
+    font-size: 1rem;
+    border: none;
+}
+
+.btn-main:hover {
+    background: #472db1;
+}
+
+.btn-green {
+    background: #2e7d32;
+    color: #fff;
+    padding: 14px 22px;
+    border-radius: 12px;
+    border: none;
+}
+
+.btn-green:hover {
+    background: #1b5e20;
+}
+
+.btn-outline {
+    border: 2px solid #777;
+    padding: 14px 22px;
+    border-radius: 12px;
+    color: #555;
+    text-decoration: none;
+}
+
+.btn-outline:hover {
+    background: #eee;
+}
+
 
 /* ========================================= */
-/* 6. Responsividade */
+/* 6. RESPONSIVIDADE — VERSÃO OTIMIZADA */
 /* ========================================= */
 
 @media (max-width: 992px) {
-    /* Layout */
     .layout {
         flex-direction: column;
     }
+
     .content {
         padding: 20px;
         margin-left: 0;
+        width: 100%;
     }
 
     .sidebar {
         width: 100%;
         position: static;
         height: auto;
-        padding: 10px 0;
-        box-shadow: none;
+        padding: 10px 10px;
+        background: white;
+        overflow-x: auto;
+        white-space: nowrap;
         border-right: none;
+        border-bottom: 1px solid #ddd;
     }
+
     .sidebar h2 {
         display: none;
     }
+
     .sidebar ul {
         display: flex;
-        overflow-x: auto;
-        padding: 0 10px;
-        border-top: 1px solid #eee;
+        gap: 15px;
+        padding: 0;
     }
+
     .sidebar ul li {
-        flex-shrink: 0;
         margin: 0;
+        flex-shrink: 0;
     }
-    .sidebar ul li a, .btn-sidebar-logout {
-        padding: 10px 15px;
-        border-left: none;
-        border-right: none;
+
+    .sidebar ul li a,
+    .btn-sidebar-logout {
+        padding: 10px 18px;
+        border-radius: 6px;
         border-bottom: 3px solid transparent;
-        border-radius: 0;
-        text-align: center;
     }
-    .sidebar ul li a.active, .sidebar ul li a:hover {
-        border-left: none;
-        border-right: none;
+
+    .sidebar ul li a.active,
+    .sidebar ul li a:hover {
+        background: #e9ecef;
         border-bottom: 3px solid var(--primary-color);
     }
-    .logout-item {
-        margin-top: 0 !important;
-        border-top: none;
-    }
-    
+
     .consulta-filtro-container {
-        padding: 10px;
+        flex-direction: column;
+        padding: 12px;
     }
+
     .filtro-form {
         flex-direction: column;
-        gap: 10px;
+        width: 100%;
     }
+
     .filtro-form select,
-    .filtro-form input[type="text"],
-    .filtro-form input[type="date"],
-    .data-filtro,
+    .filtro-form input,
     .search-box,
     .btn-filtrar,
     .btn-limpar-filtro {
-        width: 100%;
+        width: 100% !important;
         min-width: 100%;
-        margin-right: 0;
     }
+
     .search-box {
         flex-grow: unset;
     }
@@ -797,39 +932,126 @@ a {
     .lista-consultas li {
         flex-direction: column;
         align-items: flex-start;
-        gap: 15px;
+        gap: 14px;
     }
+
     .consulta-detalhes-agendamento {
         width: 100%;
         justify-content: space-between;
         margin-left: 0;
-        align-items: center;
     }
+
     .badges-group {
-        align-items: flex-start;
         flex-direction: row;
+        align-items: flex-start;
         gap: 10px;
     }
+
+    .cards {
+        flex-direction: column;
+        gap: 15px;
+    }
 }
-
-
-
 @media (max-width: 768px) {
 
     .pet-photo-display {
-        text-align: center;
+        justify-content: center;
         margin-bottom: 15px;
-    }
-
-    .pet-photo-display img {
-        margin-right: 0;
+        display: flex;
     }
 
     .pet-info-grid {
-        grid-template-columns: 1fr;
+        grid-template-columns: 1fr !important;
+        gap: 10px;
     }
 
     .full-width {
-        grid-column: 1 / 1;
+        grid-column: 1 / 1 !important;
+    }
+
+    .info-grid-appointment {
+        grid-template-columns: 1fr 1fr !important;
+        gap: 18px;
+    }
+
+    .appointment-info-item {
+        padding-bottom: 10px;
+    }
+
+    .pront-buttons {
+        flex-direction: column;
+    }
+}
+
+@media (max-width: 480px) {
+
+    .header-content {
+        padding: 0 10px;
+    }
+
+    .logo {
+        font-size: 18px;
+    }
+
+    .sidebar ul {
+        gap: 10px;
+    }
+
+    .sidebar ul li a,
+    .btn-sidebar-logout {
+        font-size: 0.85rem;
+        padding: 8px 10px;
+    }
+
+    .pet-info-principal {
+        flex-direction: column;
+        align-items: flex-start;
+    }
+
+    .consulta-detalhes-agendamento {
+        flex-direction: column;
+        align-items: flex-start;
+        gap: 5px;
+    }
+
+    .badges-group {
+        width: 100%;
+        justify-content: flex-start;
+    }
+    .info-grid-appointment {
+        grid-template-columns: 1fr !important;
+    }
+
+    .template-header h4 {
+        font-size: 16px;
+    }
+
+    .btn-styled {
+        width: 100%;
+        text-align: center;
+    }
+}
+
+@media (max-width: 360px) {
+
+    .sidebar ul li a {
+        padding: 6px 8px;
+        font-size: 0.75rem;
+    }
+
+    .lista-consultas li {
+        padding: 15px;
+    }
+
+    .pet-name {
+        font-size: 1rem;
+    }
+
+    .template-card {
+        border-radius: 8px;
+    }
+
+    .template-header {
+        padding: 12px;
     }
 }

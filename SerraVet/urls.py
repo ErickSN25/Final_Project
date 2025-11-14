@@ -25,8 +25,8 @@ from clinica.views import (
     home_vet,
     cadastro,
     home,
-    home_atendente,
-    detalhe_consulta_vet
+    detalhe_consulta_vet,
+    prontuario_view,
 )
 from clinica import views
 from django.conf import settings
@@ -42,11 +42,10 @@ urlpatterns = [
     path("home_user/", home_user, name="home_user"),
     path("redirect_home/", redirect_home, name="redirect_home"),
     path("home_vet/", home_vet, name="home_vet"),
-    path("home_atendente/", home_atendente, name="home_atendente"),
     path(
-        "home_atendente/atd/gerenciar_horarios/",
+        "home_atendente/atd/home_atendente/",
         views.gerenciar_horarios,
-        name="gerenciar_horarios",
+        name="home_atendente",
     ),
     path(
         "home_atendente/atd/editar_horario/<int:horario_id>/",
@@ -93,6 +92,10 @@ urlpatterns = [
         views.cadastrar_prontuario_vet,
         name="cadastrar_prontuario_vet",
     ),
+    path(
+        "user/prontuario/<int:pk>/", prontuario_view, name="prontuario_user"
+    ),
+    
 
 
 ]

@@ -1,88 +1,83 @@
 {% extends "clinica/atd/base_atendente.html" %}
-{% load static %}
 
 {% block content %}
-<div class="content">
-    <div class="stats-row">
-        <div class="stats-card">
-            <div class="card-title-main">Hoje</div>
-            <small class="card-subtitle-small">Consultas do dia</small>
-            <h2 class="card-number">{{ consultas_do_dia_count|default:"0" }}</h2>
-            <p class="card-text-small">consultas agendadas</p>
-        </div>
+<div class="container">
+    <h2>Gerenciar Horários</h2>
 
-        <div class="stats-card">
-            <div class="card-title-main">Agendadas</div>
-            <small class="card-subtitle-small">Total pendentes</small>
-            <h2 class="card-number warning">{{ consultas_pendentes_count|default:"0" }}</h2>
-            <p class="card-text-small">consultas pendentes</p>
-        </div>
-    </div>
 
-    <div class="consultas-section">
-        <div class="consultas-header">
-            <h4>Consultas Cadastradas</h4>
-            
-            <div class="search-container">
-                <input type="text" placeholder="Pesquisar" id="searchConsulta">
-                <span class="search-icon"><i class="fas fa-search"></i></span>
+    <form method="get" id="filtroForm" class="filtro-form">
+        <label for="{{ filtro_form.veterinario.id_for_label }}">Veterinário</label>
+        {{ filtro_form.veterinario }}
+
+        <label for="{{ filtro_form.data.id_for_label }}">Data</label>
+        {{ filtro_form.data }}
+
+          <div class="form-group checkbox-group">
+                {{ filtro_form.apenas_disponiveis }}
+                <label for="{{ filtro_form.apenas_disponiveis.id_for_label }}">Apenas Disponíveis</label>
             </div>
-        </div>
 
-        <ul class="consulta-list" id="consultaList">
-            {% if consultas_cadastradas %}
-                {% for horario in horarios %}
-                    <li class="consulta-item">
-                        <div class="consulta-details">
-                            <span class="dot"></span>
-                            <div>
-                                <span>{{ horario.pet.tutor.get_full_name }} - {{ horario.veterinario.get_full_name }}</span>
-                                <small>{{ horario.data_hora|date:"d/m/Y H:i" }}</small>
-                            </div>
-                        </div>
+        <button type="submit" class="btn btn-success">Buscar</button>
+        <a href="{% url 'home_atendente' %}" class="btn btn-outline">Limpar Filtros</a>
+    </form>
 
-                        {% if horario.status == 'REALIZADO' %}
-                            <span class="status-badge status-concluida">Realizado</span>
-                        {% elif horario.status == 'PENDENTE' %}
-                            <span class="status-badge status-agendada">Pendente</span>
-                        {% elif horario.status == 'CONFIRMADO' %}
-                            <span class="status-badge status-confirmada">Confirmado</span>
-                        {% elif horario.status == 'CANCELADO' %}
-                            <span class="status-badge status-cancelada">Cancelado</span>
-                        {% else %}
-                            <span class="status-badge">{{ horario.status }}</span>
-                        {% endif %}
-                    </li>
-                {% endfor %}
-            {% else %}
-                <li class="consulta-item" style="justify-content: center;">
-                    <p class="text-muted" style="margin: 0; padding: 10px;">Nenhuma consulta cadastrada no momento.</p>
-                </li>
-            {% endif %}
-        </ul>
+    {% if request.GET %}
+    <div class="alert alert-info">
+        Encontrado(s) <strong>{{ horarios.count }}</strong> horário(s) com os filtros aplicados.
     </div>
+    {% endif %}
+
+
+
+    <div class="mb-3">
+        <a href="{% url 'criar_horario' %}" class="btn btn-success">Criar Horário Novo</a>
+    </div>
+
+
+    <table class="tabela-horarios">
+        <thead>
+            <tr>
+                <th>ID</th>
+                <th>Veterinário</th>
+                <th>Data e Hora</th>
+                <th>Status</th>
+                <th>Cliente</th>
+                <th>Pet</th>
+                <th>Ações</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for horario in horarios %}
+            <tr>
+                <td>{{ horario.id }}</td>
+                <td>{{ horario.veterinario.nome }}</td>
+                <td>{{ horario.data|date:"d/m/Y H:i" }}</td>
+                <td>{% if horario.disponivel %}Disponível{% else %}Reservado{% endif %}</td>
+                <td>{% if horario.consulta %}{{ horario.consulta.pet.tutor.nome }}{% else %}-{% endif %}</td>
+                <td>{% if horario.consulta %}{{ horario.consulta.pet.nome }}{% else %}-{% endif %}</td>
+                <td>
+                    <a href="{% url 'editar_horario' horario.id %}" class="btn btn-primary btn-table">Editar</a>
+                    <a href="{% url 'excluir_horario' horario.id %}" class="btn btn-danger btn-table">Excluir</a>
+                </td>
+            </tr>
+            {% empty %}
+            <tr>
+                <td colspan="7">Nenhum horário encontrado.</td>
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
 </div>
 
+<div class="pagination">
+    {% if page_obj.has_previous %}
+        <a href="?page={{ page_obj.previous_page_number }}{% if request.GET.veterinario %}&veterinario={{ request.GET.veterinario }}{% endif %}{% if request.GET.data %}&data={{ request.GET.data }}{% endif %}{% if request.GET.apenas_disponiveis %}&apenas_disponiveis={{ request.GET.apenas_disponiveis }}{% endif %}">Anterior</a>
+    {% endif %}
 
+    <span>Página {{ page_obj.number }} de {{ page_obj.paginator.num_pages }}</span>
 
+    {% if page_obj.has_next %}
+        <a href="?page={{ page_obj.next_page_number }}{% if request.GET.veterinario %}&veterinario={{ request.GET.veterinario }}{% endif %}{% if request.GET.data %}&data={{ request.GET.data }}{% endif %}{% if request.GET.apenas_disponiveis %}&apenas_disponiveis={{ request.GET.apenas_disponiveis }}{% endif %}">Próxima</a>
+    {% endif %}
+</div>
 {% endblock %}
-
-{% block extra_js %}
-<script>
-    const searchInput = document.getElementById("searchConsulta");
-    const consultaList = document.getElementById("consultaList").getElementsByTagName("li");
-
-    searchInput.addEventListener("keyup", function() {
-        const filtro = searchInput.value.toLowerCase();
-        
-
-        for (let i = 0; i < consultaList.length; i++) {
-
-            const itemText = consultaList[i].textContent.toLowerCase();
-            
-
-            consultaList[i].style.display = itemText.includes(filtro) ? "" : "none";
-        }
-    });
-</script>
-{%endblock%}

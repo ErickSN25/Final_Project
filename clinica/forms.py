@@ -102,6 +102,7 @@ class ProntuarioForm(forms.ModelForm):
             "imunizacao_aplicada",
             "receita_prescrita",
             "observacoes",
+            "finalizado",
         ]
         widgets = {
             "sinais_clinicos": forms.Textarea(attrs={"rows": 5}),
@@ -109,6 +110,7 @@ class ProntuarioForm(forms.ModelForm):
             "exames_realizados": forms.Textarea(attrs={"rows": 3}),
             "imunizacao_aplicada": forms.Textarea(attrs={"rows": 3}),
             "observacoes": forms.Textarea(attrs={"rows": 3}),
+            "finalizado": forms.CheckboxInput(),
         }
         labels = {
             "sinais_clinicos": "Sinais Clínicos",
@@ -117,6 +119,7 @@ class ProntuarioForm(forms.ModelForm):
             "imunizacao_aplicada": "Imunização Aplicada",
             "receita_prescrita": "Receita Prescrita (PDF/Imagem)",
             "observacoes": "Observações Adicionais",
+            "finalizado": "Prontuário Finalizado",
         }
 
 

@@ -1,61 +1,43 @@
 {% extends "clinica/atd/base_atendente.html" %}
 {% block title %}Excluir Horário{% endblock %}
 
-{% block extra_head %}
-<style>
-body { font-family: Arial, sans-serif; background-color: #f5f5f5; }
-.container { width: 80%; margin: 30px auto; }
-h2 { color: #c0392b; margin-bottom: 20px; }
-.card { background-color: #fff; padding: 20px; border-radius: 6px; box-shadow: 0 2px 5px rgba(0,0,0,0.1); }
-p { font-size: 16px; }
-.btn { display: inline-block; padding: 8px 14px; font-size: 14px; border-radius: 4px; text-decoration: none; cursor: pointer; margin-right: 10px; }
-.btn-danger { background-color: #dc3545; color: #fff; border: none; }
-.btn-success { background-color: #28a745; color: #fff; border: none; }
-.btn:hover { opacity: 0.9; }
-.table { width: 100%; border-collapse: collapse; margin-top: 15px; }
-th, td { padding: 10px; border: 1px solid #ddd; text-align: left; }
-th { background-color: #e74c3c; color: #fff; }
-</style>
-{% endblock %}
-
 {% block content %}
-<div class="container">
+
+<div class="excluir-container">
     <h2>Excluir Horário</h2>
-    <div class="card">
+
+    <div class="card-delete">
         <p>Você tem certeza que deseja excluir este horário?</p>
 
-        <table class="table">
+        <table class="table-delete">
             <thead>
                 <tr>
                     <th>Data e Hora</th>
                     <th>Veterinário</th>
-                    <th>Cliente</th>
-                    <th>Pet</th>
-                    <th>Status</th>
                 </tr>
             </thead>
             <tbody>
                 <tr>
                     <td>{{ horario.data|date:"d/m/Y H:i" }}</td>
                     <td>{{ horario.veterinario.get_full_name|default:horario.veterinario.email }}</td>
-                    <td>{{ horario.cliente.nome|default:"-" }}</td>
-                    <td>{{ horario.pet.nome|default:"-" }}</td>
                     <td>
                         {% if horario.disponivel %}
-                            <span style="color: #28a745; font-weight:bold;">Disponível</span>
+                            <span style="color:#28a745; font-weight:bold;">Disponível</span>
                         {% else %}
-                            <span style="color: #c0392b; font-weight:bold;">Ocupado</span>
+                            <span style="color:#c0392b; font-weight:bold;">Ocupado</span>
                         {% endif %}
                     </td>
                 </tr>
             </tbody>
         </table>
 
-        <form method="post" style="margin-top: 15px;">
+        <form method="POST" style="margin-top: 20px;">
             {% csrf_token %}
             <button type="submit" class="btn btn-danger">Confirmar Exclusão</button>
-            <a href="{% url 'gerenciar_horarios' %}" class="btn btn-success">Cancelar</a>
+            <a href="{% url 'home_atendente' %}" class="btn btn-success">Cancelar</a>
         </form>
+
     </div>
 </div>
+
 {% endblock %}

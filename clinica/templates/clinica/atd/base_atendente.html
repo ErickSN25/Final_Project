@@ -20,9 +20,7 @@
         <aside class="sidebar">
             <h2>Menu</h2>
             <ul>
-                <li><a href={%url 'home_atendente'%}>Início</a></li>
-                <li><a href={%url 'gerenciar_horarios'%}>Gerenciamento de Horarios</a></li>
-                <li class="logout-item">
+                <li><a href={%url 'home_atendente'%}> Gerenciamento de Horários</a></li>
                 <form method="post" action="{% url 'logout' %}" style="display: inline;">
                 {% csrf_token %} 
                 <button type="submit" class="btn-sidebar-logout">Sair</button>
