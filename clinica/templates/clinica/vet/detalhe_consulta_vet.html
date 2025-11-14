@@ -1,0 +1,165 @@
+{% extends "clinica/vet/base_vet.html" %}
+{% load static %}
+{% block content %}
+<div class="container my-5 template-style">
+    <div class="card mb-4 template-card">
+        <div class="card-header template-header bg-success-medium">
+            <h4 class="mb-0">Dados da Consulta</h4>
+        </div>
+
+        <div class="card-body appointment-data-body">
+            <div class="row info-grid-appointment justify-content-start">
+
+                <div class="col-lg-3 col-md-6 col-sm-6 appointment-info-item">
+                    <span class="info-label">DATA DA CONSULTA:</span>
+                    <span class="info-value">{{ consulta.horario_agendado.data|date:"d/m/Y" }}</span>
+                </div>
+
+                <div class="col-lg-3 col-md-6 col-sm-6 appointment-info-item">
+                    <span class="info-label">HORÁRIO:</span>
+                    <span class="info-value">{{ consulta.horario_agendado.data|date:"H:i" }}</span>
+                </div>
+
+                <div class="col-lg-3 col-md-6 col-sm-6 appointment-info-item">
+                    <span class="info-label">STATUS:</span>
+                    <span class="info-value status-appointment status-{{ consulta.status|lower|cut:'_' }}">
+                        {{ consulta.get_status_display }}
+                    </span>
+                </div>
+
+                <div class="col-lg-3 col-md-6 col-sm-6 appointment-info-item">
+                    <span class="info-label">PRONTUÁRIO:</span>
+                    <span class="info-value status-record status-pendente">
+                        {% if prontuario_finalizado %}
+                            Finalizado
+                        {% else %}
+                            Pendente
+                        {% endif %}
+                    </span>
+                </div>
+
+            </div>
+
+            <div class="action-buttons-styled mt-4">
+                {% if consulta.status == 'MARCADA' %}
+                    <form method="post" action="{% url 'detalhe_consulta_vet' consulta.id %}">
+                        {% csrf_token %}
+                        <input type="hidden" name="action" value="iniciar_consulta">
+                        <button type="submit" class="btn btn-primary btn-styled">
+                            <i class="fas fa-play"></i> Iniciar Consulta
+                        </button>
+                    </form>
+
+                {% elif consulta.status == 'EM_ANDAMENTO' or consulta.status == 'REALIZADA' %}
+                    <a href="{% url 'cadastrar_prontuario_vet' consulta.id %}" class="btn btn-warning btn-styled">
+                        <i class="fas fa-file-medical"></i>
+                        {% if consulta.status == 'EM_ANDAMENTO' %}
+                            Continuar Prontuário
+                        {% else %}
+                            Ver/Editar Prontuário
+                        {% endif %}
+                    </a>
+
+                {% elif consulta.status == 'CANCELADA' %}
+                    <button class="btn btn-secondary btn-styled" disabled>Consulta Cancelada</button>
+                {% endif %}
+            </div>
+
+        </div>
+    </div>
+
+<div class="card mb-4 template-card">
+    <div class="card-header template-header bg-success-dark">
+        <h4 class="mb-0">Dados do Pet</h4>
+    </div>
+
+    <div class="card-body pet-data-body">
+
+        <div class="row align-items-center">
+            
+            <div class="pet-photo-display">
+                {% if consulta.pet.foto_pet %}
+                    <img src="{{ consulta.pet.foto_pet.url }}" alt="Foto de {{ consulta.pet.nome }}">
+                {% else %}
+                    <img src="{% static 'img/default_pet.png' %}" alt="Foto Padrão">
+                {% endif %}
+            </div>
+            <div class="col pet-details-info">
+
+                <h5 class="pet-name">{{ consulta.pet.nome }}</h5>
+                <p class="tutor-name">Tutor: {{ consulta.pet.tutor.get_full_name }}</p>
+                <div class="pet-info-grid">
+
+                    <p class="detail-row">
+                        <strong>Nome:</strong>
+                        <span>{{ consulta.pet.nome }}</span>
+                    </p>
+
+                    <p class="detail-row">
+                        <strong>Espécie:</strong>
+                        <span>{{ consulta.pet.get_especie_display }}</span>
+                    </p>
+
+                    <p class="detail-row">
+                        <strong>Raça:</strong>
+                        <span>
+                            {% if consulta.pet.raca %}
+                                {{ consulta.pet.raca }}
+                            {% else %}
+                                Não informada
+                            {% endif %}
+                        </span>
+                    </p>
+
+                    <p class="detail-row">
+                        <strong>Peso:</strong>
+                        <span>
+                            {% if consulta.pet.peso %}
+                                {{ consulta.pet.peso }} Kg
+                            {% else %}
+                                Não informado
+                            {% endif %}
+                        </span>
+                    </p>
+
+                    <p class="detail-row">
+                        <strong>Vacinas em dia?</strong>
+                        <span>
+                            {% if consulta.pet.vacinas_em_dia %}
+                                Sim
+                            {% else %}
+                                Não
+                            {% endif %}
+                        </span>
+                    </p>
+
+                    <p class="detail-row full-width">
+                        <strong>Alergias:</strong>
+                        <span>
+                            {% if consulta.pet.alergias %}
+                                {{ consulta.pet.alergias }}
+                            {% else %}
+                                Nenhuma
+                            {% endif %}
+                        </span>
+                    </p>
+
+                    <p class="detail-row full-width">
+                        <strong>Doenças Preexistentes:</strong>
+                        <span>
+                            {% if consulta.pet.doencas %}
+                                {{ consulta.pet.doencas }}
+                            {% else %}
+                                Nenhuma
+                            {% endif %}
+                        </span>
+                    </p>
+
+                </div>
+            </div>
+        </div>
+
+    </div>
+</div>
+{% endblock content %}
+

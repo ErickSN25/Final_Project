@@ -22,6 +22,12 @@
             <ul>
                 <li><a href={%url 'home_atendente'%}>Início</a></li>
                 <li><a href={%url 'gerenciar_horarios'%}>Gerenciamento de Horarios</a></li>
+                <li class="logout-item">
+                <form method="post" action="{% url 'logout' %}" style="display: inline;">
+                {% csrf_token %} 
+                <button type="submit" class="btn-sidebar-logout">Sair</button>
+                </form>
+            </li>
             </ul>
         </aside>
         <main class="content">

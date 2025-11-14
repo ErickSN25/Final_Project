@@ -11,7 +11,7 @@
 body {
     margin: 0 ;
     padding: 0;
-    font-family: 'Arial', sans-serif;
+    font-family: 'Questrial', sans-serif; 
     background-color: #f0f2f5; 
     color: #333;
 }
@@ -163,7 +163,7 @@ a {
 .card {
     background-color: #fff;
     border-radius: 15px; 
-    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1); 
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.25); 
     padding: 25px;
     flex: 1;
     min-width: 250px;
@@ -177,11 +177,12 @@ a {
 }
 
 .card p {
-    font-size: 2.5rem;
+    font-size: 1.0rem;
     font-weight: bold;
-    color: var(--primary-color); 
+    color: #6b6b6b; 
     margin: 5px 0 10px 0;
 }
+
 
 .card small {
     display: block;
@@ -208,17 +209,23 @@ a {
 }
 .card-action-link:hover {
     color: #b0003a;
+
+/* ========================================= */
+/* Lista de Consultas */ 
+/* ========================================= */
+
 }
 .lista-consultas {
     list-style: none;
     padding: 0;
     margin: 20px 0 0 0;
+    font-size: 1.0rem;
 }
 
 .lista-consultas li {
     background-color: #fff;
     border-radius: 15px; 
-    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.15); 
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.25); 
     padding: 20px;
     margin-bottom: 15px;
     display: flex;
@@ -228,6 +235,7 @@ a {
     border: 1px solid #ddd; 
     transition: transform 0.2s, box-shadow 0.2s;
 }
+
 
 .lista-consultas li:hover {
     box-shadow: 0 6px 12px rgba(0, 0, 0, 0.2); 
@@ -277,11 +285,6 @@ a {
     border-color: #6c757d !important;
     opacity: 0.7;
 }
-
-
-/* ========================================= */
-/* LISTAGEM DE CONSULTAS  */
-/* ========================================= */
 
 .section-divider {
     border: 0;
@@ -376,7 +379,7 @@ a {
 }
 
 .btn-filtrar {
-    background-color: var(--primary-color);
+    background-color: #68735b;
     color: white;
     padding: 10px 15px;
     border: none;
@@ -386,11 +389,11 @@ a {
     font-weight: 600;
 }
 .btn-filtrar:hover {
-    background-color: var(--secondary-color);
+    background-color: #98a588;
 }
 
 .btn-limpar-filtro {
-    background-color: #6c757d;
+    background-color: #713e28;
     color: white;
     padding: 10px 15px;
     border-radius: 8px;
@@ -402,7 +405,6 @@ a {
     background-color: #5a6268;
     text-decoration: none;
 }
-
 
 .pet-info-principal {
     display: flex;
@@ -550,6 +552,173 @@ a {
     color: #555;
 }
 
+/*========================================= */
+/* Detalhes da Consulta */
+/*========================================= */
+
+:root {
+    --green-header: #768A74;       
+    --green-button: #D8E8D2;       
+    --gray-text: #7A7A7A;          
+    --card-shadow: rgba(0, 0, 0, 0.12);
+}
+
+.template-style {
+    max-width: 900px;
+}
+
+.template-card {
+    border: 1px solid #ddd;
+    border-radius: 10px;
+    box-shadow: 0 4px 10px var(--card-shadow);
+    overflow: hidden;
+    background: white;
+}
+
+.template-header {
+    background-color: var(--green-header) !important;
+    padding: 16px 24px;
+    color: white;
+    border-radius: 14px 14px 0 0;
+}
+
+.template-header h4 {
+    font-weight: 600;
+    font-size: 20px;
+    margin: 0;
+}
+
+.pet-data-body {
+    padding: 24px;
+}
+
+.pet-photo-display img {
+    width: 85px;
+    height: 85px;
+    object-fit: cover;
+    border-radius: 50%;
+    margin-right: 20px;
+    border: 2px solid #dadada;
+}
+
+.pet-details-info {
+    flex: 1;
+}
+
+.pet-name {
+    font-size: 22px;
+    font-weight: 600;
+    margin-bottom: 4px;
+}
+
+.tutor-name {
+    font-size: 14px;
+    color: var(--gray-text);
+    margin-bottom: 12px;
+}
+
+.pet-info-grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 8px 20px;
+    margin-top: 15px;
+}
+
+.detail-row {
+    display: flex;
+    justify-content: space-between;
+    padding: 4px 0;
+    border-bottom: 1px solid #ddd;
+    font-size: 15px;
+}
+
+.detail-row strong {
+    font-weight: 600;
+}
+
+.full-width {
+    grid-column: 1 / span 3;
+}
+
+.status-ok {
+    color: green;
+}
+
+.status-pendente {
+    color: #cc8a00;
+}
+
+
+.info-grid-appointment {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 30px 25px;
+    margin-top: 20px;
+}
+
+.appointment-info-item {
+    font-size: 15px;
+    border-bottom: 1px solid #ddd;
+    padding-bottom: 15px;
+}
+
+.info-label {
+    display: block;
+    font-size: 12px;
+    color: var(--gray-text);
+    font-weight: 600;
+    margin-bottom: 10px;
+    letter-spacing: 0.5px;
+}
+
+.info-value {
+    font-size: 15px;
+    font-weight: 600;
+}
+
+.status-appointment.status-marcada {
+    color: #007bff;
+}
+
+.status-appointment.status-em {
+    color: #c58f00;
+}
+
+.status-appointment.status-realizada {
+    color: green;
+}
+
+.status-record {
+    font-weight: 600;
+}
+
+.status-pendente {
+    color: #cc8a00;
+}
+
+.btn-styled {
+    background: var(--green-button) !important;
+    border: none !important;
+    color: black !important;
+    font-weight: 600;
+    padding: 10px 18px;
+    border-radius: 15px;
+    margin-top: 10px;
+    font-size: 15px;
+    transition: 0.2s ease;
+    cursor: pointer;
+    text-decoration: none;
+    text-align: center;
+    display: inline-block;
+   
+}
+
+.btn-styled:hover {
+    filter: brightness(0.95);
+}
+
+
+
 /* ========================================= */
 /* 6. Responsividade */
 /* ========================================= */
@@ -643,25 +812,24 @@ a {
     }
 }
 
-@media (max-width: 600px) {
-    .cards {
-        flex-direction: column;
-        gap: 15px;
+
+
+@media (max-width: 768px) {
+
+    .pet-photo-display {
+        text-align: center;
+        margin-bottom: 15px;
     }
-    .card {
-        width: 100%;
-        padding: 20px;
-        box-sizing: border-box;
+
+    .pet-photo-display img {
+        margin-right: 0;
     }
-    .consulta-detalhes-agendamento {
-        flex-direction: column;
-        align-items: flex-start;
+
+    .pet-info-grid {
+        grid-template-columns: 1fr;
     }
-    .data-hora {
-        text-align: left;
-    }
-    .badges-group {
-        flex-direction: column;
-        align-items: flex-start;
+
+    .full-width {
+        grid-column: 1 / 1;
     }
 }

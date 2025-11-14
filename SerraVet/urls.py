@@ -26,6 +26,7 @@ from clinica.views import (
     cadastro,
     home,
     home_atendente,
+    detalhe_consulta_vet
 )
 from clinica import views
 from django.conf import settings
@@ -92,6 +93,8 @@ urlpatterns = [
         views.cadastrar_prontuario_vet,
         name="cadastrar_prontuario_vet",
     ),
+
+
 ]
 
 if settings.DEBUG:

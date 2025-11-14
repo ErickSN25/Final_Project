@@ -49,21 +49,16 @@
                                     Pet: <strong>{{ consulta.pet.nome }}</strong> (Tutor: {{ consulta.pet.tutor.get_full_name }})
                                 </p>
                                 <p class="motivo-status">
-                                    Motivo: {{ consulta.motivo|truncatechars:70 }} 
-                                    <span class="status-badge status-{{ consulta.status|lower }}">
-                                        {{ consulta.get_status_display }}
+                                    <span class="status-badge status-{{ consulta.status|lower }}" >{{ consulta.get_status_display }}
                                     </span>
                                 </p>
                             </div>
-                            <a href="{% url 'detalhe_consulta_vet' consulta.id %}" class="btn-detalhes">
-                                Detalhes e Iniciar
-                            </a>
                         </li>
                     {% endfor %}
                 </ul>
                 <div style="margin-top: 20px;">
                      <a href="{% url 'lista_consultas_vet' %}" class="btn-ver-todas">
-                        Ver Todas as Consultas ({{ count_marcadas }} Ativas)
+                        Ver Todas as Consultas → 
                     </a>
                 </div>
 
