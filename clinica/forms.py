@@ -445,11 +445,6 @@ class ConsultaFiltroForm(forms.Form):
     )
 
 
-# =====================
-# VETS FILTER FORMS
-# =====================
-
-
 class VeterinarioConsultaFiltroForm(forms.Form):
     STATUS_CONSULTA_CHOICES = [("TODOS", "Todos os Status")] + [
         (s[0], s[1])
@@ -534,4 +529,28 @@ class ConsultaAtivasFiltroForm(forms.Form):
     data_fim = forms.DateField(
         required=False,
         widget=forms.DateInput(attrs={"type": "date", "class": "form-control"}),
+    )
+
+
+class PetsFiltroForm(forms.Form):
+
+    ESPECIES_CHOICES_FILTRO = [("TODAS", "Todas as espécies")] + list(
+        Pet.especieChoices
+    )
+
+    nome = forms.CharField(
+        required=False,
+        label="Pet",
+        widget=forms.TextInput(
+            attrs={"class": "form-control", "placeholder": "Nome do Pet..."}
+        ),
+    )
+
+    vacinas_em_dia = forms.BooleanField(required=False, label="Vacinas em dia")
+
+    especie = forms.ChoiceField(
+        choices=ESPECIES_CHOICES_FILTRO,
+        required=False,
+        label="Status",
+        widget=forms.Select(attrs={"class": "form-select"}),  
     )

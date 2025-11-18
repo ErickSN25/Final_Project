@@ -16,6 +16,7 @@ from .forms import (
     ConsultaFiltroForm,
     ConsultaAtivasFiltroForm,
     ConsultaFinalizadasFiltroForm,
+    PetsFiltroForm,
 )
 from django.contrib.auth.decorators import login_required
 from django.contrib.auth.views import LoginView
@@ -144,9 +145,31 @@ def home_user(request):
 @login_required
 def meus_pets_view(request):
     pets = Pet.objects.filter(tutor=request.user).order_by("nome")
+    form_filtro = PetsFiltroForm(request.GET)
+
+    if form_filtro.is_valid():
+        nome = form_filtro.cleaned_data.get("nome")
+        if nome:
+            pets = pets.filter(nome__icontains=nome)
+
+
+        vacinas_em_dia = form_filtro.cleaned_data.get("vacinas_em_dia")
+        if vacinas_em_dia:
+            pets = pets.filter(vacinas_em_dia=False)
+
+        especie = request.GET.get("especie")
+        if especie and especie != "TODAS":
+            pets = pets.filter(especie=especie)
+
+    PAGINATION_SIZE = 3
+    paginator = Paginator(pets, PAGINATION_SIZE)
+    page_number = request.GET.get("page")
+    pets = paginator.get_page(page_number)
+
     context = {
         "pets": pets,
         "titulo_pagina": "Meus Pets",
+        "form_filtro": form_filtro
     }
     return render(request, "clinica/user/meus_pets.html", context)
 
@@ -250,7 +273,7 @@ def minhas_consultas_view(request):
                 horario_agendado__data__date__lt=data_fim_exclusiva
             )
 
-    PAGINATION_SIZE = 5
+    PAGINATION_SIZE = 2
     paginator = Paginator(consultas_queryset, PAGINATION_SIZE)
     page_number = request.GET.get("page")
     consultas = paginator.get_page(page_number)
@@ -521,8 +544,8 @@ def lista_consultas_vet(request):
         if query_busca_ativas:
             consultas_ativas_qs = consultas_ativas_qs.filter(
                 Q(pet__nome__icontains=query_busca_ativas)
-                | Q(pet__tutor__first_name__icontains=query_busca_ativas)
-                | Q(pet__tutor__last_name__icontains=query_busca_ativas)
+                | Q(pet__tutor__nome__icontains=query_busca_ativas)
+                | Q(pet__tutor__sobrenome__icontains=query_busca_ativas)
                 | Q(status__icontains=query_busca_ativas)
             )
 
@@ -571,8 +594,8 @@ def lista_consultas_vet(request):
         if query_busca_finalizadas:
             consultas_finalizadas_qs = consultas_finalizadas_qs.filter(
                 Q(pet__nome__icontains=query_busca_finalizadas)
-                | Q(pet__tutor__first_name__icontains=query_busca_finalizadas)
-                | Q(pet__tutor__last_name__icontains=query_busca_finalizadas)
+                | Q(pet__tutor__nome__icontains=query_busca_finalizadas)
+                | Q(pet__tutor__sobrenome__icontains=query_busca_finalizadas)
             )
 
 

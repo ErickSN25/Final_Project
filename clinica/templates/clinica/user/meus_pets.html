@@ -14,6 +14,37 @@
         </a>
     </div>
 
+    <div class="filter-bar card-shadow">
+        <form method="get" class="form-filtro">
+            {% csrf_token %}
+
+            <div class="form-group-inline">
+                <label for="{{ form_filtro.nome.id_for_label }}">Nome do Pet:</label>
+                {{ form_filtro.nome }}
+            </div>
+
+            <div class="form-group-inline">
+                <label for="{{ form_filtro.especie.id_for_label }}">Espécie:</label>
+                {{ form_filtro.especie }}
+            </div>
+
+            <div class="form-group-inline">
+                <label for="{{ form_filtro.vacinas_em_dia.id_for_label }}">Sem vacinas em dia:</label>
+                {{ form_filtro.vacinas_em_dia }}
+            </div>
+
+            <button type="submit" class="btn-filtro">
+                <i class="fas fa-filter"></i> Filtrar
+            </button>
+            
+            {% if request.GET|length > 0 %}
+            <a href="{% url 'meus_pets' %}" class="btn-limpar-filtro">
+                Limpar Filtro
+            </a>
+            {% endif %}
+        </form>
+    </div>
+
     <div class="pets-list">
         {% if pets %}
             {% for pet in pets %}
@@ -52,4 +83,29 @@
         {% endif %}
     </div>
 </div>
+{% if pets.has_other_pages %}
+    <div class="pagination-container">
+        <ul class="pagination">
+            {% if pets.has_previous %}
+                <li class="page-item"><a class="page-link" href="?page={{ pets.previous_page_number }}{% for key, value in request.GET.items %}{% if key != 'page' %}&{{ key }}={{ value }}{% endif %}{% endfor %}">Anterior</a></li>
+            {% else %}
+                <li class="page-item disabled"><span class="page-link">Anterior</span></li>
+            {% endif %}
+            
+            {% for i in pets.paginator.page_range %}
+                {% if pets.number == i %}
+                    <li class="page-item active"><span class="page-link">{{ i }}</span></li>
+                {% else %}
+                    <li class="page-item"><a class="page-link" href="?page={{ i }}{% for key, value in request.GET.items %}{% if key != 'page' %}&{{ key }}={{ value }}{% endif %}{% endfor %}">{{ i }}</a></li>
+                {% endif %}
+            {% endfor %}
+            
+            {% if pets.has_next %}
+                <li class="page-item"><a class="page-link" href="?page={{ pets.next_page_number }}{% for key, value in request.GET.items %}{% if key != 'page' %}&{{ key }}={{ value }}{% endif %}{% endfor %}">Próxima</a></li>
+            {% else %}
+                <li class="page-item disabled"><span class="page-link">Próxima</span></li>
+            {% endif %}
+        </ul>
+    </div>
+    {% endif %}
 {% endblock content %}
