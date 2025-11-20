@@ -1614,36 +1614,54 @@ body {
 }
 
 @media (max-width: 992px) {
-    .sidebar {
-        position: fixed;
-        left: -250px;
-        top: 65px;
-        width: 240px;
-        height: calc(100vh - 65px);
-        background: #fff;
-        transition: left 0.3s ease-in-out;
-        z-index: 999;
-        padding: 20px;
-    }
-
-    .sidebar.open {
-        left: 0;
-    }
-
-    .navbar .menu-toggle {
-        display: block;
-        font-size: 26px;
-        cursor: pointer;
-        margin-right: 10px;
-        color: #fff;
-    }
-
-    .layout {
-        margin-left: 0;
+     .layout {
+        flex-direction: column;
     }
 
     .content {
         padding: 20px;
+        margin-left: 0;
+        width: 100%;
+    }
+
+    .sidebar {
+        width: 100%;
+        position: static;
+        height: auto;
+        padding: 10px 10px;
+        background: white;
+        overflow-x: auto;
+        white-space: nowrap;
+        border-right: none;
+        border-bottom: 1px solid #ddd;
+    }
+
+    .sidebar h2 {
+        display: none;
+    }
+
+    .sidebar ul {
+        display: flex;
+        gap: 15px;
+        padding: 0;
+    }
+
+    .sidebar ul li {
+        margin: 0;
+        flex-shrink: 0;
+    }
+
+    .sidebar ul li a,
+    .btn-sidebar-logout {
+        padding: 10px 18px;
+        border-radius: 6px;
+        border-bottom: 3px solid transparent;
+    }
+
+    .sidebar ul li a.active,
+    .sidebar ul li a:hover {
+        background: #e9ecef;
+        border-bottom: 3px solid var(--primary-color);
     }
 
     .pets-list {

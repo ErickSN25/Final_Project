@@ -104,16 +104,12 @@
                         {% endif %}
     
                 <div class="pront-buttons mt-4">
-                    <button type="submit" name="action" value="salvar" class="btn-main">
-                        <i class="fas fa-save me-2"></i> Salvar como Rascunho
-                    </button>
-
                     <button type="submit" name="action" value="finalizar" class="btn-green">
                         <i class="fas fa-check-circle me-2"></i> Finalizar Consulta
                     </button>
 
                     <a href="{% url 'detalhe_consulta_vet' consulta.id %}" class="btn-outline">
-                        <i class="fas fa-arrow-left me-2"></i> Voltar sem salvar
+                        <i class="fas fa-arrow-left me-2"></i> Cancelar
                     </a>
                 </div>
             </div>
