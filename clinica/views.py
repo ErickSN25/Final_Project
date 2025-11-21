@@ -1,5 +1,5 @@
 from django.shortcuts import render, get_object_or_404, redirect
-from django.urls import reverse, reverse_lazy  
+from django.urls import reverse, reverse_lazy
 from .models import (
     ClientePerfil,
     Pet,
@@ -36,9 +36,9 @@ from django.db.models import OuterRef, Exists
 from django.utils.timezone import now
 
 
-#=====================
+# =====================
 # BASIC VIEWS
-#=====================
+# =====================
 
 
 def home(request):
@@ -75,9 +75,9 @@ def cadastro(request):
     return render(request, "clinica/cadastro.html", context)
 
 
-#=====================
+# =====================
 # CUSTOM LOGIN VIEWS
-#=====================
+# =====================
 
 
 class CustomLoginView(LoginView):
@@ -104,9 +104,9 @@ class CustomLoginView(LoginView):
         return reverse_lazy("home")
 
 
-#=====================
+# =====================
 # REDIRECT VIEWS
-#=====================
+# =====================
 
 
 @login_required
@@ -123,9 +123,9 @@ def redirect_home(request):
     return redirect("home")
 
 
-#=====================
+# =====================
 # CLIENT VIEWS
-#=====================
+# =====================
 
 
 @login_required
@@ -152,7 +152,6 @@ def meus_pets_view(request):
         if nome:
             pets = pets.filter(nome__icontains=nome)
 
-
         vacinas_em_dia = form_filtro.cleaned_data.get("vacinas_em_dia")
         if vacinas_em_dia:
             pets = pets.filter(vacinas_em_dia=False)
@@ -166,11 +165,7 @@ def meus_pets_view(request):
     page_number = request.GET.get("page")
     pets = paginator.get_page(page_number)
 
-    context = {
-        "pets": pets,
-        "titulo_pagina": "Meus Pets",
-        "form_filtro": form_filtro
-    }
+    context = {"pets": pets, "titulo_pagina": "Meus Pets", "form_filtro": form_filtro}
     return render(request, "clinica/user/meus_pets.html", context)
 
 
@@ -370,14 +365,14 @@ def detalhe_consulta_view(request, pk):
 
     try:
         prontuario = Prontuario.objects.get(consulta=consulta)
-        
+
     except Prontuario.DoesNotExist:
-            prontuario = None
+        prontuario = None
 
     context = {
-            "consulta": consulta,
-            "prontuario": prontuario,   
-        }
+        "consulta": consulta,
+        "prontuario": prontuario,
+    }
     return render(request, "clinica/user/detalhes_consulta.html", context)
 
 
@@ -434,11 +429,12 @@ def perfil_user(request):
     }
     return render(request, "clinica/user/perfil_user.html", context)
 
+
 @login_required
 def prontuario_view(request, pk):
     prontuario = get_object_or_404(
         Prontuario.objects.select_related("consulta__pet", "consulta__veterinario"),
-        pk=pk
+        pk=pk,
     )
 
     consulta = prontuario.consulta
@@ -453,11 +449,9 @@ def prontuario_view(request, pk):
     return render(request, "clinica/user/prontuario_user.html", context)
 
 
-
-
-#=====================
+# =====================
 # VETS VIEWS
-#=====================
+# =====================
 
 
 @login_required
@@ -516,7 +510,6 @@ def lista_consultas_vet(request):
     veterinario = request.user
     hoje = timezone.now().date()
 
-
     form_ativas = ConsultaAtivasFiltroForm(request.GET)
 
     consultas_ativas_qs = (
@@ -550,11 +543,8 @@ def lista_consultas_vet(request):
             )
 
     paginator_ativas = Paginator(consultas_ativas_qs, 5)
-    page_number_ativas = request.GET.get(
-        "page_ativas"
-    )
+    page_number_ativas = request.GET.get("page_ativas")
     consultas_ativas = paginator_ativas.get_page(page_number_ativas)
-
 
     form_finalizadas = ConsultaFinalizadasFiltroForm(request.GET)
 
@@ -565,7 +555,6 @@ def lista_consultas_vet(request):
         .select_related("pet", "pet__tutor", "horario_agendado")
         .order_by("-horario_agendado__data")
     )
-
 
     consultas_finalizadas_qs = consultas_finalizadas_qs.annotate(
         has_prontuario=Exists(Prontuario.objects.filter(consulta_id=OuterRef("pk")))
@@ -598,13 +587,9 @@ def lista_consultas_vet(request):
                 | Q(pet__tutor__sobrenome__icontains=query_busca_finalizadas)
             )
 
-
     paginator_finalizadas = Paginator(consultas_finalizadas_qs, 5)
-    page_number_finalizadas = request.GET.get(
-        "page_finalizadas"
-    )
+    page_number_finalizadas = request.GET.get("page_finalizadas")
     consultas_finalizadas = paginator_finalizadas.get_page(page_number_finalizadas)
-
 
     context = {
         "consultas_ativas": consultas_ativas,
@@ -662,6 +647,7 @@ def detalhe_consulta_vet(request, consulta_id):
     }
     return render(request, "clinica/vet/detalhe_consulta_vet.html", context)
 
+
 @login_required
 def cadastrar_prontuario_vet(request, consulta_id):
     consulta = get_object_or_404(
@@ -713,9 +699,9 @@ def cadastrar_prontuario_vet(request, consulta_id):
     return render(request, "clinica/vet/cadastrar_prontuario_vet.html", context)
 
 
-#=====================
+# =====================
 # ATTENDANT VIEWS
-#=====================
+# =====================
 
 
 def gerenciar_horarios(request):

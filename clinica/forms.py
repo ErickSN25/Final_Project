@@ -15,12 +15,13 @@ from django.contrib.auth.forms import PasswordChangeForm
 from django.contrib.auth import get_user_model
 
 
-#=====================
+# =====================
 # CUSTOM USERS FORMS
-#=====================
+# =====================
 
 
 User = get_user_model()
+
 
 class CustomAuthenticationForm(AuthenticationForm):
     username = forms.EmailField(
@@ -55,9 +56,9 @@ class CustomUserChangeForm(UserChangeForm):
         )
 
 
-#=====================
+# =====================
 # ATTENDANT FORMS
-#=====================
+# =====================
 
 
 class HorarioDisponivelForm(forms.ModelForm):
@@ -79,9 +80,10 @@ class HorarioDisponivelForm(forms.ModelForm):
         )
 
 
-#=====================
+# =====================
 # VETS FORMS
-#=====================
+# =====================
+
 
 class ProntuarioForm(forms.ModelForm):
     receita_prescrita = forms.FileField(
@@ -123,9 +125,9 @@ class ProntuarioForm(forms.ModelForm):
         }
 
 
-#=====================
+# =====================
 # USERS FORMS
-#=====================
+# =====================
 
 
 class CadastroClienteForm(forms.Form):
@@ -215,9 +217,10 @@ class CadastroClienteForm(forms.Form):
             )
         return user
 
-#=====================
+
+# =====================
 # PETS FORMS
-#=====================
+# =====================
 
 
 class CadastroPetForm(forms.ModelForm):
@@ -243,19 +246,15 @@ class AgendamentoClienteForm(forms.Form):
         queryset=Pet.objects.none(), label="Selecione o seu Pet"
     )
 
-
     veterinario = forms.ModelChoiceField(
         queryset=CustomUser.objects.none(), label="Selecione o Veterinário"
     )
 
-
     horario_agendado = forms.ModelChoiceField(
-        queryset=HorarioDisponivel.objects.none(),  
+        queryset=HorarioDisponivel.objects.none(),
         label="Horário Disponível",
-
         widget=forms.Select(attrs={"id": "id_horario_agendado_ajax"}),
     )
-
 
     motivo = forms.CharField(
         widget=forms.Textarea(
@@ -276,19 +275,16 @@ class AgendamentoClienteForm(forms.Form):
                 user_type="veterinario"
             ).order_by("nome")
 
-
     def clean(self):
         cleaned_data = super().clean()
         horario = cleaned_data.get("horario_agendado")
         veterinario = cleaned_data.get("veterinario")
-
 
         if horario and veterinario and horario.veterinario != veterinario:
             self.add_error(
                 "horario_agendado",
                 "O horário selecionado não pertence ao veterinário escolhido.",
             )
-
 
         if horario and not horario.disponivel:
             self.add_error("horario_agendado", "Este horário não está mais disponível.")
@@ -312,7 +308,6 @@ class AgendamentoClienteForm(forms.Form):
                 motivo=motivo,
                 status="MARCADA",
             )
-
 
             horario_instance.disponivel = False
             horario_instance.save()
@@ -347,9 +342,10 @@ class ConsultaForm(forms.ModelForm):
 
         return cleaned_data
 
-#=====================
+
+# =====================
 # PERFIL FORMS
-#=====================
+# =====================
 class ClientePerfilForm(forms.ModelForm):
 
     class Meta:
@@ -389,7 +385,6 @@ class ClientePerfilForm(forms.ModelForm):
         }
 
 
-
 class CustomPasswordChangeForm(PasswordChangeForm):
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
@@ -416,7 +411,6 @@ class HorarioFiltroForm(forms.Form):
 
 class ConsultaFiltroForm(forms.Form):
 
-
     STATUS_CHOICES_FILTRO = [("TODOS", "Todos os Status")] + list(
         Consulta.STATUS_CHOICES
     )
@@ -425,23 +419,19 @@ class ConsultaFiltroForm(forms.Form):
         choices=STATUS_CHOICES_FILTRO,
         required=False,
         label="Status",
-        widget=forms.Select(attrs={"class": "form-select"}),  
+        widget=forms.Select(attrs={"class": "form-select"}),
     )
 
     data_inicio = forms.DateField(
         required=False,
         label="Data de Início",
-        widget=forms.DateInput(
-            attrs={"type": "date", "class": "form-control"}
-        ),  
+        widget=forms.DateInput(attrs={"type": "date", "class": "form-control"}),
     )
 
     data_fim = forms.DateField(
         required=False,
         label="Data Final",
-        widget=forms.DateInput(
-            attrs={"type": "date", "class": "form-control"}
-        ),  
+        widget=forms.DateInput(attrs={"type": "date", "class": "form-control"}),
     )
 
 
@@ -501,7 +491,6 @@ class ConsultaFinalizadasFiltroForm(forms.Form):
         ("ok", "Finalizado"),
     ]
 
-
     STATUS_CHOICES = [
         ("", "Status Consulta"),
         ("REALIZADA", "Realizada"),
@@ -552,5 +541,5 @@ class PetsFiltroForm(forms.Form):
         choices=ESPECIES_CHOICES_FILTRO,
         required=False,
         label="Status",
-        widget=forms.Select(attrs={"class": "form-select"}),  
+        widget=forms.Select(attrs={"class": "form-select"}),
     )

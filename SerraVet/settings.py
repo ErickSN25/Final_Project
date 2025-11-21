@@ -1,4 +1,3 @@
-
 """
 Django settings for SerraVet project.
 
@@ -132,5 +131,5 @@ LOGIN_REDIRECT_URL = "home_user"
 LOGOUT_REDIRECT_URL = "login"
 
 
-#Enviar e-mail teste
+# Enviar e-mail teste
 EMAIL_BACKEND = "django.core.mail.backends.console.EmailBackend"

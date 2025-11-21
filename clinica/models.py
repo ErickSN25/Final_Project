@@ -7,9 +7,9 @@ from django.contrib.auth.models import (
 from django.core.exceptions import ValidationError
 
 
-#=====================
+# =====================
 # USERS MODELS
-#=====================
+# =====================
 
 
 class UsuarioManager(BaseUserManager):
@@ -137,9 +137,9 @@ class ClientePerfil(models.Model):
         verbose_name_plural = "Perfis dos Clientes"
 
 
-#=====================
+# =====================
 # PETS MODELS
-#=====================
+# =====================
 
 
 class Pet(models.Model):
@@ -174,6 +174,7 @@ class Pet(models.Model):
     class Meta:
         verbose_name = "Pet"
         verbose_name_plural = "Pets"
+
 
 class Consulta(models.Model):
     pet = models.ForeignKey(Pet, on_delete=models.CASCADE)
@@ -213,7 +214,6 @@ class Consulta(models.Model):
     def save(self, *args, **kwargs):
         is_new = self._state.adding
 
-        
         if self.veterinario != self.horario_agendado.veterinario:
             raise ValidationError(
                 "O veterinário da consulta deve ser o mesmo cadastrado no Horário Disponível selecionado."
@@ -223,7 +223,6 @@ class Consulta(models.Model):
             self.horario_agendado.disponivel = False
             self.horario_agendado.save()
 
-        
         elif self.status == "CANCELADA" and not self.horario_agendado.disponivel:
             self.horario_agendado.disponivel = True
             self.horario_agendado.save()
@@ -236,9 +235,9 @@ class Consulta(models.Model):
         ordering = ["horario_agendado__data"]
 
 
-#=====================
+# =====================
 # ATTENDANT MODELS
-#=====================
+# =====================
 
 
 class HorarioDisponivel(models.Model):
@@ -249,7 +248,8 @@ class HorarioDisponivel(models.Model):
     )
     data = models.DateTimeField()
     disponivel = models.BooleanField(default=True)
-    disponivel = models.BooleanField(default=True)  
+    disponivel = models.BooleanField(default=True)
+
     def __str__(self):
         status = "Disponível" if self.disponivel else "Indisponível"
         return f"{self.veterinario} - {self.data.strftime('%d/%m/%Y %H:%M')} ({status})"
@@ -259,9 +259,9 @@ class HorarioDisponivel(models.Model):
         verbose_name_plural = "Horários Disponíveis"
 
 
-#=====================
+# =====================
 # VETS MODELS
-#=====================
+# =====================
 
 
 class Prontuario(models.Model):
@@ -297,4 +297,3 @@ class Prontuario(models.Model):
             consulta = self.consulta
             consulta.status = "REALIZADA"
             consulta.save(update_fields=["status"])
-

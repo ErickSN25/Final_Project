@@ -91,7 +91,7 @@ class ConsultaAdmin(admin.ModelAdmin):
         "veterinario",
         "get_data_hora",
         "status",
-    )  
+    )
     list_filter = ("status", "horario_agendado__data")
     ordering = ("horario_agendado__data",)
     search_fields = ("pet__nome", "veterinario__nome", "veterinario__sobrenome")
@@ -133,4 +133,3 @@ admin.site.register(Pet, PetAdmin)
 admin.site.register(Consulta, ConsultaAdmin)
 admin.site.register(Prontuario, ProntuarioAdmin)
 admin.site.register(HorarioDisponivel, HorarioDisponivelAdmin)
-

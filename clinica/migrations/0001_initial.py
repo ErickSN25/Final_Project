@@ -10,128 +10,383 @@ class Migration(migrations.Migration):
     initial = True
 
     dependencies = [
-        ('auth', '0012_alter_user_first_name_max_length'),
+        ("auth", "0012_alter_user_first_name_max_length"),
     ]
 
     operations = [
         migrations.CreateModel(
-            name='CustomUser',
+            name="CustomUser",
             fields=[
-                ('id', models.BigAutoField(auto_created=True, primary_key=True, serialize=False, verbose_name='ID')),
-                ('password', models.CharField(max_length=128, verbose_name='password')),
-                ('last_login', models.DateTimeField(blank=True, null=True, verbose_name='last login')),
-                ('is_superuser', models.BooleanField(default=False, help_text='Designates that this user has all permissions without explicitly assigning them.', verbose_name='superuser status')),
-                ('email', models.EmailField(max_length=254, unique=True)),
-                ('nome', models.CharField(max_length=30)),
-                ('sobrenome', models.CharField(max_length=30)),
-                ('cpf', models.CharField(max_length=11, unique=True)),
-                ('is_active', models.BooleanField(default=True)),
-                ('is_staff', models.BooleanField(default=False)),
-                ('user_type', models.CharField(choices=[('veterinario', 'Veterinário'), ('cliente', 'Cliente'), ('atendente', 'Atendente'), ('administrador', 'Administrador')], max_length=20)),
-                ('groups', models.ManyToManyField(blank=True, help_text='The groups this user belongs to. A user will get all permissions granted to each of their groups.', related_name='user_set', related_query_name='user', to='auth.group', verbose_name='groups')),
-                ('user_permissions', models.ManyToManyField(blank=True, help_text='Specific permissions for this user.', related_name='user_set', related_query_name='user', to='auth.permission', verbose_name='user permissions')),
+                (
+                    "id",
+                    models.BigAutoField(
+                        auto_created=True,
+                        primary_key=True,
+                        serialize=False,
+                        verbose_name="ID",
+                    ),
+                ),
+                ("password", models.CharField(max_length=128, verbose_name="password")),
+                (
+                    "last_login",
+                    models.DateTimeField(
+                        blank=True, null=True, verbose_name="last login"
+                    ),
+                ),
+                (
+                    "is_superuser",
+                    models.BooleanField(
+                        default=False,
+                        help_text="Designates that this user has all permissions without explicitly assigning them.",
+                        verbose_name="superuser status",
+                    ),
+                ),
+                ("email", models.EmailField(max_length=254, unique=True)),
+                ("nome", models.CharField(max_length=30)),
+                ("sobrenome", models.CharField(max_length=30)),
+                ("cpf", models.CharField(max_length=11, unique=True)),
+                ("is_active", models.BooleanField(default=True)),
+                ("is_staff", models.BooleanField(default=False)),
+                (
+                    "user_type",
+                    models.CharField(
+                        choices=[
+                            ("veterinario", "Veterinário"),
+                            ("cliente", "Cliente"),
+                            ("atendente", "Atendente"),
+                            ("administrador", "Administrador"),
+                        ],
+                        max_length=20,
+                    ),
+                ),
+                (
+                    "groups",
+                    models.ManyToManyField(
+                        blank=True,
+                        help_text="The groups this user belongs to. A user will get all permissions granted to each of their groups.",
+                        related_name="user_set",
+                        related_query_name="user",
+                        to="auth.group",
+                        verbose_name="groups",
+                    ),
+                ),
+                (
+                    "user_permissions",
+                    models.ManyToManyField(
+                        blank=True,
+                        help_text="Specific permissions for this user.",
+                        related_name="user_set",
+                        related_query_name="user",
+                        to="auth.permission",
+                        verbose_name="user permissions",
+                    ),
+                ),
             ],
             options={
-                'verbose_name': 'Usuário',
-                'verbose_name_plural': 'Usuários',
+                "verbose_name": "Usuário",
+                "verbose_name_plural": "Usuários",
             },
         ),
         migrations.CreateModel(
-            name='ClientePerfil',
+            name="ClientePerfil",
             fields=[
-                ('id', models.BigAutoField(auto_created=True, primary_key=True, serialize=False, verbose_name='ID')),
-                ('foto_user', models.ImageField(blank=True, null=True, upload_to='fotos_perfil/')),
-                ('telefone', models.CharField(blank=True, max_length=15, null=True)),
-                ('endereco', models.CharField(blank=True, max_length=255, null=True)),
-                ('cidade', models.CharField(blank=True, max_length=100, null=True)),
-                ('estado', models.CharField(blank=True, choices=[('AC', 'Acre'), ('AL', 'Alagoas'), ('AP', 'Amapá'), ('AM', 'Amazonas'), ('BA', 'Bahia'), ('CE', 'Ceará'), ('DF', 'Distrito Federal'), ('ES', 'Espírito Santo'), ('GO', 'Goiás'), ('MA', 'Maranhão'), ('MT', 'Mato Grosso'), ('MS', 'Mato Grosso do Sul'), ('MG', 'Minas Gerais'), ('PA', 'Pará'), ('PB', 'Paraíba'), ('PR', 'Paraná'), ('PE', 'Pernambuco'), ('PI', 'Piauí'), ('RJ', 'Rio de Janeiro'), ('RN', 'Rio Grande do Norte'), ('RS', 'Rio Grande do Sul'), ('RO', 'Rondônia'), ('RR', 'Roraima'), ('SC', 'Santa Catarina'), ('SP', 'São Paulo'), ('SE', 'Sergipe'), ('TO', 'Tocantins')], max_length=2, null=True)),
-                ('bairro', models.CharField(blank=True, max_length=100, null=True)),
-                ('numero', models.CharField(blank=True, max_length=10, null=True)),
-                ('user', models.OneToOneField(limit_choices_to={'user_type': 'cliente'}, on_delete=django.db.models.deletion.CASCADE, to=settings.AUTH_USER_MODEL)),
+                (
+                    "id",
+                    models.BigAutoField(
+                        auto_created=True,
+                        primary_key=True,
+                        serialize=False,
+                        verbose_name="ID",
+                    ),
+                ),
+                (
+                    "foto_user",
+                    models.ImageField(blank=True, null=True, upload_to="fotos_perfil/"),
+                ),
+                ("telefone", models.CharField(blank=True, max_length=15, null=True)),
+                ("endereco", models.CharField(blank=True, max_length=255, null=True)),
+                ("cidade", models.CharField(blank=True, max_length=100, null=True)),
+                (
+                    "estado",
+                    models.CharField(
+                        blank=True,
+                        choices=[
+                            ("AC", "Acre"),
+                            ("AL", "Alagoas"),
+                            ("AP", "Amapá"),
+                            ("AM", "Amazonas"),
+                            ("BA", "Bahia"),
+                            ("CE", "Ceará"),
+                            ("DF", "Distrito Federal"),
+                            ("ES", "Espírito Santo"),
+                            ("GO", "Goiás"),
+                            ("MA", "Maranhão"),
+                            ("MT", "Mato Grosso"),
+                            ("MS", "Mato Grosso do Sul"),
+                            ("MG", "Minas Gerais"),
+                            ("PA", "Pará"),
+                            ("PB", "Paraíba"),
+                            ("PR", "Paraná"),
+                            ("PE", "Pernambuco"),
+                            ("PI", "Piauí"),
+                            ("RJ", "Rio de Janeiro"),
+                            ("RN", "Rio Grande do Norte"),
+                            ("RS", "Rio Grande do Sul"),
+                            ("RO", "Rondônia"),
+                            ("RR", "Roraima"),
+                            ("SC", "Santa Catarina"),
+                            ("SP", "São Paulo"),
+                            ("SE", "Sergipe"),
+                            ("TO", "Tocantins"),
+                        ],
+                        max_length=2,
+                        null=True,
+                    ),
+                ),
+                ("bairro", models.CharField(blank=True, max_length=100, null=True)),
+                ("numero", models.CharField(blank=True, max_length=10, null=True)),
+                (
+                    "user",
+                    models.OneToOneField(
+                        limit_choices_to={"user_type": "cliente"},
+                        on_delete=django.db.models.deletion.CASCADE,
+                        to=settings.AUTH_USER_MODEL,
+                    ),
+                ),
             ],
             options={
-                'verbose_name': 'Perfil do Cliente',
-                'verbose_name_plural': 'Perfis dos Clientes',
+                "verbose_name": "Perfil do Cliente",
+                "verbose_name_plural": "Perfis dos Clientes",
             },
         ),
         migrations.CreateModel(
-            name='HorarioDisponivel',
+            name="HorarioDisponivel",
             fields=[
-                ('id', models.BigAutoField(auto_created=True, primary_key=True, serialize=False, verbose_name='ID')),
-                ('data', models.DateTimeField()),
-                ('disponivel', models.BooleanField(default=True)),
-                ('veterinario', models.ForeignKey(limit_choices_to={'user_type': 'veterinario'}, on_delete=django.db.models.deletion.CASCADE, to=settings.AUTH_USER_MODEL)),
+                (
+                    "id",
+                    models.BigAutoField(
+                        auto_created=True,
+                        primary_key=True,
+                        serialize=False,
+                        verbose_name="ID",
+                    ),
+                ),
+                ("data", models.DateTimeField()),
+                ("disponivel", models.BooleanField(default=True)),
+                (
+                    "veterinario",
+                    models.ForeignKey(
+                        limit_choices_to={"user_type": "veterinario"},
+                        on_delete=django.db.models.deletion.CASCADE,
+                        to=settings.AUTH_USER_MODEL,
+                    ),
+                ),
             ],
             options={
-                'verbose_name': 'Horário Disponível',
-                'verbose_name_plural': 'Horários Disponíveis',
+                "verbose_name": "Horário Disponível",
+                "verbose_name_plural": "Horários Disponíveis",
             },
         ),
         migrations.CreateModel(
-            name='Pet',
+            name="Pet",
             fields=[
-                ('id', models.BigAutoField(auto_created=True, primary_key=True, serialize=False, verbose_name='ID')),
-                ('foto_pet', models.ImageField(blank=True, null=True, upload_to='fotos_pet/')),
-                ('nome', models.CharField(max_length=100)),
-                ('especie', models.CharField(choices=[('CACHORRO', 'Cachorro'), ('GATO', 'Gato'), ('COELHO', 'Coelho'), ('PAPAGAIO', 'Papagaio'), ('HAMSTER', 'Hamster'), ('CALOPSITA', 'Calopsita'), ('FURAO', 'Furão'), ('JABUTI', 'Jabuti'), ('PEIXE', 'Peixe'), ('PIRIQUITO', 'Periquito')], max_length=50)),
-                ('raca', models.CharField(blank=True, max_length=50, null=True)),
-                ('peso', models.DecimalField(decimal_places=2, max_digits=5)),
-                ('vacinas_em_dia', models.BooleanField(default=False)),
-                ('alergias', models.TextField(blank=True, null=True)),
-                ('doencas', models.TextField(blank=True, null=True)),
-                ('tutor', models.ForeignKey(limit_choices_to={'user_type': 'cliente'}, on_delete=django.db.models.deletion.CASCADE, to=settings.AUTH_USER_MODEL)),
+                (
+                    "id",
+                    models.BigAutoField(
+                        auto_created=True,
+                        primary_key=True,
+                        serialize=False,
+                        verbose_name="ID",
+                    ),
+                ),
+                (
+                    "foto_pet",
+                    models.ImageField(blank=True, null=True, upload_to="fotos_pet/"),
+                ),
+                ("nome", models.CharField(max_length=100)),
+                (
+                    "especie",
+                    models.CharField(
+                        choices=[
+                            ("CACHORRO", "Cachorro"),
+                            ("GATO", "Gato"),
+                            ("COELHO", "Coelho"),
+                            ("PAPAGAIO", "Papagaio"),
+                            ("HAMSTER", "Hamster"),
+                            ("CALOPSITA", "Calopsita"),
+                            ("FURAO", "Furão"),
+                            ("JABUTI", "Jabuti"),
+                            ("PEIXE", "Peixe"),
+                            ("PIRIQUITO", "Periquito"),
+                        ],
+                        max_length=50,
+                    ),
+                ),
+                ("raca", models.CharField(blank=True, max_length=50, null=True)),
+                ("peso", models.DecimalField(decimal_places=2, max_digits=5)),
+                ("vacinas_em_dia", models.BooleanField(default=False)),
+                ("alergias", models.TextField(blank=True, null=True)),
+                ("doencas", models.TextField(blank=True, null=True)),
+                (
+                    "tutor",
+                    models.ForeignKey(
+                        limit_choices_to={"user_type": "cliente"},
+                        on_delete=django.db.models.deletion.CASCADE,
+                        to=settings.AUTH_USER_MODEL,
+                    ),
+                ),
             ],
             options={
-                'verbose_name': 'Pet',
-                'verbose_name_plural': 'Pets',
+                "verbose_name": "Pet",
+                "verbose_name_plural": "Pets",
             },
         ),
         migrations.CreateModel(
-            name='Consulta',
+            name="Consulta",
             fields=[
-                ('id', models.BigAutoField(auto_created=True, primary_key=True, serialize=False, verbose_name='ID')),
-                ('motivo', models.TextField(verbose_name='Motivo da Consulta')),
-                ('status', models.CharField(choices=[('MARCADA', 'Marcada'), ('CANCELADA', 'Cancelada'), ('EM_ANDAMENTO', 'Em Andamento'), ('REALIZADA', 'Realizada')], default='MARCADA', max_length=20, verbose_name='Status da Consulta')),
-                ('veterinario', models.ForeignKey(limit_choices_to={'user_type': 'veterinario'}, on_delete=django.db.models.deletion.CASCADE, related_name='consultas_como_veterinario', to=settings.AUTH_USER_MODEL)),
-                ('horario_agendado', models.OneToOneField(limit_choices_to={'disponivel': True}, on_delete=django.db.models.deletion.PROTECT, to='clinica.horariodisponivel', verbose_name='Horário Agendado')),
-                ('pet', models.ForeignKey(on_delete=django.db.models.deletion.CASCADE, to='clinica.pet')),
+                (
+                    "id",
+                    models.BigAutoField(
+                        auto_created=True,
+                        primary_key=True,
+                        serialize=False,
+                        verbose_name="ID",
+                    ),
+                ),
+                ("motivo", models.TextField(verbose_name="Motivo da Consulta")),
+                (
+                    "status",
+                    models.CharField(
+                        choices=[
+                            ("MARCADA", "Marcada"),
+                            ("CANCELADA", "Cancelada"),
+                            ("EM_ANDAMENTO", "Em Andamento"),
+                            ("REALIZADA", "Realizada"),
+                        ],
+                        default="MARCADA",
+                        max_length=20,
+                        verbose_name="Status da Consulta",
+                    ),
+                ),
+                (
+                    "veterinario",
+                    models.ForeignKey(
+                        limit_choices_to={"user_type": "veterinario"},
+                        on_delete=django.db.models.deletion.CASCADE,
+                        related_name="consultas_como_veterinario",
+                        to=settings.AUTH_USER_MODEL,
+                    ),
+                ),
+                (
+                    "horario_agendado",
+                    models.OneToOneField(
+                        limit_choices_to={"disponivel": True},
+                        on_delete=django.db.models.deletion.PROTECT,
+                        to="clinica.horariodisponivel",
+                        verbose_name="Horário Agendado",
+                    ),
+                ),
+                (
+                    "pet",
+                    models.ForeignKey(
+                        on_delete=django.db.models.deletion.CASCADE, to="clinica.pet"
+                    ),
+                ),
             ],
             options={
-                'verbose_name': 'Consulta',
-                'verbose_name_plural': 'Consultas',
-                'ordering': ['horario_agendado__data'],
+                "verbose_name": "Consulta",
+                "verbose_name_plural": "Consultas",
+                "ordering": ["horario_agendado__data"],
             },
         ),
         migrations.CreateModel(
-            name='Prontuario',
+            name="Prontuario",
             fields=[
-                ('id', models.BigAutoField(auto_created=True, primary_key=True, serialize=False, verbose_name='ID')),
-                ('finalizado', models.BooleanField(default=False)),
-                ('sinais_clinicos', models.TextField(verbose_name='Sinais Clínicos')),
-                ('diagnostico', models.TextField(verbose_name='Diagnóstico')),
-                ('exames_realizados', models.TextField(blank=True, null=True, verbose_name='Exames Realizados')),
-                ('imunizacao_aplicada', models.TextField(blank=True, null=True, verbose_name='Imunização Aplicada')),
-                ('receita_prescrita', models.FileField(blank=True, null=True, upload_to='receitas/', verbose_name='Receita Prescrita')),
-                ('observacoes', models.TextField(blank=True, null=True, verbose_name='Observações Adicionais')),
-                ('criada_em', models.DateTimeField(auto_now_add=True)),
-                ('consulta', models.OneToOneField(on_delete=django.db.models.deletion.CASCADE, to='clinica.consulta')),
+                (
+                    "id",
+                    models.BigAutoField(
+                        auto_created=True,
+                        primary_key=True,
+                        serialize=False,
+                        verbose_name="ID",
+                    ),
+                ),
+                ("finalizado", models.BooleanField(default=False)),
+                ("sinais_clinicos", models.TextField(verbose_name="Sinais Clínicos")),
+                ("diagnostico", models.TextField(verbose_name="Diagnóstico")),
+                (
+                    "exames_realizados",
+                    models.TextField(
+                        blank=True, null=True, verbose_name="Exames Realizados"
+                    ),
+                ),
+                (
+                    "imunizacao_aplicada",
+                    models.TextField(
+                        blank=True, null=True, verbose_name="Imunização Aplicada"
+                    ),
+                ),
+                (
+                    "receita_prescrita",
+                    models.FileField(
+                        blank=True,
+                        null=True,
+                        upload_to="receitas/",
+                        verbose_name="Receita Prescrita",
+                    ),
+                ),
+                (
+                    "observacoes",
+                    models.TextField(
+                        blank=True, null=True, verbose_name="Observações Adicionais"
+                    ),
+                ),
+                ("criada_em", models.DateTimeField(auto_now_add=True)),
+                (
+                    "consulta",
+                    models.OneToOneField(
+                        on_delete=django.db.models.deletion.CASCADE,
+                        to="clinica.consulta",
+                    ),
+                ),
             ],
             options={
-                'verbose_name': 'Prontuário',
-                'verbose_name_plural': 'Prontuários',
+                "verbose_name": "Prontuário",
+                "verbose_name_plural": "Prontuários",
             },
         ),
         migrations.CreateModel(
-            name='VeterinarioInfo',
+            name="VeterinarioInfo",
             fields=[
-                ('id', models.BigAutoField(auto_created=True, primary_key=True, serialize=False, verbose_name='ID')),
-                ('crmv', models.CharField(max_length=10, unique=True, verbose_name='CRMV')),
-                ('foto_veterinario', models.ImageField(blank=True, null=True, upload_to='fotos_perfil/')),
-                ('user', models.OneToOneField(limit_choices_to={'user_type': 'veterinario'}, on_delete=django.db.models.deletion.CASCADE, to=settings.AUTH_USER_MODEL)),
+                (
+                    "id",
+                    models.BigAutoField(
+                        auto_created=True,
+                        primary_key=True,
+                        serialize=False,
+                        verbose_name="ID",
+                    ),
+                ),
+                (
+                    "crmv",
+                    models.CharField(max_length=10, unique=True, verbose_name="CRMV"),
+                ),
+                (
+                    "foto_veterinario",
+                    models.ImageField(blank=True, null=True, upload_to="fotos_perfil/"),
+                ),
+                (
+                    "user",
+                    models.OneToOneField(
+                        limit_choices_to={"user_type": "veterinario"},
+                        on_delete=django.db.models.deletion.CASCADE,
+                        to=settings.AUTH_USER_MODEL,
+                    ),
+                ),
             ],
             options={
-                'verbose_name': 'Informação do Veterinário',
-                'verbose_name_plural': 'Informações dos Veterinários',
+                "verbose_name": "Informação do Veterinário",
+                "verbose_name_plural": "Informações dos Veterinários",
             },
         ),
     ]
