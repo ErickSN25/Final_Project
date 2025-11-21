@@ -1,5 +1,5 @@
 from django.shortcuts import render, get_object_or_404, redirect
-from django.urls import reverse, reverse_lazy
+from django.urls import reverse_lazy
 from .models import (
     ClientePerfil,
     Pet,
@@ -25,7 +25,6 @@ from django.contrib import messages
 from django.utils import timezone
 from datetime import timedelta
 from django.db.models import Q
-from datetime import date
 from django.core.paginator import Paginator
 from django.http import JsonResponse
 from django.views.decorators.http import require_GET
@@ -199,7 +198,6 @@ def excluir_pet_view(request, pet_id):
 @login_required
 def detalhes_pet_view(request, pet_id):
     pet = get_object_or_404(Pet, id=pet_id, tutor=request.user)
-    hoje = date.today()
     context = {
         "pet": pet,
         "titulo_pagina": f"Detalhamento dos dados de {pet.nome}",
@@ -477,7 +475,6 @@ def lista_consultas_vet(request):
         return redirect("home")
 
     veterinario = request.user
-    hoje = timezone.now().date()
 
     form_ativas = ConsultaAtivasFiltroForm(request.GET)
 
@@ -628,7 +625,8 @@ def cadastrar_prontuario_vet(request, consulta_id):
                 prontuario_salvo.finalizado = True
                 messages.success(
                     request,
-                    f"Prontuário de {consulta.pet.nome} finalizado com sucesso! Status da consulta alterado para 'Realizada'.",
+                    f"Prontuário de {consulta.pet.nome} finalizado com sucesso! "
+                    f"Status da consulta alterado para 'Realizada'.",
                 )
             else:
                 prontuario_salvo.finalizado = False

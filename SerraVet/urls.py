@@ -26,7 +26,6 @@ from clinica.views import (
     home_vet,
     cadastro,
     home,
-    detalhe_consulta_vet,
     prontuario_view,
 )
 from clinica import views

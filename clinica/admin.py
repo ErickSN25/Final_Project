@@ -11,7 +11,6 @@ from .models import (
 from .forms import CustomUserCreationForm, CustomUserChangeForm
 from django.contrib.auth.admin import UserAdmin
 from django.utils import timezone
-from django.utils.html import format_html
 
 
 if CustomUser in admin.site._registry:
