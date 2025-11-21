@@ -45,9 +45,8 @@ test = [
 where = ["."]
 include = ["alimentador*"]
 
-
 [tool.black]
-line-length = 88
+line-length = 120
 target-version = ["py310"]
 
 [tool.flake8]

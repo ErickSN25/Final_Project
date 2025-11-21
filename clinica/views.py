@@ -56,9 +56,7 @@ def cadastro(request):
                 usuario.set_password(form.cleaned_data["password"])
                 usuario.save()
 
-                messages.success(
-                    request, "Cadastro realizado com sucesso! Por favor, faça login."
-                )
+                messages.success(request, "Cadastro realizado com sucesso! Por favor, faça login.")
                 return redirect("login")
 
             except Exception as e:
@@ -86,9 +84,7 @@ class CustomLoginView(LoginView):
 
     def get_success_url(self):
         user = self.request.user
-        print(
-            f"DEBUG: Usuário logado: {user.email}, Tipo detectado: '{user.user_type}'"
-        )
+        print(f"DEBUG: Usuário logado: {user.email}, Tipo detectado: '{user.user_type}'")
         if user.user_type == "cliente":
             return reverse_lazy("home_user")
 
@@ -131,9 +127,7 @@ def redirect_home(request):
 @login_required
 def home_user(request):
     pets = Pet.objects.filter(tutor=request.user)
-    consultas = Consulta.objects.filter(pet__tutor=request.user).order_by(
-        "-horario_agendado"
-    )[:5]
+    consultas = Consulta.objects.filter(pet__tutor=request.user).order_by("-horario_agendado")[:5]
     context = {
         "user": request.user,
         "pets": pets,
@@ -177,9 +171,7 @@ def cadastrar_pet_view(request):
             novo_pet = form.save(commit=False)
             novo_pet.tutor = request.user
             novo_pet.save()
-            messages.success(
-                request, f'O pet "{novo_pet.nome}" foi cadastrado com sucesso!'
-            )
+            messages.success(request, f'O pet "{novo_pet.nome}" foi cadastrado com sucesso!')
             return redirect("meus_pets")
 
     else:
@@ -223,9 +215,7 @@ def editar_pet_form_view(request, pet_id):
         form = CadastroPetForm(request.POST, request.FILES, instance=pet)
         if form.is_valid():
             form.save()
-            messages.success(
-                request, f'Os dados de "{pet.nome}" foram atualizados com sucesso.'
-            )
+            messages.success(request, f'Os dados de "{pet.nome}" foram atualizados com sucesso.')
             return redirect("detalhes_pet", pet_id=pet.id)
     else:
         form = CadastroPetForm(instance=pet)
@@ -258,15 +248,11 @@ def minhas_consultas_view(request):
             consultas_queryset = consultas_queryset.filter(status=status_filter)
 
         if data_inicio:
-            consultas_queryset = consultas_queryset.filter(
-                horario_agendado__data__date__gte=data_inicio
-            )
+            consultas_queryset = consultas_queryset.filter(horario_agendado__data__date__gte=data_inicio)
 
         if data_fim:
             data_fim_exclusiva = data_fim + timezone.timedelta(days=1)
-            consultas_queryset = consultas_queryset.filter(
-                horario_agendado__data__date__lt=data_fim_exclusiva
-            )
+            consultas_queryset = consultas_queryset.filter(horario_agendado__data__date__lt=data_fim_exclusiva)
 
     PAGINATION_SIZE = 2
     paginator = Paginator(consultas_queryset, PAGINATION_SIZE)
@@ -332,14 +318,9 @@ def obter_horarios_disponiveis_ajax(request):
         return JsonResponse([], safe=False)
 
     try:
-        horarios = HorarioDisponivel.objects.filter(
-            veterinario_id=veterinario_id, disponivel=True
-        ).order_by("data")
+        horarios = HorarioDisponivel.objects.filter(veterinario_id=veterinario_id, disponivel=True).order_by("data")
 
-        horarios_data = [
-            {"id": h.id, "display": localtime(h.data).strftime("%d/%m/%Y às %H:%M")}
-            for h in horarios
-        ]
+        horarios_data = [{"id": h.id, "display": localtime(h.data).strftime("%d/%m/%Y às %H:%M")} for h in horarios]
         return JsonResponse(horarios_data, safe=False)
     except Exception as e:
         print("ERRO AO OBTER HORÁRIOS:", e)
@@ -386,9 +367,7 @@ def perfil_user(request):
     form_password_change = CustomPasswordChangeForm(user=request.user)
     if request.method == "POST":
         if "submit_endereco" in request.POST:
-            form_perfil = ClientePerfilForm(
-                request.POST, request.FILES, instance=perfil
-            )
+            form_perfil = ClientePerfilForm(request.POST, request.FILES, instance=perfil)
             if form_perfil.is_valid():
                 form_perfil.save()
                 messages.success(
@@ -402,9 +381,7 @@ def perfil_user(request):
                     "Houve um erro na atualização do Perfil. Verifique os campos.",
                 )
         elif "submit_senha" in request.POST:
-            form_password_change = CustomPasswordChangeForm(
-                user=request.user, data=request.POST
-            )
+            form_password_change = CustomPasswordChangeForm(user=request.user, data=request.POST)
 
             if form_password_change.is_valid():
                 user = form_password_change.save()
@@ -470,20 +447,12 @@ def home_vet(request):
         .filter(status__in=["MARCADA", "EM_ANDAMENTO"])
         .order_by("horario_agendado__data")
     )
-    consultas_hoje = consultas_futuras_e_andamento.filter(
-        horario_agendado__data__date=hoje
-    )
+    consultas_hoje = consultas_futuras_e_andamento.filter(horario_agendado__data__date=hoje)
     count_em_andamento = consultas_hoje.filter(status="EM_ANDAMENTO").count()
     count_marcadas = consultas_futuras_e_andamento.filter(status="MARCADA").count()
     prontuarios_pendentes = (
-        Consulta.objects.filter(
-            veterinario=veterinario, status__in=["REALIZADA", "EM_ANDAMENTO"]
-        )
-        .annotate(
-            prontuario_finalizado=Exists(
-                Prontuario.objects.filter(consulta=OuterRef("pk"), finalizado=True)
-            )
-        )
+        Consulta.objects.filter(veterinario=veterinario, status__in=["REALIZADA", "EM_ANDAMENTO"])
+        .annotate(prontuario_finalizado=Exists(Prontuario.objects.filter(consulta=OuterRef("pk"), finalizado=True)))
         .exclude(prontuario_finalizado=True)
         .count()
     )
@@ -513,9 +482,7 @@ def lista_consultas_vet(request):
     form_ativas = ConsultaAtivasFiltroForm(request.GET)
 
     consultas_ativas_qs = (
-        Consulta.objects.filter(
-            veterinario=veterinario, status__in=["MARCADA", "EM_ANDAMENTO"]
-        )
+        Consulta.objects.filter(veterinario=veterinario, status__in=["MARCADA", "EM_ANDAMENTO"])
         .select_related("pet", "pet__tutor", "horario_agendado")
         .order_by("horario_agendado__data")
     )
@@ -526,14 +493,10 @@ def lista_consultas_vet(request):
         query_busca_ativas = request.GET.get("q_ativas")
 
         if data_inicio:
-            consultas_ativas_qs = consultas_ativas_qs.filter(
-                horario_agendado__data__date__gte=data_inicio
-            )
+            consultas_ativas_qs = consultas_ativas_qs.filter(horario_agendado__data__date__gte=data_inicio)
         if data_fim:
             data_fim_exclusiva = data_fim + timedelta(days=1)
-            consultas_ativas_qs = consultas_ativas_qs.filter(
-                horario_agendado__data__date__lt=data_fim_exclusiva
-            )
+            consultas_ativas_qs = consultas_ativas_qs.filter(horario_agendado__data__date__lt=data_fim_exclusiva)
         if query_busca_ativas:
             consultas_ativas_qs = consultas_ativas_qs.filter(
                 Q(pet__nome__icontains=query_busca_ativas)
@@ -549,9 +512,7 @@ def lista_consultas_vet(request):
     form_finalizadas = ConsultaFinalizadasFiltroForm(request.GET)
 
     consultas_finalizadas_qs = (
-        Consulta.objects.filter(
-            veterinario=veterinario, status__in=["REALIZADA", "CANCELADA"]
-        )
+        Consulta.objects.filter(veterinario=veterinario, status__in=["REALIZADA", "CANCELADA"])
         .select_related("pet", "pet__tutor", "horario_agendado")
         .order_by("-horario_agendado__data")
     )
@@ -566,19 +527,13 @@ def lista_consultas_vet(request):
         query_busca_finalizadas = request.GET.get("q_finalizadas")
 
         if status_filter:
-            consultas_finalizadas_qs = consultas_finalizadas_qs.filter(
-                status=status_filter
-            )
+            consultas_finalizadas_qs = consultas_finalizadas_qs.filter(status=status_filter)
 
         if prontuario_filter == "ok":
-            consultas_finalizadas_qs = consultas_finalizadas_qs.filter(
-                has_prontuario=True
-            )
+            consultas_finalizadas_qs = consultas_finalizadas_qs.filter(has_prontuario=True)
         elif prontuario_filter == "pendente":
 
-            consultas_finalizadas_qs = consultas_finalizadas_qs.filter(
-                has_prontuario=False, status="REALIZADA"
-            )
+            consultas_finalizadas_qs = consultas_finalizadas_qs.filter(has_prontuario=False, status="REALIZADA")
 
         if query_busca_finalizadas:
             consultas_finalizadas_qs = consultas_finalizadas_qs.filter(
@@ -626,9 +581,7 @@ def detalhe_consulta_vet(request, consulta_id):
         if action == "iniciar_consulta" and consulta.status == "MARCADA":
             consulta.status = "EM_ANDAMENTO"
             consulta.save(update_fields=["status"])
-            messages.success(
-                request, f"Consulta de {consulta.pet.nome} iniciada (Em Andamento)!"
-            )
+            messages.success(request, f"Consulta de {consulta.pet.nome} iniciada (Em Andamento)!")
             return redirect("detalhe_consulta_vet", consulta_id=consulta.id)
 
         else:
@@ -679,9 +632,7 @@ def cadastrar_prontuario_vet(request, consulta_id):
                 )
             else:
                 prontuario_salvo.finalizado = False
-                messages.info(
-                    request, "Prontuário salvo como rascunho. Continue o atendimento!"
-                )
+                messages.info(request, "Prontuário salvo como rascunho. Continue o atendimento!")
 
             prontuario_salvo.save()
             return redirect("detalhe_consulta_vet", consulta_id=consulta.id)
@@ -761,9 +712,7 @@ def editar_horario(request, horario_id):
     else:
         form = HorarioDisponivelForm(instance=horario)
 
-    return render(
-        request, "clinica/atd/editar_horario.html", {"form": form, "horario": horario}
-    )
+    return render(request, "clinica/atd/editar_horario.html", {"form": form, "horario": horario})
 
 
 def excluir_horario(request, horario_id):

@@ -156,9 +156,7 @@ class Pet(models.Model):
         ("PIRIQUITO", "Periquito"),
     ]
 
-    tutor = models.ForeignKey(
-        CustomUser, on_delete=models.CASCADE, limit_choices_to={"user_type": "cliente"}
-    )
+    tutor = models.ForeignKey(CustomUser, on_delete=models.CASCADE, limit_choices_to={"user_type": "cliente"})
     foto_pet = models.ImageField(upload_to="fotos_pet/", blank=True, null=True)
     nome = models.CharField(max_length=100)
     especie = models.CharField(max_length=50, choices=especieChoices)
@@ -269,18 +267,10 @@ class Prontuario(models.Model):
     finalizado = models.BooleanField(default=False)
     sinais_clinicos = models.TextField(verbose_name="Sinais Clínicos")
     diagnostico = models.TextField(verbose_name="Diagnóstico")
-    exames_realizados = models.TextField(
-        blank=True, null=True, verbose_name="Exames Realizados"
-    )
-    imunizacao_aplicada = models.TextField(
-        blank=True, null=True, verbose_name="Imunização Aplicada"
-    )
-    receita_prescrita = models.FileField(
-        upload_to="receitas/", blank=True, null=True, verbose_name="Receita Prescrita"
-    )
-    observacoes = models.TextField(
-        blank=True, null=True, verbose_name="Observações Adicionais"
-    )
+    exames_realizados = models.TextField(blank=True, null=True, verbose_name="Exames Realizados")
+    imunizacao_aplicada = models.TextField(blank=True, null=True, verbose_name="Imunização Aplicada")
+    receita_prescrita = models.FileField(upload_to="receitas/", blank=True, null=True, verbose_name="Receita Prescrita")
+    observacoes = models.TextField(blank=True, null=True, verbose_name="Observações Adicionais")
     criada_em = models.DateTimeField(auto_now_add=True)
 
     def __str__(self):

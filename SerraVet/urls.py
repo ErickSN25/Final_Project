@@ -66,12 +66,8 @@ urlpatterns = [
     path("meus-pets/", views.meus_pets_view, name="meus_pets"),
     path("meus-pets/cadastrar/", views.cadastrar_pet_view, name="cadastrar_pet"),
     path("meus-pets/excluir/<int:pet_id>/", views.excluir_pet_view, name="excluir_pet"),
-    path(
-        "meus-pets/detalhes/<int:pet_id>/", views.detalhes_pet_view, name="detalhes_pet"
-    ),
-    path(
-        "meus-pets/editar/<int:pet_id>/", views.editar_pet_form_view, name="editar_pet"
-    ),
+    path("meus-pets/detalhes/<int:pet_id>/", views.detalhes_pet_view, name="detalhes_pet"),
+    path("meus-pets/editar/<int:pet_id>/", views.editar_pet_form_view, name="editar_pet"),
     path("consultas/", views.minhas_consultas_view, name="consultas_user"),
     path("agendar-consulta/", views.agendar_consulta_view, name="cadastrar_consulta"),
     path(
@@ -94,9 +90,7 @@ urlpatterns = [
         name="cadastrar_prontuario_vet",
     ),
     path("user/prontuario/<int:pk>/", prontuario_view, name="prontuario_user"),
-    path(
-        "reset_password/", auth_views.PasswordResetView.as_view(), name="reset_password"
-    ),
+    path("reset_password/", auth_views.PasswordResetView.as_view(), name="reset_password"),
     path(
         "reset_password_sent/",
         auth_views.PasswordResetDoneView.as_view(),

@@ -102,9 +102,7 @@ class ConsultaAdmin(admin.ModelAdmin):
 
     def formfield_for_foreignkey(self, db_field, request, **kwargs):
         if db_field.name == "horario_agendado":
-            queryset_base = HorarioDisponivel.objects.filter(
-                disponivel=True, data__gte=timezone.now()
-            )
+            queryset_base = HorarioDisponivel.objects.filter(disponivel=True, data__gte=timezone.now())
             kwargs["queryset"] = queryset_base
 
         return super().formfield_for_foreignkey(db_field, request, **kwargs)

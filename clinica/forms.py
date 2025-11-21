@@ -62,9 +62,7 @@ class CustomUserChangeForm(UserChangeForm):
 
 
 class HorarioDisponivelForm(forms.ModelForm):
-    veterinario = forms.ModelChoiceField(
-        queryset=CustomUser.objects.none(), label="Veterinário"
-    )
+    veterinario = forms.ModelChoiceField(queryset=CustomUser.objects.none(), label="Veterinário")
 
     class Meta:
         model = HorarioDisponivel
@@ -75,9 +73,7 @@ class HorarioDisponivelForm(forms.ModelForm):
 
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
-        self.fields["veterinario"].queryset = CustomUser.objects.filter(
-            user_type="veterinario"
-        )
+        self.fields["veterinario"].queryset = CustomUser.objects.filter(user_type="veterinario")
 
 
 # =====================
@@ -90,9 +86,7 @@ class ProntuarioForm(forms.ModelForm):
         required=False,
         label="Receita Prescrita (PDF/Imagem)",
         help_text="Faça upload da receita prescrita para o pet (opcional).",
-        validators=[
-            FileExtensionValidator(allowed_extensions=["pdf", "jpg", "jpeg", "png"])
-        ],
+        validators=[FileExtensionValidator(allowed_extensions=["pdf", "jpg", "jpeg", "png"])],
     )
 
     class Meta:
@@ -167,9 +161,7 @@ class CadastroClienteForm(forms.Form):
         widget=forms.PasswordInput(attrs={"class": "form-control"}),
     )
 
-    aceito = forms.BooleanField(
-        label="Concordo com as diretrizes do site", required=True
-    )
+    aceito = forms.BooleanField(label="Concordo com as diretrizes do site", required=True)
 
     def clean_cpf(self):
         cpf = self.cleaned_data.get("cpf")
@@ -212,9 +204,7 @@ class CadastroClienteForm(forms.Form):
                 user_type="cliente",
             )
 
-            ClientePerfil.objects.create(
-                user=user, telefone=self.cleaned_data.get("telefone", "")
-            )
+            ClientePerfil.objects.create(user=user, telefone=self.cleaned_data.get("telefone", ""))
         return user
 
 
@@ -242,13 +232,9 @@ class CadastroPetForm(forms.ModelForm):
 
 class AgendamentoClienteForm(forms.Form):
 
-    pet = forms.ModelChoiceField(
-        queryset=Pet.objects.none(), label="Selecione o seu Pet"
-    )
+    pet = forms.ModelChoiceField(queryset=Pet.objects.none(), label="Selecione o seu Pet")
 
-    veterinario = forms.ModelChoiceField(
-        queryset=CustomUser.objects.none(), label="Selecione o Veterinário"
-    )
+    veterinario = forms.ModelChoiceField(queryset=CustomUser.objects.none(), label="Selecione o Veterinário")
 
     horario_agendado = forms.ModelChoiceField(
         queryset=HorarioDisponivel.objects.none(),
@@ -257,9 +243,7 @@ class AgendamentoClienteForm(forms.Form):
     )
 
     motivo = forms.CharField(
-        widget=forms.Textarea(
-            attrs={"rows": 4, "placeholder": "Descreva o motivo da consulta..."}
-        ),
+        widget=forms.Textarea(attrs={"rows": 4, "placeholder": "Descreva o motivo da consulta..."}),
         label="Motivo da Consulta",
     )
 
@@ -268,12 +252,8 @@ class AgendamentoClienteForm(forms.Form):
         super().__init__(*args, **kwargs)
 
         if user and user.is_authenticated:
-            self.fields["pet"].queryset = Pet.objects.filter(tutor=user).order_by(
-                "nome"
-            )
-            self.fields["veterinario"].queryset = CustomUser.objects.filter(
-                user_type="veterinario"
-            ).order_by("nome")
+            self.fields["pet"].queryset = Pet.objects.filter(tutor=user).order_by("nome")
+            self.fields["veterinario"].queryset = CustomUser.objects.filter(user_type="veterinario").order_by("nome")
 
     def clean(self):
         cleaned_data = super().clean()
@@ -362,12 +342,8 @@ class ClientePerfilForm(forms.ModelForm):
 
         widgets = {
             "foto_user": forms.FileInput(attrs={"class": "form-control-file"}),
-            "telefone": forms.TextInput(
-                attrs={"class": "form-control", "placeholder": "(XX) XXXXX-XXXX"}
-            ),
-            "endereco": forms.TextInput(
-                attrs={"class": "form-control", "placeholder": "Rua/Avenida..."}
-            ),
+            "telefone": forms.TextInput(attrs={"class": "form-control", "placeholder": "(XX) XXXXX-XXXX"}),
+            "endereco": forms.TextInput(attrs={"class": "form-control", "placeholder": "Rua/Avenida..."}),
             "numero": forms.TextInput(attrs={"class": "form-control"}),
             "bairro": forms.TextInput(attrs={"class": "form-control"}),
             "cidade": forms.TextInput(attrs={"class": "form-control"}),
@@ -403,17 +379,13 @@ class HorarioFiltroForm(forms.Form):
         required=False,
         label="Veterinário",
     )
-    data = forms.DateField(
-        required=False, widget=forms.DateInput(attrs={"type": "date"}), label="Data"
-    )
+    data = forms.DateField(required=False, widget=forms.DateInput(attrs={"type": "date"}), label="Data")
     apenas_disponiveis = forms.BooleanField(required=False, label="Apenas Disponíveis")
 
 
 class ConsultaFiltroForm(forms.Form):
 
-    STATUS_CHOICES_FILTRO = [("TODOS", "Todos os Status")] + list(
-        Consulta.STATUS_CHOICES
-    )
+    STATUS_CHOICES_FILTRO = [("TODOS", "Todos os Status")] + list(Consulta.STATUS_CHOICES)
 
     status = forms.ChoiceField(
         choices=STATUS_CHOICES_FILTRO,
@@ -437,9 +409,7 @@ class ConsultaFiltroForm(forms.Form):
 
 class VeterinarioConsultaFiltroForm(forms.Form):
     STATUS_CONSULTA_CHOICES = [("TODOS", "Todos os Status")] + [
-        (s[0], s[1])
-        for s in Consulta.STATUS_CHOICES
-        if s[0] in ["MARCADA", "EM_ANDAMENTO", "REALIZADA", "CANCELADA"]
+        (s[0], s[1]) for s in Consulta.STATUS_CHOICES if s[0] in ["MARCADA", "EM_ANDAMENTO", "REALIZADA", "CANCELADA"]
     ]
 
     STATUS_PRONTUARIO_CHOICES = [
@@ -477,9 +447,7 @@ class VeterinarioConsultaFiltroForm(forms.Form):
     pesquisa = forms.CharField(
         required=False,
         label="Pet/Tutor/Motivo",
-        widget=forms.TextInput(
-            attrs={"class": "form-control", "placeholder": "Nome do Pet ou Tutor..."}
-        ),
+        widget=forms.TextInput(attrs={"class": "form-control", "placeholder": "Nome do Pet ou Tutor..."}),
     )
 
 
@@ -523,16 +491,12 @@ class ConsultaAtivasFiltroForm(forms.Form):
 
 class PetsFiltroForm(forms.Form):
 
-    ESPECIES_CHOICES_FILTRO = [("TODAS", "Todas as espécies")] + list(
-        Pet.especieChoices
-    )
+    ESPECIES_CHOICES_FILTRO = [("TODAS", "Todas as espécies")] + list(Pet.especieChoices)
 
     nome = forms.CharField(
         required=False,
         label="Pet",
-        widget=forms.TextInput(
-            attrs={"class": "form-control", "placeholder": "Nome do Pet..."}
-        ),
+        widget=forms.TextInput(attrs={"class": "form-control", "placeholder": "Nome do Pet..."}),
     )
 
     vacinas_em_dia = forms.BooleanField(required=False, label="Vacinas em dia")

@@ -29,9 +29,7 @@ class Migration(migrations.Migration):
                 ("password", models.CharField(max_length=128, verbose_name="password")),
                 (
                     "last_login",
-                    models.DateTimeField(
-                        blank=True, null=True, verbose_name="last login"
-                    ),
+                    models.DateTimeField(blank=True, null=True, verbose_name="last login"),
                 ),
                 (
                     "is_superuser",
@@ -288,9 +286,7 @@ class Migration(migrations.Migration):
                 ),
                 (
                     "pet",
-                    models.ForeignKey(
-                        on_delete=django.db.models.deletion.CASCADE, to="clinica.pet"
-                    ),
+                    models.ForeignKey(on_delete=django.db.models.deletion.CASCADE, to="clinica.pet"),
                 ),
             ],
             options={
@@ -316,15 +312,11 @@ class Migration(migrations.Migration):
                 ("diagnostico", models.TextField(verbose_name="Diagnóstico")),
                 (
                     "exames_realizados",
-                    models.TextField(
-                        blank=True, null=True, verbose_name="Exames Realizados"
-                    ),
+                    models.TextField(blank=True, null=True, verbose_name="Exames Realizados"),
                 ),
                 (
                     "imunizacao_aplicada",
-                    models.TextField(
-                        blank=True, null=True, verbose_name="Imunização Aplicada"
-                    ),
+                    models.TextField(blank=True, null=True, verbose_name="Imunização Aplicada"),
                 ),
                 (
                     "receita_prescrita",
@@ -337,9 +329,7 @@ class Migration(migrations.Migration):
                 ),
                 (
                     "observacoes",
-                    models.TextField(
-                        blank=True, null=True, verbose_name="Observações Adicionais"
-                    ),
+                    models.TextField(blank=True, null=True, verbose_name="Observações Adicionais"),
                 ),
                 ("criada_em", models.DateTimeField(auto_now_add=True)),
                 (
