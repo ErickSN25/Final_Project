@@ -3,29 +3,31 @@ requires = ["setuptools>=61.0", "wheel"]
 build-backend = "setuptools.build_meta"
 
 [project]
-name = "Feeder"
+name = "SerraVet"
 version = "0.1.0"
 description = "Projeto para atividade com o toml"
 authors = [
-    { name = "Silvio Ernesto", email = "silvioebis2005@gmail.com" },
+    { name = "Yasmim Lorrana", email = "lorranaft123@gmail.com" },
     { name = "Erick Soares", email = "erick250107@gmail.com" }
 ]
 readme = "README.md"
 requires-python = ">=3.10"
 
 dependencies = [
-    "asgiref==3.9.1",
-    "django==5.2.6",
-    "numpy==2.3.2",
-    "pyarrow==21.0.0",
-    "sqlparse==0.5.3",
-    "tzdata==2025.2"
+    asgiref==3.8.1
+    Django==5.2.2
+    pillow==11.3.0
+    sqlparse==0.5.3
+    tzdata==2025.2
+    psycopg2-binary>=2.9
+    djangorestframework==3.15.0
+    black==24.0.0
 ]
 
 [project.urls]
-Homepage = "https://github.com/ErnestoSESB/Feeder"
-Repository = "https://github.com/ErnestoSESB/Feeder"
-"Bug Tracker" = "https://github.com/ErnestoSESB/Feeder/issues"
+Homepage = "https://github.com/ErickSN25/Final_Project"
+Repository = "https://github.com/ErickSN25/Final_Project"
+"Bug Tracker" = "https://github.com/ErickSN25/Final_Project/issues"
 
 [project.optional-dependencies]
 dev = [
@@ -43,7 +45,7 @@ test = [
 
 [tool.setuptools.packages.find]
 where = ["."]
-include = ["alimentador*"]
+include = ["SerraVet*"]
 
 [tool.black]
 line-length = 120
@@ -54,5 +56,5 @@ max-line-length = 120
 extend-ignore = ["E203", "W503"]
 
 [tool.pytest.ini_options]
-DJANGO_SETTINGS_MODULE = "alimentador.settings"
+DJANGO_SETTINGS_MODULE = "SerraVet.settings"
 python_files = ["tests.py", "test_*.py"]
