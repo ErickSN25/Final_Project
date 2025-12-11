@@ -26,7 +26,7 @@ SECRET_KEY = "django-insecure-^#$m31rm$+9a(xmq#w6f-a3t2)y+w3z*plrs%95o8bh=c@w-4$
 DEBUG = False
 
 ALLOWED_HOSTS = ['*']
-
+CSRF_TRUSTED_ORIGINS = ['https://serravet.nadic.com.br']
 
 # Application definition
 
